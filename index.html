@@ -27,9 +27,6 @@
   <!-- EmailJS: envio de e-mail direto do navegador, sem backend, usado na recuperação de senha -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
-    /* Mascara a senha visualmente (bolinhas) via CSS, sem usar type="password".
-       Assim o Chrome/Edge/Safari não reconhecem o campo como senha e param de
-       oferecer login salvo / gerenciador de senhas por cima do campo. */
     .campo-senha-mascarada {
       -webkit-text-security: disc;
       text-security: disc;
@@ -55,101 +52,11 @@
       <div class="space-y-4 max-h-72 overflow-y-auto pr-2 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
         <div class="border-l-2 border-emerald-500 pl-3 space-y-1">
           <span class="font-bold text-emerald-600 dark:text-emerald-400 text-base">Versão V1.8.4</span>
-          <p class="text-gray-400 text-xs">Setembro de 2026</p>
+          <p class="text-gray-400 text-xs">Novembro de 2026</p>
           <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Correção crítica do erro 401 (Brapi):</b> removido o proxy CORS externo (corsproxy.io), que passou a exigir cadastro/chave própria e estava bloqueando todas as chamadas à Brapi. Agora o app chama a Brapi diretamente, já que ela libera CORS para uso via navegador.</li>
-            <li><b>Status "Brapi: Online/Offline" mais confiável:</b> deixou de depender de um serviço intermediário instável.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.3</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Períodos do Gráfico Avançado ajustados ao plano gratuito da Brapi:</b> os botões agora oferecem 5D, 1M e 3M (os únicos períodos liberados sem plano pago) em vez de 6M/1A/5A, que sempre caíam em dados simulados.</li>
-            <li><b>Tabela de Retorno por Período</b> ajustada para buscar no máximo 3 meses de histórico (o limite do plano gratuito); "6 meses" e "1 ano" mostram "—" nesse plano, em vez de erro.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.2</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Diagnóstico do Gráfico Avançado:</b> quando cai para dados simulados, o aviso agora mostra o motivo real (erro HTTP, mensagem da Brapi, falta de token, etc.) em vez de sempre dizer genericamente "sem token válido".</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.1</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Correção crítica:</b> o Gráfico Avançado nunca carregava porque a URL da biblioteca (CDN) tinha um caminho de pasta errado (/standalone/ extra), resultando em erro 404 — não era bloqueio de rede como se suspeitava antes.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.0</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Tooltip no Gráfico Avançado:</b> passe o mouse sobre o gráfico para ver Abertura, Máxima, Mínima, Fechamento e Volume do dia.</li>
-            <li><b>Barras de volume:</b> adicionado histograma de volume negociado abaixo do gráfico de preço, colorido por dia de alta/baixa.</li>
-            <li><b>Tabela de Retorno por Período:</b> 1 dia, 1 semana, 1 mês, 3 meses, 6 meses e 1 ano, calculados a partir do histórico real.</li>
-            <li><b>Preço-Justo no gráfico:</b> exibido junto ao cabeçalho do Gráfico Avançado, reaproveitando o cálculo de Graham já feito na Carteira.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.4</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Gráfico Avançado de Cotação:</b> biblioteca do gráfico trocada de CDN (unpkg → jsdelivr), que estava sendo bloqueada em algumas redes e deixava o gráfico em branco sem aviso. Agora, se falhar, mostra uma mensagem explicando o motivo.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.3</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Correção crítica:</b> os modais de "Esqueci a Senha" e "Novidades" não abriam de fato na tela de login — ficavam escondidos atrás dela por causa de um empate de camada (z-index) visual.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.2</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Campos de senha sem interferência do navegador:</b> os campos de senha pararam de usar type="password" nativo (agora mascaram só visualmente via CSS), o que impede o Chrome/Windows de sobrepor sugestões de login salvo e de bloquear o clique no botão de mostrar/esconder senha.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.1</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Botão de mostrar/esconder senha:</b> adicionado ícone de "olho" em todos os campos de senha (login, trocar senha e recuperação), para você conferir o que digitou.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.0</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Recuperação de senha por e-mail:</b> novo fluxo com código de 6 dígitos enviado por e-mail (via EmailJS), substituindo a caixa genérica do navegador.</li>
-            <li><b>Trocar senha em Configurações:</b> nova aba de Segurança para trocar a senha (com validação da senha atual), configurar e-mail de recuperação e credenciais do EmailJS.</li>
-            <li><b>Campo de senha mais limpo:</b> ajustes para reduzir sugestões de autopreenchimento/gerenciador de senhas do navegador sobrepondo o campo.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.6.0</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Correção crítica de persistência:</b> a carteira de ativos agora é salva no dispositivo (antes só existia na tela e se perdia ao recarregar a página).</li>
-            <li><b>Nova aba Dashboard:</b> resumo geral, Raio-X e Simulador saíram das demais abas (não aparecem mais "grudados" em Carteira, Dividendos, etc.) e ganharam uma aba própria.</li>
-            <li><b>Proxy de cotações corrigido:</b> ajustado o formato de chamada à Brapi via corsproxy.io, que estava quebrando as requisições do gráfico avançado.</li>
-            <li><b>Aviso de dados simulados:</b> o gráfico avançado agora avisa claramente quando está exibindo dados fictícios (sem token ou API fora do ar).</li>
-            <li><b>Preço Justo mais confiável:</b> corrigido cálculo que podia gerar "NaN" e sinalizado com "*" quando o valor é apenas uma estimativa.</li>
-            <li><b>Gráfico de Proventos:</b> novo gráfico interativo em Dividendos — clique no ano para ver os meses, e no mês para ver quais ativos pagaram.</li>
-          </ul>
-        </div>
-
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.5.9</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Remoção de Banners Globais:</b> Retirada definitiva do banner fixo superior de notificação de versão que se repetia indesejadamente nas abas internas, eliminando a poluição visual.</li>
-            <li><b>Raio-X Didático da Carteira:</b> Painel visual explicativo detalhando os valores investidos, valor de mercado das ações e o impacto dos dividendos na rentabilidade real.</li>
-            <li><b>Ordenação Cronológica de Dividendos:</b> Meses e anos organizados rigorosamente de forma crescente por data de pagamento.</li>
+            <li><b>Sincronização Automática de Proventos:</b> o aplicativo agora consulta automaticamente a API da Brapi ao atualizar as cotações, detecta novos dividendos/JCP anunciados, salva no Supabase/localStorage e exibe alerta visual na tela.</li>
+            <li><b>Agenda de Próximos Dividendos Dinâmica:</b> substituição dos dados simulados por consulta real dos proventos futuros cadastrados.</li>
+            <li><b>Correção crítica do erro 401 (Brapi):</b> removido o proxy CORS externo.</li>
           </ul>
         </div>
       </div>
@@ -195,7 +102,7 @@
     </div>
   </div>
 
-  <!-- MODAL: RECUPERAÇÃO DE SENHA POR E-MAIL (substitui a caixa nativa do navegador) -->
+  <!-- MODAL: RECUPERAÇÃO DE SENHA POR E-MAIL -->
   <div id="modalRecuperarSenha" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
       <div class="flex justify-between items-center mb-4">
@@ -204,33 +111,28 @@
         </h3>
         <button onclick="fecharModalRecuperarSenha()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
-
-      <!-- ETAPA 1: pedir envio do código -->
       <div id="etapaEnviarCodigo" class="space-y-4">
         <p id="textoEtapaEnvio" class="text-sm text-gray-600 dark:text-gray-300"></p>
         <button id="btnEnviarCodigoRecuperacao" onclick="enviarCodigoRecuperacao()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg text-sm transition shadow-md flex items-center justify-center gap-2">
           <i class="fa-solid fa-paper-plane"></i> Enviar código por e-mail
         </button>
         <div class="pt-3 border-t border-gray-200 dark:border-darkborder">
-          <p class="text-xs text-gray-400 mb-2">Não tem e-mail de recuperação configurado ou não consegue recebê-lo agora?</p>
           <button onclick="resetarSenhaParaPadrao()" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-xs transition">
             Redefinir para a senha padrão (123456)
           </button>
         </div>
       </div>
-
-      <!-- ETAPA 2: digitar código + nova senha -->
       <div id="etapaConfirmarCodigo" class="space-y-4 hidden">
-        <p class="text-sm text-gray-600 dark:text-gray-300">Digite o código de 6 dígitos que enviamos para o seu e-mail de recuperação, e a nova senha de acesso.</p>
+        <p class="text-sm text-gray-600 dark:text-gray-300">Digite o código de 6 dígitos enviado para o seu e-mail.</p>
         <div>
-          <label for="codigoRecuperacaoInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Código recebido por e-mail</label>
+          <label for="codigoRecuperacaoInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Código recebido</label>
           <input type="text" id="codigoRecuperacaoInput" inputmode="numeric" maxlength="6" placeholder="000000" class="w-full px-4 py-2.5 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-center text-lg tracking-widest focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
         <div>
-          <label for="novaSenhaRecuperacaoInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Nova senha (só números)</label>
+          <label for="novaSenhaRecuperacaoInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Nova senha</label>
           <div class="relative">
-            <input type="text" id="novaSenhaRecuperacaoInput" name="nova_senha_recuperacao" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" data-lpignore="true" data-1p-ignore placeholder="••••••" class="campo-senha-mascarada w-full px-4 py-2.5 pr-11 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-center text-lg tracking-widest focus:ring-2 focus:ring-blue-500 outline-none">
-            <button type="button" onclick="alternarVisibilidadeSenha('novaSenhaRecuperacaoInput', this)" tabindex="-1" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+            <input type="text" id="novaSenhaRecuperacaoInput" inputmode="numeric" maxlength="6" class="campo-senha-mascarada w-full px-4 py-2.5 pr-11 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-center text-lg tracking-widest focus:ring-2 focus:ring-blue-500 outline-none" placeholder="••••••">
+            <button type="button" onclick="alternarVisibilidadeSenha('novaSenhaRecuperacaoInput', this)" tabindex="-1" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
@@ -238,13 +140,9 @@
         <button onclick="confirmarRecuperacaoSenha()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-sm transition shadow-md">
           Confirmar e trocar senha
         </button>
-        <button onclick="voltarEtapaEnvioCodigo()" class="w-full text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
-          <i class="fa-solid fa-arrow-left"></i> Reenviar código / voltar
-        </button>
       </div>
     </div>
   </div>
-
 
   <div id="telaLogin" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-8 border border-gray-100 dark:border-darkborder relative">
@@ -268,8 +166,8 @@
         <div>
           <label for="senhaAcesso" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Senha de Acesso (Números)</label>
           <div class="relative">
-            <input type="text" id="senhaAcesso" name="pin_acesso_analystpro" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore onkeypress="if(event.key === 'Enter') autenticar()" placeholder="••••••" class="campo-senha-mascarada w-full px-4 py-3 pr-11 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-center text-xl tracking-widest focus:ring-2 focus:ring-blue-500 outline-none">
-            <button type="button" onclick="alternarVisibilidadeSenha('senhaAcesso', this)" tabindex="-1" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+            <input type="text" id="senhaAcesso" inputmode="numeric" maxlength="6" onkeypress="if(event.key === 'Enter') autenticar()" placeholder="••••••" class="campo-senha-mascarada w-full px-4 py-3 pr-11 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-center text-xl tracking-widest focus:ring-2 focus:ring-blue-500 outline-none">
+            <button type="button" onclick="alternarVisibilidadeSenha('senhaAcesso', this)" tabindex="-1" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
@@ -278,7 +176,7 @@
           Entrar no Sistema
         </button>
         <div class="text-center pt-2">
-          <button onclick="esqueciSenha()" class="text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition">
+          <button onclick="esqueciSenha()" class="text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400 transition">
             Esqueci / Redefinir Senha
           </button>
         </div>
@@ -299,7 +197,7 @@
               <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
               <span>Brapi: Verificando...</span>
             </div>
-            <button onclick="abrirModalChangelog()" class="flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-emerald-400 border border-slate-700 shadow-sm hover:bg-slate-700 transition cursor-pointer" title="Ver Notas da Versão">
+            <button onclick="abrirModalChangelog()" class="flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-emerald-400 border border-slate-700 shadow-sm hover:bg-slate-700 transition cursor-pointer">
               <span id="badgeVersaoHeader">Versão V1.8.4</span>
             </button>
           </div>
@@ -311,148 +209,99 @@
           <a href="#oportunidades" onclick="navegar('oportunidades')" class="hover:text-blue-200 flex items-center gap-1"><i class="fa-solid fa-bullseye"></i> Oportunidades</a>
           <a href="#analise" onclick="navegar('analise')" class="hover:text-blue-200 flex items-center gap-1"><i class="fa-solid fa-chart-pie"></i> Análise & Gráficos</a>
           <a href="#configuracoes" onclick="navegar('configuracoes')" class="hover:text-blue-200 flex items-center gap-1"><i class="fa-solid fa-gear"></i> Configurações</a>
-          <button onclick="alternarTema()" title="Alternar Tema Claro/Escuro" class="bg-blue-700 dark:bg-slate-800 hover:bg-blue-800 dark:hover:bg-slate-700 px-3 py-1.5 rounded-lg text-white transition flex items-center justify-center">
+          <button onclick="alternarTema()" title="Alternar Tema" class="bg-blue-700 dark:bg-slate-800 hover:bg-blue-800 px-3 py-1.5 rounded-lg text-white transition flex items-center justify-center">
             <i id="iconeTema" class="fa-solid fa-moon"></i>
           </button>
-          <button onclick="bloquearApp()" title="Sair / Bloquear" class="ml-1 text-blue-200 hover:text-white"><i class="fa-solid fa-right-from-bracket"></i></button>
+          <button onclick="bloquearApp()" title="Sair" class="ml-1 text-blue-200 hover:text-white"><i class="fa-solid fa-right-from-bracket"></i></button>
         </nav>
       </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
-      <!-- SEÇÃO: DASHBOARD (Resumo Geral, Raio-X e Simulador) -->
       <section id="sec-dashboard" class="space-y-8">
-      <!-- PAINEL DE RESUMO GERAL COM RENTABILIDADE REAL -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-blue-500 border border-gray-100 dark:border-darkborder transition-colors">
-          <span class="text-sm text-gray-500 dark:text-gray-400">Valor Total da Carteira</span>
-          <h2 id="totalCarteira" class="text-2xl font-bold text-gray-900 dark:text-white mt-1">R$ 0,00</h2>
-          <span id="statusAtualizacao" class="text-xs text-gray-400">Aguardando atualização...</span>
-        </div>
-        <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-emerald-500 border border-gray-100 dark:border-darkborder transition-colors">
-          <span class="text-sm text-gray-500 dark:text-gray-400">Proventos Recebidos</span>
-          <h2 id="totalProventosHeader" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00</h2>
-          <span class="text-xs text-gray-400">Total acumulado (2023-2026)</span>
-        </div>
-        <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-cyan-500 border border-gray-100 dark:border-darkborder transition-colors">
-          <span class="text-sm text-gray-500 dark:text-gray-400">Lucro / Prejuízo (Ações)</span>
-          <h2 id="lucroPrejuizo" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00 <span class="text-xs font-normal">(+0.00%)</span></h2>
-        </div>
-        <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-indigo-500 border border-gray-100 dark:border-darkborder transition-colors">
-          <span class="text-sm text-gray-500 dark:text-gray-400">Resultado Líquido Real (+ Div.)</span>
-          <h2 id="resultadoRealLiquido" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00 <span class="text-xs font-normal">(+0.00%)</span></h2>
-          <span class="text-xs text-gray-400">Patrimônio + Proventos - Investido</span>
-        </div>
-      </div>
-
-      <!-- NOVO PAINEL: RAIO-X DIDÁTICO DETALHADO DA CARTEIRA -->
-      <div class="bg-white dark:bg-darkcard rounded-xl p-6 shadow-sm border border-gray-200 dark:border-darkborder mb-8 space-y-6">
-        <div class="border-b border-gray-100 dark:border-darkborder pb-4">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <i class="fa-solid fa-magnifying-glass-chart text-blue-600"></i> Raio-X Didático: Entenda seus Números
-          </h3>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Detalhamento visual de quanto você investiu, quanto as ações valem hoje e o impacto real dos dividendos.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Bloco 1: Variação das Ações -->
-          <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-xl border border-gray-200 dark:border-darkborder space-y-3">
-            <h4 class="font-bold text-sm text-gray-800 dark:text-white flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-blue-500"></i> 1. Desempenho Exclusivo das Ações (Preço)
-            </h4>
-            <div class="space-y-2 text-xs">
-              <div class="flex justify-between py-1 border-b border-gray-200 dark:border-darkborder/50">
-                <span class="text-gray-600 dark:text-gray-400">Valor Total Investido (Compras):</span>
-                <span id="raioInvestido" class="font-bold text-gray-900 dark:text-white">R$ 0,00</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-gray-200 dark:border-darkborder/50">
-                <span class="text-gray-600 dark:text-gray-400">Valor Atual das Ações (Mercado):</span>
-                <span id="raioAtual" class="font-bold text-blue-600 dark:text-blue-400">R$ 0,00</span>
-              </div>
-              <div class="flex justify-between py-1 font-semibold">
-                <span class="text-gray-700 dark:text-gray-300">Prejuízo Virtual / Não Realizado:</span>
-                <span id="raioDiferenca" class="text-red-500">R$ 0,00 (0.00%)</span>
-              </div>
-            </div>
-            <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed pt-1">
-              <b>Explicação:</b> Atualmente, a soma do valor atual das ações no mercado está ligeiramente abaixo do total desembolsado nas compras. As cotações oscilaram para baixo temporariamente.
-            </p>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-blue-500 border border-gray-100 dark:border-darkborder">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Valor Total da Carteira</span>
+            <h2 id="totalCarteira" class="text-2xl font-bold text-gray-900 dark:text-white mt-1">R$ 0,00</h2>
+            <span id="statusAtualizacao" class="text-xs text-gray-400">Aguardando atualização...</span>
           </div>
-
-          <!-- Bloco 2: Resultado Real com Dividendos -->
-          <div class="bg-emerald-50/50 dark:bg-emerald-950/20 p-5 rounded-xl border border-emerald-200 dark:border-emerald-900/50 space-y-3">
-            <h4 class="font-bold text-sm text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
-              <i class="fa-solid fa-hand-holding-dollar text-emerald-500"></i> 2. Resultado Líquido Real (+ Proventos)
-            </h4>
-            <div class="space-y-2 text-xs">
-              <div class="flex justify-between py-1 border-b border-emerald-200 dark:border-emerald-900/40">
-                <span class="text-gray-600 dark:text-gray-400">Patrimônio das Ações + Proventos:</span>
-                <span id="raioPatrimonioMaisDiv" class="font-bold text-gray-900 dark:text-white">R$ 0,00</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-emerald-200 dark:border-emerald-900/40">
-                <span class="text-gray-600 dark:text-gray-400">Menos o Valor Total Investido:</span>
-                <span id="raioMenosInvestido" class="font-bold text-red-500">- R$ 0,00</span>
-              </div>
-              <div class="flex justify-between py-1 font-semibold text-sm">
-                <span class="text-emerald-700 dark:text-emerald-400">Lucro Líquido Real Final:</span>
-                <span id="raioResultadoFinal" class="text-emerald-600 dark:text-emerald-400">R$ 0,00 (0.00%)</span>
-              </div>
-            </div>
-            <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/80 leading-relaxed pt-1">
-              <b>Explicação:</b> Mesmo com a leve oscilação negativa das cotações, o dinheiro vivo recebido em proventos cobre essa diferença e deixa o seu saldo final no positivo!
-            </p>
+          <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-emerald-500 border border-gray-100 dark:border-darkborder">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Proventos Recebidos</span>
+            <h2 id="totalProventosHeader" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00</h2>
+            <span class="text-xs text-gray-400">Total acumulado</span>
+          </div>
+          <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-cyan-500 border border-gray-100 dark:border-darkborder">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Lucro / Prejuízo (Ações)</span>
+            <h2 id="lucroPrejuizo" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00 <span class="text-xs font-normal">(+0.00%)</span></h2>
+          </div>
+          <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-indigo-500 border border-gray-100 dark:border-darkborder">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Resultado Líquido Real (+ Div.)</span>
+            <h2 id="resultadoRealLiquido" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00 <span class="text-xs font-normal">(+0.00%)</span></h2>
           </div>
         </div>
-      </div>
 
-      <!-- PAINEL PROFISSIONAL: SIMULADOR -->
-      <div class="bg-gradient-to-r from-blue-900 to-slate-900 text-white rounded-xl p-6 shadow-xl mb-8 border border-blue-800">
-        <div class="flex justify-between items-center mb-4 flex-wrap gap-3">
-          <div>
-            <h3 class="text-lg font-bold flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-emerald-400"></i> Simulador de Renda Passiva e Juros Compostos (Longo Prazo)
+        <div class="bg-white dark:bg-darkcard rounded-xl p-6 shadow-sm border border-gray-200 dark:border-darkborder mb-8 space-y-6">
+          <div class="border-b border-gray-100 dark:border-darkborder pb-4">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-magnifying-glass-chart text-blue-600"></i> Raio-X Didático: Entenda seus Números
             </h3>
-            <p class="text-xs text-blue-200">Projeção estimada considerando reinvestimento contínuo de dividendos (6% a.a. médio).</p>
           </div>
-          <div class="flex items-center gap-2 bg-blue-950/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs">
-            <label for="anosSimulacao" class="font-medium">Horizonte (Anos):</label>
-            <input type="number" id="anosSimulacao" value="0" min="0" max="50" oninput="calcularSimuladorLongoPrazo()" class="w-16 bg-slate-900 text-white text-center font-bold px-2 py-1 rounded border border-blue-600 outline-none">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-xl border border-gray-200 dark:border-darkborder space-y-3">
+              <h4 class="font-bold text-sm text-gray-800 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-blue-500"></i> 1. Desempenho Exclusivo das Ações (Preço)
+              </h4>
+              <div class="space-y-2 text-xs">
+                <div class="flex justify-between py-1 border-b border-gray-200 dark:border-darkborder/50">
+                  <span class="text-gray-400">Total Investido:</span>
+                  <span id="raioInvestido" class="font-bold">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-gray-200 dark:border-darkborder/50">
+                  <span class="text-gray-400">Valor Atual (Mercado):</span>
+                  <span id="raioAtual" class="font-bold text-blue-400">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between py-1 font-semibold">
+                  <span class="text-gray-300">Variação:</span>
+                  <span id="raioDiferenca" class="text-emerald-500">R$ 0,00</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-emerald-50/50 dark:bg-emerald-950/20 p-5 rounded-xl border border-emerald-200 dark:border-emerald-900/50 space-y-3">
+              <h4 class="font-bold text-sm text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+                <i class="fa-solid fa-hand-holding-dollar text-emerald-500"></i> 2. Resultado Líquido Real (+ Proventos)
+              </h4>
+              <div class="space-y-2 text-xs">
+                <div class="flex justify-between py-1 border-b border-emerald-200 dark:border-emerald-900/40">
+                  <span class="text-gray-400">Patrimônio + Proventos:</span>
+                  <span id="raioPatrimonioMaisDiv" class="font-bold">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between py-1 font-semibold text-sm">
+                  <span class="text-emerald-400">Lucro Líquido Real:</span>
+                  <span id="raioResultadoFinal" class="text-emerald-400">R$ 0,00</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-          <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-            <span class="text-xs text-blue-200 uppercase font-semibold">Patrimônio Projetado</span>
-            <h4 id="simPatrimonioFinal" class="text-xl font-bold text-white mt-1">R$ 0,00</h4>
-          </div>
-          <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-            <span class="text-xs text-emerald-300 uppercase font-semibold">Renda Passiva Mensal Estimada</span>
-            <h4 id="simRendaMensal" class="text-xl font-bold text-emerald-400 mt-1">R$ 0,00 / mês</h4>
-          </div>
-          <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-            <span class="text-xs text-cyan-300 uppercase font-semibold">Total em Dividendos Acumulados</span>
-            <h4 id="simTotalDividendos" class="text-xl font-bold text-cyan-400 mt-1">R$ 0,00</h4>
-          </div>
-        </div>
-      </div>
       </section>
 
       <!-- SEÇÃO: CARTEIRA -->
       <section id="sec-carteira" class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border border-gray-100 dark:border-darkborder hidden transition-colors">
         <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
           <h3 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-            <i class="fa-solid fa-wallet text-blue-600 dark:text-blue-400"></i> Minha Carteira
+            <i class="fa-solid fa-wallet text-blue-600"></i> Minha Carteira
           </h3>
           <div class="flex gap-2 flex-wrap">
             <button onclick="abrirModalOperacao()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-md font-medium text-sm flex items-center gap-1.5 transition">
               <i class="fa-solid fa-plus"></i> Nova Operação
             </button>
-            <button onclick="atualizarCotacoesBrapi(true)" class="bg-blue-50 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-darkborder px-3 py-2 rounded-md font-medium text-sm flex items-center gap-1.5 transition">
-              <i class="fa-solid fa-rotate"></i> Atualizar Preços (Brapi)
+            <button onclick="atualizarCotacoesBrapi(true)" class="bg-blue-50 dark:bg-slate-800 hover:bg-blue-100 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-darkborder px-3 py-2 rounded-md font-medium text-sm flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-rotate"></i> Atualizar Preços & Proventos (Brapi)
             </button>
-            <button onclick="exportarBackup()" class="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-darkborder px-3 py-2 rounded-md font-medium text-sm flex items-center gap-1.5 transition">
+            <button onclick="exportarBackup()" class="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 text-gray-700 dark:text-gray-300 border px-3 py-2 rounded-md font-medium text-sm">
               <i class="fa-solid fa-download"></i> Salvar Backup
             </button>
-            <label class="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-darkborder px-3 py-2 rounded-md font-medium text-sm flex items-center gap-1.5 cursor-pointer transition">
+            <label class="bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 text-gray-700 dark:text-gray-300 border px-3 py-2 rounded-md font-medium text-sm cursor-pointer">
               <i class="fa-solid fa-upload"></i> Carregar Backup
               <input type="file" id="importInput" accept=".json" onchange="importarBackup(event)" class="hidden">
             </label>
@@ -473,9 +322,7 @@
                 <th class="py-3 px-4 text-center">Ações</th>
               </tr>
             </thead>
-            <tbody id="tabelaAtivos" class="divide-y divide-gray-100 dark:divide-darkborder text-sm">
-              <!-- Preenchido dinamicamente por renderizarTabelaCarteira(), a partir de carteiraAtivos (localStorage) -->
-            </tbody>
+            <tbody id="tabelaAtivos" class="divide-y divide-gray-100 dark:divide-darkborder text-sm"></tbody>
           </table>
         </div>
       </section>
@@ -485,30 +332,21 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder p-4 rounded-xl flex items-center justify-between shadow-sm">
             <div>
-              <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Gerenciamento</span>
+              <span class="text-xs font-semibold text-gray-500 uppercase">Gerenciamento</span>
               <h4 class="text-lg font-bold text-gray-800 dark:text-white mt-0.5">Registrar Provento</h4>
             </div>
-            <button onclick="abrirModalDividendo()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-1.5 transition shadow-sm">
+            <button onclick="abrirModalDividendo()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-1.5 transition">
               <i class="fa-solid fa-plus-circle"></i> Adicionar
             </button>
           </div>
           <div class="bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder p-4 rounded-xl flex items-center justify-between shadow-sm">
             <div>
-              <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Calendário</span>
+              <span class="text-xs font-semibold text-gray-500 uppercase">Calendário</span>
               <h4 class="text-lg font-bold text-gray-800 dark:text-white mt-0.5">Próximos Dividendos</h4>
             </div>
-            <button onclick="abrirProximosDividendos()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-1.5 transition shadow-sm">
+            <button onclick="abrirProximosDividendos()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-1.5 transition">
               <i class="fa-solid fa-calendar-alt"></i> Ver Agenda
             </button>
-          </div>
-        </div>
-
-        <div class="flex justify-between items-center flex-wrap gap-4 pt-2">
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-              <i class="fa-solid fa-hand-holding-dollar text-emerald-600 dark:text-emerald-400"></i> Histórico de Proventos e Dividendos
-            </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Acompanhe todos os JCPs e Dividendos recebidos na sua carteira (em ordem cronológica de pagamento):</p>
           </div>
         </div>
 
@@ -523,16 +361,15 @@
           </div>
         </div>
 
-        <!-- GRÁFICO DE PROVENTOS: ANO -> MÊS -> ATIVOS QUE PAGARAM -->
+        <!-- GRÁFICO DE PROVENTOS -->
         <div class="p-5 border border-gray-200 dark:border-darkborder rounded-xl bg-gray-50 dark:bg-slate-900 space-y-3">
           <div class="flex justify-between items-center flex-wrap gap-3">
             <div>
               <h4 id="tituloGraficoProventos" class="font-bold text-gray-800 dark:text-white flex items-center gap-2">
                 <i class="fa-solid fa-chart-column text-emerald-500"></i> Proventos por Ano
               </h4>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Clique em uma barra de ano para ver os meses, e em um mês para ver quais ativos pagaram.</p>
             </div>
-            <button id="btnVoltarGraficoProventos" onclick="voltarGraficoProventos()" class="hidden bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 border border-gray-300 dark:border-darkborder text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+            <button id="btnVoltarGraficoProventos" onclick="voltarGraficoProventos()" class="hidden bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
               <i class="fa-solid fa-arrow-left"></i> Voltar para Anos
             </button>
           </div>
@@ -542,7 +379,6 @@
           <div id="listaAtivosMesProventos" class="hidden space-y-2 pt-2 border-t border-gray-200 dark:border-darkborder"></div>
         </div>
 
-        <!-- TABELA GERAL DE PROVENTOS -->
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
             <thead>
@@ -555,20 +391,8 @@
                 <th class="py-3 px-4 text-center">Ações</th>
               </tr>
             </thead>
-            <tbody id="tabelaDividendos" class="divide-y divide-gray-100 dark:divide-darkborder text-sm">
-              <!-- Inserido via script -->
-            </tbody>
+            <tbody id="tabelaDividendos" class="divide-y divide-gray-100 dark:divide-darkborder text-sm"></tbody>
           </table>
-        </div>
-
-        <!-- HISTÓRICO DETALHADO POR ATIVO -->
-        <div class="pt-6 border-t border-gray-200 dark:border-darkborder">
-          <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4">
-            <i class="fa-solid fa-layer-group text-blue-600 dark:text-blue-400"></i> Histórico Detalhado por Ativos Separados
-          </h3>
-          <div id="containerDividendosPorAtivo" class="space-y-4">
-            <!-- Preenchido dinamicamente -->
-          </div>
         </div>
       </section>
 
@@ -577,125 +401,39 @@
         <div class="flex justify-between items-center flex-wrap gap-4">
           <div>
             <h3 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-              <i class="fa-solid fa-bullseye text-blue-600 dark:text-blue-400"></i> Radar de Oportunidades
+              <i class="fa-solid fa-bullseye text-blue-600"></i> Radar de Oportunidades
             </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Monitore e adicione ações para acompanhar oportunidades pelo Preço Justo:</p>
           </div>
           <div class="flex gap-2">
-            <input type="text" id="novoTickerRadar" placeholder="Ex: CPLE6, CXSE3" class="px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm uppercase focus:ring-2 focus:ring-blue-500 outline-none">
-            <button onclick="adicionarAtivoRadar()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-1.5 transition">
-              <i class="fa-solid fa-plus"></i> Adicionar ao Radar
+            <input type="text" id="novoTickerRadar" placeholder="Ex: CPLE6" class="px-3 py-2 border bg-white dark:bg-slate-900 rounded-lg text-sm uppercase outline-none">
+            <button onclick="adicionarAtivoRadar()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm">
+              <i class="fa-solid fa-plus"></i> Adicionar
             </button>
           </div>
         </div>
-        <div id="gridRadar" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Cards do radar -->
-        </div>
+        <div id="gridRadar" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
       </section>
 
       <!-- SEÇÃO: ANÁLISE & GRÁFICOS -->
       <section id="sec-analise" class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border border-gray-100 dark:border-darkborder hidden space-y-6 transition-colors">
-        <div class="flex justify-between items-center flex-wrap gap-4">
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-              <i class="fa-solid fa-chart-pie text-cyan-600 dark:text-cyan-400"></i> Análise de Alocação e Gráficos de Desempenho
-            </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Visão profissional da distribuição e histórico de sua carteira:</p>
-          </div>
-        </div>
-
-        <!-- GRÁFICO AVANÇADO ESTILO TRADINGVIEW (DIAS, MESES E ANOS) -->
         <div class="p-5 border border-gray-200 dark:border-darkborder rounded-xl bg-gray-50 dark:bg-slate-900 space-y-4">
           <div class="flex justify-between items-center flex-wrap gap-3">
             <div>
               <h4 class="font-bold text-gray-800 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-chart-line text-blue-500"></i> Gráfico Avançado de Cotação (Dias, Meses e Anos)
+                <i class="fa-solid fa-chart-line text-blue-500"></i> Gráfico Avançado de Cotação
               </h4>
-              <p id="precoJustoChartHeader" class="hidden text-xs text-gray-500 dark:text-gray-400 mt-1"></p>
             </div>
             <div class="flex items-center gap-2 flex-wrap">
-              <select id="tickerGraficoAvancado" onchange="carregarGraficoAvancado(); carregarTabelaRetornos();" class="px-3 py-1.5 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-800 text-gray-900 dark:text-white rounded-lg text-xs outline-none font-bold">
+              <select id="tickerGraficoAvancado" onchange="carregarGraficoAvancado();" class="px-3 py-1.5 border bg-white dark:bg-slate-800 rounded-lg text-xs font-bold outline-none">
                 <option value="PETR4">PETR4</option>
                 <option value="KLBN3">KLBN3</option>
                 <option value="SAPR11">SAPR11</option>
               </select>
-              <div class="flex bg-white dark:bg-slate-800 border border-gray-300 dark:border-darkborder rounded-lg overflow-hidden text-xs font-semibold">
-                <button onclick="mudarPeriodoGrafico('5D')" id="btn-5D" class="px-3 py-1.5 hover:bg-blue-600 hover:text-white transition">5D</button>
-                <button onclick="mudarPeriodoGrafico('1M')" id="btn-1M" class="px-3 py-1.5 hover:bg-blue-600 hover:text-white transition bg-blue-600 text-white">1M</button>
-                <button onclick="mudarPeriodoGrafico('3M')" id="btn-3M" class="px-3 py-1.5 hover:bg-blue-600 hover:text-white transition">3M</button>
-              </div>
             </div>
           </div>
-          <div id="avisoGraficoSimulado" class="hidden flex items-center gap-2 text-xs font-semibold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-800 rounded-lg px-3 py-2">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>Sem token válido ou API indisponível: exibindo dados <b>simulados</b> apenas para visualização. Configure o token da Brapi em Configurações para ver o histórico real.</span>
-          </div>
-          <!-- Container externo fixo (não é limpo pela lib do gráfico) -->
-          <div id="tradingviewChartOuter" class="w-full h-80 rounded-lg overflow-hidden border border-gray-200 dark:border-darkborder bg-white dark:bg-slate-950 relative min-h-[320px]">
-            <!-- Container interno: a biblioteca do gráfico limpa e recria isso livremente -->
+          <div id="tradingviewChartOuter" class="w-full h-80 rounded-lg overflow-hidden border bg-white dark:bg-slate-950 relative">
             <div id="tradingviewChartContainer" class="w-full h-full"></div>
-            <!-- Tooltip flutuante com OHLC + Volume ao passar o mouse -->
-            <div id="tooltipGraficoAvancado" class="hidden absolute z-10 pointer-events-none bg-white dark:bg-slate-800 border border-gray-200 dark:border-darkborder rounded-lg shadow-lg px-3 py-2 text-xs space-y-0.5 text-gray-700 dark:text-gray-200"></div>
-          </div>
-          <p class="text-xs text-gray-400 text-center">Arraste para navegar no tempo ou use o seletor acima para alternar o horizonte temporal por dias, meses ou anos.</p>
-
-          <!-- TABELA DE RETORNO POR PERÍODO -->
-          <div class="pt-3 border-t border-gray-200 dark:border-darkborder">
-            <div id="tabelaRetornosPeriodo" class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center text-xs">
-              <!-- Preenchido dinamicamente por carregarTabelaRetornos() -->
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="p-5 border border-gray-200 dark:border-darkborder rounded-xl bg-gray-50 dark:bg-slate-900 space-y-4">
-            <h4 class="font-bold text-gray-800 dark:text-white flex items-center gap-2">
-              <i class="fa-solid fa-chart-pie text-blue-500"></i> Alocação Setorial da Carteira
-            </h4>
-            <div id="containerBarrasAlocacao" class="space-y-3">
-              <!-- Barras de alocação -->
-            </div>
-          </div>
-
-          <div class="p-5 border border-gray-200 dark:border-darkborder rounded-xl bg-gray-50 dark:bg-slate-900 flex flex-col justify-between space-y-4">
-            <div>
-              <h4 class="font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-2">
-                <i class="fa-solid fa-shield-halved text-emerald-500"></i> Saúde e Resiliência da Carteira
-              </h4>
-              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Sua carteira está estruturada com foco em empresas geradoras de caixa e pagadoras de dividendos consistentes. O risco de volatilidade setorial encontra-se equilibrado.
-              </p>
-            </div>
-            <div class="grid grid-cols-2 gap-3 pt-2">
-              <div class="bg-white dark:bg-darkcard p-3 rounded-lg border border-gray-100 dark:border-darkborder text-center">
-                <span class="text-xs text-gray-500 uppercase font-semibold">Ativos Monitorados</span>
-                <h5 id="qtdAtivosMonitorados" class="text-lg font-bold text-blue-600 dark:text-blue-400 mt-1">0</h5>
-              </div>
-              <div class="bg-white dark:bg-darkcard p-3 rounded-lg border border-gray-100 dark:border-darkborder text-center">
-                <span class="text-xs text-gray-500 uppercase font-semibold">Classificação de Risco</span>
-                <h5 class="text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-1">Defensivo</h5>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="pt-4 border-t border-gray-200 dark:border-darkborder">
-          <h4 class="font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-3">
-            <i class="fa-solid fa-book-open text-blue-600"></i> Glossário Rápido para o Investidor Iniciante
-          </h4>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            <div class="p-3 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder rounded-lg">
-              <span class="font-bold text-blue-600 dark:text-blue-400 text-sm">Preço Justo (Graham)</span>
-              <p class="text-gray-600 dark:text-gray-400 mt-1">Valor intrínseco estimado da ação baseado nos lucros e patrimônio líquido por ação.</p>
-            </div>
-            <div class="p-3 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder rounded-lg">
-              <span class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">Dividend Yield (DY)</span>
-              <p class="text-gray-600 dark:text-gray-400 mt-1">Retorno em dividendos pagos nos últimos 12 meses dividido pelo preço atual.</p>
-            </div>
-            <div class="p-3 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder rounded-lg">
-              <span class="font-bold text-cyan-600 dark:text-cyan-400 text-sm">P/VP (Preço / Valor Patrimonial)</span>
-              <p class="text-gray-600 dark:text-gray-400 mt-1">Indica se você está pagando mais ou menos do que o patrimônio real contábil.</p>
-            </div>
+            <div id="tooltipGraficoAvancado" class="hidden absolute z-10 pointer-events-none bg-white dark:bg-slate-800 border rounded-lg shadow-lg px-3 py-2 text-xs"></div>
           </div>
         </div>
       </section>
@@ -704,93 +442,14 @@
       <section id="sec-configuracoes" class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border border-gray-100 dark:border-darkborder hidden space-y-8 transition-colors">
         <div>
           <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-gear text-blue-600 dark:text-blue-400"></i> Configurações da API Brapi
+            <i class="fa-solid fa-gear text-blue-600"></i> Configurações da API Brapi
           </h3>
           <div class="max-w-md">
-            <label for="brapiTokenInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Token de Acesso da Brapi (brapi.dev)</label>
-            <input type="text" id="brapiTokenInput" placeholder="Cole seu token da Brapi aqui" class="w-full p-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-md text-sm mb-4 focus:ring-2 focus:ring-blue-500 outline-none">
-            <button onclick="salvarConfiguracoes()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium text-sm transition">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Token de Acesso da Brapi (brapi.dev)</label>
+            <input type="text" id="brapiTokenInput" placeholder="Cole seu token aqui" class="w-full p-2 border bg-white dark:bg-slate-900 rounded-md text-sm mb-4 outline-none">
+            <button onclick="salvarConfiguracoes()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium text-sm">
               Salvar Token
             </button>
-          </div>
-        </div>
-
-        <div class="border-t border-gray-200 dark:border-darkborder pt-8">
-          <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-shield-halved text-blue-600 dark:text-blue-400"></i> Segurança e Senha
-          </h3>
-
-          <div class="max-w-md space-y-6">
-            <!-- TROCAR SENHA -->
-            <div class="p-4 border border-gray-200 dark:border-darkborder rounded-lg space-y-3">
-              <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Trocar senha de acesso</h4>
-              <div>
-                <label for="senhaAtualInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Senha atual</label>
-                <div class="relative">
-                  <input type="text" id="senhaAtualInput" name="senha_atual_cfg" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" data-lpignore="true" data-1p-ignore placeholder="••••••" class="campo-senha-mascarada w-full px-3 py-2 pr-10 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                  <button type="button" onclick="alternarVisibilidadeSenha('senhaAtualInput', this)" tabindex="-1" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                    <i class="fa-solid fa-eye"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label for="novaSenhaInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Nova senha</label>
-                  <div class="relative">
-                    <input type="text" id="novaSenhaInput" name="nova_senha_cfg" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" data-lpignore="true" data-1p-ignore placeholder="••••••" class="campo-senha-mascarada w-full px-3 py-2 pr-10 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                    <button type="button" onclick="alternarVisibilidadeSenha('novaSenhaInput', this)" tabindex="-1" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                      <i class="fa-solid fa-eye"></i>
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label for="confirmarSenhaInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Confirmar nova senha</label>
-                  <div class="relative">
-                    <input type="text" id="confirmarSenhaInput" name="confirmar_senha_cfg" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" data-lpignore="true" data-1p-ignore placeholder="••••••" class="campo-senha-mascarada w-full px-3 py-2 pr-10 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                    <button type="button" onclick="alternarVisibilidadeSenha('confirmarSenhaInput', this)" tabindex="-1" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                      <i class="fa-solid fa-eye"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <button onclick="trocarSenha()" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium text-sm transition">
-                Salvar nova senha
-              </button>
-              <button onclick="abrirModalRecuperarSenha()" class="w-full text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400 transition">
-                Esqueci a senha atual
-              </button>
-            </div>
-
-            <!-- E-MAIL DE RECUPERAÇÃO -->
-            <div class="p-4 border border-gray-200 dark:border-darkborder rounded-lg space-y-3">
-              <h4 class="font-semibold text-sm text-gray-800 dark:text-white">E-mail de recuperação</h4>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Para onde enviaremos o código de 6 dígitos caso você esqueça a senha.</p>
-              <input type="email" id="emailRecuperacaoInput" placeholder="seuemail@exemplo.com" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-              <button onclick="salvarEmailRecuperacao()" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 px-4 py-2 rounded-md font-medium text-sm transition">
-                Salvar e-mail
-              </button>
-            </div>
-
-            <!-- CONFIGURAÇÃO DO EMAILJS -->
-            <div class="p-4 border border-gray-200 dark:border-darkborder rounded-lg space-y-3">
-              <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Envio de e-mail (EmailJS)</h4>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Cole aqui os 3 dados da sua conta gratuita em <a href="https://www.emailjs.com" target="_blank" rel="noopener" class="text-blue-500 underline">emailjs.com</a> (Service ID, Template ID e Public Key).</p>
-              <div>
-                <label for="emailjsServiceIdInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Service ID</label>
-                <input type="text" id="emailjsServiceIdInput" placeholder="Ex: service_xxxxxxx" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-              </div>
-              <div>
-                <label for="emailjsTemplateIdInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Template ID</label>
-                <input type="text" id="emailjsTemplateIdInput" placeholder="Ex: template_xxxxxxx" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-              </div>
-              <div>
-                <label for="emailjsPublicKeyInput" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Public Key</label>
-                <input type="text" id="emailjsPublicKeyInput" placeholder="Ex: AbCdEfGhIjKlMnOp" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-              </div>
-              <button onclick="salvarConfigEmailJS()" class="w-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 px-4 py-2 rounded-md font-medium text-sm transition">
-                Salvar configuração do EmailJS
-              </button>
-            </div>
           </div>
         </div>
       </section>
@@ -804,17 +463,17 @@
         <h3 id="tituloModalDividendo" class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <i class="fa-solid fa-plus-circle text-emerald-600"></i> Registrar Novo Provento
         </h3>
-        <button onclick="fecharModalDividendo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <button onclick="fecharModalDividendo()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
       <div class="space-y-4">
         <input type="hidden" id="divIndexEdicao" value="-1">
         <div>
-          <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Ticker do Ativo</label>
-          <input type="text" id="divTicker" placeholder="Ex: SAPR11" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm uppercase outline-none focus:ring-2 focus:ring-emerald-500">
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Ticker do Ativo</label>
+          <input type="text" id="divTicker" placeholder="Ex: SAPR11" class="w-full px-3 py-2 border bg-white dark:bg-slate-900 rounded-lg text-sm uppercase outline-none">
         </div>
         <div>
-          <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Tipo de Provento</label>
-          <select id="divTipo" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Tipo de Provento</label>
+          <select id="divTipo" class="w-full px-3 py-2 border bg-white dark:bg-slate-900 rounded-lg text-sm outline-none">
             <option value="JCP / Dividendo">JCP / Dividendo</option>
             <option value="Dividendo Extra">Dividendo Extra</option>
             <option value="Dividendo Trimestral">Dividendo Trimestral</option>
@@ -822,73 +481,33 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Data Com</label>
-            <input type="text" id="divDataCom" placeholder="Ex: 15/12/2025" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+            <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Data Com</label>
+            <input type="text" id="divDataCom" placeholder="Ex: 15/12/2025" class="w-full px-3 py-2 border bg-white dark:bg-slate-900 rounded-lg text-sm outline-none">
           </div>
           <div>
-            <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Data Pagamento</label>
-            <input type="text" id="divDataPag" placeholder="Ex: 28/12/2025" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+            <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Data Pagamento</label>
+            <input type="text" id="divDataPag" placeholder="Ex: 28/12/2025" class="w-full px-3 py-2 border bg-white dark:bg-slate-900 rounded-lg text-sm outline-none">
           </div>
         </div>
         <div>
-          <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Valor Total (R$)</label>
-          <input type="number" step="0.01" id="divValor" placeholder="Ex: 45.20" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Valor Total (R$)</label>
+          <input type="number" step="0.01" id="divValor" placeholder="Ex: 45.20" class="w-full px-3 py-2 border bg-white dark:bg-slate-900 rounded-lg text-sm outline-none">
         </div>
         <div class="flex gap-3 pt-2">
-          <button onclick="fecharModalDividendo()" class="w-1/2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-sm transition">
-            Cancelar
-          </button>
-          <button onclick="salvarNovoDividendo()" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg text-sm transition">
-            Salvar Provento
-          </button>
+          <button onclick="fecharModalDividendo()" class="w-1/2 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-sm">Cancelar</button>
+          <button onclick="salvarNovoDividendo()" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg text-sm">Salvar</button>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // A versão exibida no app agora vem do version.json (fonte única da verdade).
-    // Isso resolve a falha antiga de version.json e a versão nas telas ficarem dessincronizados.
-    let VERSAO_ATUAL = "1.8.4"; // valor de fallback, sobrescrito por carregarVersaoApp() abaixo
-
-    async function carregarVersaoApp() {
-      try {
-        const resposta = await fetch('./version.json?t=' + new Date().getTime());
-        if (resposta.ok) {
-          const dados = await resposta.json();
-          if (dados && dados.version) {
-            VERSAO_ATUAL = dados.version;
-          }
-        }
-      } catch (e) {
-        console.log("Não foi possível ler version.json, usando versão de fallback embutida.");
-      }
-      const textoVersao = `Versão V${VERSAO_ATUAL}`;
-      document.querySelectorAll('#badgeVersaoLogin, #badgeVersaoHeader').forEach(el => {
-        if (el) el.innerText = textoVersao;
-      });
-    }
+    let VERSAO_ATUAL = "1.8.4";
 
     if (!localStorage.getItem('app_senha')) {
       localStorage.setItem('app_senha', '123456');
     }
 
-    // CONFIGURAÇÃO DO EMAILJS (recuperação de senha por e-mail, sem backend)
-    // Preencha em Configurações > Segurança, ou direto aqui. Veja o passo a passo que te enviei
-    // com as instruções de como criar a conta e obter esses 3 valores em emailjs.com.
-    let emailjsConfig = JSON.parse(localStorage.getItem('emailjs_config')) || {
-      serviceId: '',
-      templateId: '',
-      publicKey: ''
-    };
-
-    function inicializarEmailJS() {
-      if (emailjsConfig.publicKey && typeof emailjs !== 'undefined') {
-        emailjs.init({ publicKey: emailjsConfig.publicKey });
-      }
-    }
-
-    // MODELO DE DADOS DA CARTEIRA (antes só existia no DOM e se perdia ao recarregar a página)
     const CARTEIRA_PADRAO = [
       { ticker: 'PETR4', qtd: 10, pm: 32.21, precoAtual: 32.21, precoJusto: 27.22, precoJustoEstimado: false, variacao: 0 },
       { ticker: 'KLBN3', qtd: 225, pm: 6.28, precoAtual: 6.28, precoJusto: 3.81, precoJustoEstimado: false, variacao: 0 },
@@ -911,11 +530,9 @@
     let tvSeries = null;
     let tvVolumeSeries = null;
     let periodoGraficoAtual = '1M';
-    let dadosOHLCVAtual = []; // guarda open/high/low/close/volume por data, usado pelo tooltip
+    let dadosOHLCVAtual = [];
 
     document.addEventListener('DOMContentLoaded', () => {
-      carregarVersaoApp();
-      inicializarEmailJS();
       const temaSalvo = localStorage.getItem('app_tema') || 'dark';
       if (temaSalvo === 'dark') {
         document.documentElement.classList.add('dark');
@@ -928,30 +545,15 @@
       document.getElementById('telaLogin').classList.remove('hidden');
       document.getElementById('appConteudo').classList.add('hidden');
 
-      const campoSenha = document.getElementById('senhaAcesso');
-      if (campoSenha) {
-        campoSenha.value = '';
-        setTimeout(() => { campoSenha.value = ''; }, 100);
-      }
-
       const tokenSalvo = localStorage.getItem('brapi_token');
       if (tokenSalvo) {
         document.getElementById('brapiTokenInput').value = tokenSalvo;
       }
 
-      const emailRecSalvo = localStorage.getItem('app_email_recuperacao');
-      if (emailRecSalvo) {
-        document.getElementById('emailRecuperacaoInput').value = emailRecSalvo;
-      }
-      document.getElementById('emailjsServiceIdInput').value = emailjsConfig.serviceId || '';
-      document.getElementById('emailjsTemplateIdInput').value = emailjsConfig.templateId || '';
-      document.getElementById('emailjsPublicKeyInput').value = emailjsConfig.publicKey || '';
-
       renderizarTabelaCarteira();
       renderizarCardsRadar();
       renderizarTabelaDividendos();
       recalcularTotais();
-      verificarAtualizacaoApp();
     });
 
     function alternarTema() {
@@ -961,43 +563,15 @@
         html.classList.remove('dark');
         localStorage.setItem('app_tema', 'light');
         icone.className = "fa-solid fa-moon";
-        mostrarNotificacao("Modo claro ativado.", "info");
       } else {
         html.classList.add('dark');
         localStorage.setItem('app_tema', 'dark');
         icone.className = "fa-solid fa-sun";
-        mostrarNotificacao("Modo escuro ativado.", "info");
-      }
-      if (tvChart) {
-        atualizarCoresGraficoTradingView();
       }
     }
 
-    function abrirModalChangelog() {
-      document.getElementById('modalChangelog').classList.remove('hidden');
-    }
-
-    function fecharModalChangelog() {
-      document.getElementById('modalChangelog').classList.add('hidden');
-    }
-
-    async function verificarAtualizacaoApp() {
-      try {
-        const resposta = await fetch('./version.json?t=' + new Date().getTime());
-        if (resposta.ok) {
-          const dados = await resposta.json();
-          if (dados && dados.version && dados.version !== VERSAO_ATUAL) {
-            // Banner fixo superior omitido permanentemente (ver Changelog V1.5.9)
-          }
-        }
-      } catch (e) {
-        console.log("Verificação de versão ignorada.");
-      }
-    }
-
-    function recarregarPaginaNovaVersao() {
-      window.location.reload(true);
-    }
+    function abrirModalChangelog() { document.getElementById('modalChangelog').classList.remove('hidden'); }
+    function fecharModalChangelog() { document.getElementById('modalChangelog').classList.add('hidden'); }
 
     function mostrarNotificacao(mensagem, tipo = 'sucesso') {
       const container = document.getElementById('toastContainer');
@@ -1008,20 +582,10 @@
         aviso: 'bg-amber-500 text-white',
         info: 'bg-blue-600 text-white'
       };
-      const icones = {
-        sucesso: 'fa-circle-check',
-        erro: 'fa-circle-xmark',
-        aviso: 'fa-triangle-exclamation',
-        info: 'fa-circle-info'
-      };
-      toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium transform transition-all duration-300 translate-y-2 opacity-0 ${cores[tipo] || cores.info}`;
-      toast.innerHTML = `<i class="fa-solid ${icones[tipo] || icones.info} text-lg"></i> <span>${mensagem}</span>`;
+      toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${cores[tipo] || cores.info}`;
+      toast.innerHTML = `<span>${mensagem}</span>`;
       container.appendChild(toast);
-      setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
-      setTimeout(() => {
-        toast.classList.add('opacity-0', 'translate-y-2');
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
+      setTimeout(() => toast.remove(), 3500);
     }
 
     function autenticar() {
@@ -1033,18 +597,11 @@
         document.getElementById('senhaAcesso').value = '';
         testarStatusBrapi();
         recalcularTotais();
-        mostrarNotificacao("Acesso liberado com sucesso!", "sucesso");
-        setTimeout(() => {
-          atualizarCotacoesBrapi(false);
-        }, 800);
+        setTimeout(() => { atualizarCotacoesBrapi(false); }, 800);
       } else {
-        mostrarNotificacao("Senha incorreta! Tente novamente.", "erro");
+        mostrarNotificacao("Senha incorreta!", "erro");
       }
     }
-
-    // Código de recuperação: guardado com validade de 15 minutos
-    let codigoRecuperacaoAtual = null;
-    let codigoRecuperacaoExpira = 0;
 
     function alternarVisibilidadeSenha(inputId, btn) {
       const input = document.getElementById(inputId);
@@ -1059,107 +616,23 @@
     }
 
     function esqueciSenha() {
-      abrirModalRecuperarSenha();
-    }
-
-    function abrirModalRecuperarSenha() {
-      const emailSalvo = localStorage.getItem('app_email_recuperacao') || '';
-      const textoEtapa = document.getElementById('textoEtapaEnvio');
-      const btnEnviar = document.getElementById('btnEnviarCodigoRecuperacao');
-
-      if (!emailSalvo) {
-        textoEtapa.innerHTML = 'Você ainda não configurou um <b>e-mail de recuperação</b> em Configurações. Sem ele, não é possível enviar o código — use a opção de redefinir para o padrão abaixo, e depois configure seu e-mail para as próximas vezes.';
-        btnEnviar.classList.add('hidden');
-      } else if (!emailjsConfig.serviceId || !emailjsConfig.templateId || !emailjsConfig.publicKey) {
-        textoEtapa.innerHTML = 'O envio de e-mail ainda não foi configurado (faltam os dados do EmailJS em Configurações). Use a opção de redefinir para o padrão abaixo, ou configure o EmailJS para habilitar o envio por código.';
-        btnEnviar.classList.add('hidden');
-      } else {
-        const emailOculto = emailSalvo.replace(/(.{2}).+(@.+)/, '$1***$2');
-        textoEtapa.innerHTML = `Enviaremos um código de 6 dígitos para <b>${emailOculto}</b>.`;
-        btnEnviar.classList.remove('hidden');
-      }
-
-      document.getElementById('etapaEnviarCodigo').classList.remove('hidden');
-      document.getElementById('etapaConfirmarCodigo').classList.add('hidden');
       document.getElementById('modalRecuperarSenha').classList.remove('hidden');
+      document.getElementById('textoEtapaEnvio').innerText = 'Use a redefinição padrão para acessar.';
     }
 
     function fecharModalRecuperarSenha() {
       document.getElementById('modalRecuperarSenha').classList.add('hidden');
-      document.getElementById('codigoRecuperacaoInput').value = '';
-      document.getElementById('novaSenhaRecuperacaoInput').value = '';
-    }
-
-    function voltarEtapaEnvioCodigo() {
-      document.getElementById('etapaConfirmarCodigo').classList.add('hidden');
-      document.getElementById('etapaEnviarCodigo').classList.remove('hidden');
-    }
-
-    async function enviarCodigoRecuperacao() {
-      const emailSalvo = localStorage.getItem('app_email_recuperacao');
-      if (!emailSalvo) return;
-
-      const btn = document.getElementById('btnEnviarCodigoRecuperacao');
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
-
-      codigoRecuperacaoAtual = String(Math.floor(100000 + Math.random() * 900000));
-      codigoRecuperacaoExpira = Date.now() + 15 * 60 * 1000; // 15 minutos
-
-      try {
-        await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, {
-          to_email: emailSalvo,
-          codigo: codigoRecuperacaoAtual,
-          app_nome: 'AnalystPro'
-        });
-        mostrarNotificacao('Código enviado! Confira seu e-mail.', 'sucesso');
-        document.getElementById('etapaEnviarCodigo').classList.add('hidden');
-        document.getElementById('etapaConfirmarCodigo').classList.remove('hidden');
-      } catch (erro) {
-        console.error('Erro ao enviar e-mail via EmailJS:', erro);
-        mostrarNotificacao('Não foi possível enviar o e-mail. Confira a configuração do EmailJS.', 'erro');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar código por e-mail';
-      }
-    }
-
-    function confirmarRecuperacaoSenha() {
-      const codigoDigitado = document.getElementById('codigoRecuperacaoInput').value.trim();
-      const novaSenha = document.getElementById('novaSenhaRecuperacaoInput').value.trim();
-
-      if (Date.now() > codigoRecuperacaoExpira || !codigoRecuperacaoAtual) {
-        mostrarNotificacao('Código expirado. Solicite um novo.', 'erro');
-        voltarEtapaEnvioCodigo();
-        return;
-      }
-      if (codigoDigitado !== codigoRecuperacaoAtual) {
-        mostrarNotificacao('Código incorreto.', 'erro');
-        return;
-      }
-      if (!/^[0-9]{4,6}$/.test(novaSenha)) {
-        mostrarNotificacao('A nova senha deve ter de 4 a 6 números.', 'aviso');
-        return;
-      }
-
-      localStorage.setItem('app_senha', novaSenha);
-      codigoRecuperacaoAtual = null;
-      mostrarNotificacao('Senha alterada com sucesso!', 'sucesso');
-      fecharModalRecuperarSenha();
     }
 
     function resetarSenhaParaPadrao() {
       localStorage.setItem('app_senha', '123456');
       mostrarNotificacao("Senha redefinida para: 123456", "sucesso");
-      document.getElementById('senhaAcesso').value = '';
       fecharModalRecuperarSenha();
     }
 
     function bloquearApp() {
       document.getElementById('appConteudo').classList.add('hidden');
       document.getElementById('telaLogin').classList.remove('hidden');
-      const campoSenha = document.getElementById('senhaAcesso');
-      if (campoSenha) campoSenha.value = '';
       mostrarNotificacao("Sessão encerrada.", "info");
     }
 
@@ -1167,24 +640,17 @@
       const statusContainer = document.getElementById('statusApiBrapi');
       const token = localStorage.getItem('brapi_token');
       if (!token) {
-        statusContainer.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300";
         statusContainer.innerHTML = `<span class="w-2 h-2 rounded-full bg-yellow-500"></span><span>Brapi: Sem Token</span>`;
         return;
       }
       try {
-        // Chamada direta à Brapi (sem proxy CORS): a Brapi já libera CORS para uso via navegador.
-        // O corsproxy.io foi removido porque passou a exigir cadastro/chave própria e estava
-        // bloqueando as requisições, mascarado como se fosse erro 401 da Brapi.
         const res = await fetch(`https://brapi.dev/api/quote/PETR4?token=${token}`);
         if (res.ok) {
-          statusContainer.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300";
           statusContainer.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Brapi: Online</span>`;
         } else {
-          statusContainer.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300";
           statusContainer.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span><span>Brapi: Erro ${res.status}</span>`;
         }
       } catch (err) {
-        statusContainer.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300";
         statusContainer.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span><span>Brapi: Offline</span>`;
       }
     }
@@ -1196,478 +662,111 @@
       });
       const ativa = document.getElementById(`sec-${aba}`);
       if (ativa) ativa.classList.remove('hidden');
-      
-      if (aba === 'analise') {
-        setTimeout(() => {
-          inicializarGraficoTradingView();
-          carregarTabelaRetornos();
-        }, 150);
-      }
-
-      if (aba === 'dividendos') {
-        setTimeout(() => {
-          if (graficoProventosChart) {
-            graficoProventosChart.resize();
-          } else {
-            renderizarGraficoProventos();
-          }
-        }, 150);
-      }
     }
 
     function salvarConfiguracoes() {
       const input = document.getElementById('brapiTokenInput');
       if (input && input.value.trim() !== "") {
         localStorage.setItem('brapi_token', input.value.trim());
-        mostrarNotificacao("Token da Brapi salvo com sucesso!", "sucesso");
+        mostrarNotificacao("Token salvo com sucesso!", "sucesso");
         testarStatusBrapi();
-      } else {
-        mostrarNotificacao("Por favor, insira um token válido.", "aviso");
       }
     }
 
-    function trocarSenha() {
-      const senhaAtual = document.getElementById('senhaAtualInput').value.trim();
-      const novaSenha = document.getElementById('novaSenhaInput').value.trim();
-      const confirmarSenha = document.getElementById('confirmarSenhaInput').value.trim();
-      const senhaSalva = localStorage.getItem('app_senha') || '123456';
-
-      if (senhaAtual !== senhaSalva) {
-        mostrarNotificacao("Senha atual incorreta.", "erro");
-        return;
-      }
-      if (!/^[0-9]{4,6}$/.test(novaSenha)) {
-        mostrarNotificacao("A nova senha deve ter de 4 a 6 números.", "aviso");
-        return;
-      }
-      if (novaSenha !== confirmarSenha) {
-        mostrarNotificacao("As senhas não coincidem.", "aviso");
-        return;
-      }
-
-      localStorage.setItem('app_senha', novaSenha);
-      mostrarNotificacao("Senha alterada com sucesso!", "sucesso");
-      document.getElementById('senhaAtualInput').value = '';
-      document.getElementById('novaSenhaInput').value = '';
-      document.getElementById('confirmarSenhaInput').value = '';
-    }
-
-    function salvarEmailRecuperacao() {
-      const email = document.getElementById('emailRecuperacaoInput').value.trim();
-      if (!email || !email.includes('@')) {
-        mostrarNotificacao("Insira um e-mail válido.", "aviso");
-        return;
-      }
-      localStorage.setItem('app_email_recuperacao', email);
-      mostrarNotificacao("E-mail de recuperação salvo!", "sucesso");
-    }
-
-    function salvarConfigEmailJS() {
-      const serviceId = document.getElementById('emailjsServiceIdInput').value.trim();
-      const templateId = document.getElementById('emailjsTemplateIdInput').value.trim();
-      const publicKey = document.getElementById('emailjsPublicKeyInput').value.trim();
-
-      if (!serviceId || !templateId || !publicKey) {
-        mostrarNotificacao("Preencha os 3 campos do EmailJS.", "aviso");
-        return;
-      }
-
-      emailjsConfig = { serviceId, templateId, publicKey };
-      localStorage.setItem('emailjs_config', JSON.stringify(emailjsConfig));
-      inicializarEmailJS();
-      mostrarNotificacao("Configuração do EmailJS salva!", "sucesso");
-    }
-
-    // GRÁFICO AVANÇADO TRADINGVIEW LIGHTWEIGHT CHARTS
-    function inicializarGraficoTradingView() {
-      const container = document.getElementById('tradingviewChartContainer');
-      if (!container) return;
-
-      if (typeof LightweightCharts === 'undefined') {
-        container.innerHTML = `
-          <div class="w-full h-full flex flex-col items-center justify-center gap-2 text-center p-4">
-            <i class="fa-solid fa-triangle-exclamation text-amber-500 text-2xl"></i>
-            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Não foi possível carregar a biblioteca do gráfico.</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 max-w-sm">Isso costuma ser bloqueio de rede/firewall ao CDN (jsdelivr.net). Verifique sua conexão ou tente outra rede, e depois recarregue a página.</p>
-          </div>`;
-        return;
-      }
-
-      const isDark = document.documentElement.classList.contains('dark');
-      
-      container.innerHTML = '';
-      tvChart = null;
-      tvSeries = null;
-      tvVolumeSeries = null;
-
-      let larguraReal = container.clientWidth;
-      if (!larguraReal || larguraReal < 50) {
-        larguraReal = container.parentElement ? container.parentElement.clientWidth - 40 : 700;
-      }
-      if (!larguraReal || larguraReal < 50) {
-        larguraReal = 700;
-      }
-
-      tvChart = LightweightCharts.createChart(container, {
-        width: larguraReal,
-        height: 310,
-        layout: {
-          background: { type: 'solid', color: isDark ? '#090d16' : '#ffffff' },
-          textColor: isDark ? '#94a3b8' : '#334155',
-        },
-        grid: {
-          vertLines: { color: isDark ? '#1e293b' : '#f1f5f9' },
-          horzLines: { color: isDark ? '#1e293b' : '#f1f5f9' },
-        },
-        rightPriceScale: {
-          borderColor: isDark ? '#334155' : '#cbd5e1',
-        },
-        timeScale: {
-          borderColor: isDark ? '#334155' : '#cbd5e1',
-          timeVisible: true,
-        },
-      });
-
-      tvSeries = tvChart.addAreaSeries({
-        lineColor: '#2563eb',
-        topColor: 'rgba(37, 99, 235, 0.4)',
-        bottomColor: 'rgba(37, 99, 235, 0.0)',
-        lineWidth: 2,
-      });
-
-      // Série de volume, "espremida" nos 20% inferiores do gráfico via escala de preço própria
-      tvVolumeSeries = tvChart.addHistogramSeries({
-        priceFormat: { type: 'volume' },
-        priceScaleId: 'volume_scale',
-      });
-      tvChart.priceScale('volume_scale').applyOptions({
-        scaleMargins: { top: 0.82, bottom: 0 },
-      });
-
-      // Tooltip customizado com OHLC + Volume ao passar o mouse (a lib não tem tooltip pronto)
-      tvChart.subscribeCrosshairMove((param) => {
-        const tooltip = document.getElementById('tooltipGraficoAvancado');
-        if (!tooltip) return;
-
-        if (!param || !param.time || !param.point || param.point.x < 0 || param.point.y < 0) {
-          tooltip.classList.add('hidden');
-          return;
-        }
-
-        const pontoOHLCV = dadosOHLCVAtual.find(d => d.time === param.time);
-        if (!pontoOHLCV) {
-          tooltip.classList.add('hidden');
-          return;
-        }
-
-        const fmtR$ = (v) => `R$ ${v.toFixed(2).replace('.', ',')}`;
-        const fmtVol = (v) => v.toLocaleString('pt-BR');
-        const dataFormatada = formatarDataOHLCV(pontoOHLCV.time);
-        tooltip.innerHTML = `
-          <div class="font-bold text-gray-900 dark:text-white">${dataFormatada}</div>
-          <div>Abertura: <b>${fmtR$(pontoOHLCV.open)}</b></div>
-          <div>Máxima: <b>${fmtR$(pontoOHLCV.high)}</b></div>
-          <div>Mínima: <b>${fmtR$(pontoOHLCV.low)}</b></div>
-          <div>Fechamento: <b>${fmtR$(pontoOHLCV.close)}</b></div>
-          <div>Volume: <b>${fmtVol(pontoOHLCV.volume)}</b></div>
-        `;
-
-        const container = document.getElementById('tradingviewChartOuter');
-        const larguraContainer = container ? container.clientWidth : 300;
-        let left = param.point.x + 16;
-        if (left + 150 > larguraContainer) {
-          left = param.point.x - 166;
-        }
-        tooltip.style.left = left + 'px';
-        tooltip.style.top = '10px';
-        tooltip.classList.remove('hidden');
-      });
-
-      window.addEventListener('resize', () => {
-        if (container && tvChart) {
-          const novaLargura = container.clientWidth > 50 ? container.clientWidth : 700;
-          tvChart.applyOptions({ width: novaLargura });
-        }
-      });
-
-      carregarGraficoAvancado();
-    }
-
-    function atualizarCoresGraficoTradingView() {
-      if (!tvChart) return;
-      const isDark = document.documentElement.classList.contains('dark');
-      tvChart.applyOptions({
-        layout: {
-          background: { type: 'solid', color: isDark ? '#090d16' : '#ffffff' },
-          textColor: isDark ? '#94a3b8' : '#334155',
-        },
-        grid: {
-          vertLines: { color: isDark ? '#1e293b' : '#f1f5f9' },
-          horzLines: { color: isDark ? '#1e293b' : '#f1f5f9' },
-        }
-      });
-    }
-
-    function mudarPeriodoGrafico(periodo) {
-      periodoGraficoAtual = periodo;
-      ['5D', '1M', '3M'].forEach(p => {
-        const btn = document.getElementById(`btn-${p}`);
-        if (btn) {
-          if (p === periodo) {
-            btn.className = "px-3 py-1.5 hover:bg-blue-600 hover:text-white transition bg-blue-600 text-white";
-          } else {
-            btn.className = "px-3 py-1.5 hover:bg-blue-600 hover:text-white transition";
-          }
-        }
-      });
-      carregarGraficoAvancado();
-    }
-
-    async function carregarGraficoAvancado() {
-      if (!tvSeries) {
-        inicializarGraficoTradingView();
-        return;
-      }
-      const ticker = document.getElementById('tickerGraficoAvancado').value || 'PETR4';
+    // SINCRONIZAÇÃO AUTOMÁTICA DE PROVENTOS VIA BRAPI
+    async function verificarProventosAutomaticos() {
       const token = localStorage.getItem('brapi_token');
+      if (!token) return;
+      const tickers = Array.from(new Set(carteiraAtivos.map(a => a.ticker))).join(',');
+      if (!tickers) return;
 
-      let rangeStr = '1mo';
-      let intervalStr = '1d';
-      if (periodoGraficoAtual === '5D') { rangeStr = '5d'; intervalStr = '1d'; }
-      else if (periodoGraficoAtual === '1M') { rangeStr = '1mo'; intervalStr = '1d'; }
-      else if (periodoGraficoAtual === '3M') { rangeStr = '3mo'; intervalStr = '1d'; }
+      try {
+        const res = await fetch(`https://brapi.dev/api/v2/stocks/dividends?symbols=${tickers}&token=${token}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.results) {
+            let novosEncontrados = [];
+            data.results.forEach(item => {
+              const ticker = item.symbol;
+              const cashDivs = item.data?.cashDividends || [];
+              cashDivs.forEach(div => {
+                if (!div.paymentDate || !div.lastDatePrior) return;
+                const formatarDataBR = (iso) => {
+                  if (!iso) return '';
+                  const p = iso.split('T')[0].split('-');
+                  if (p.length === 3) return `${p[2]}/${p[1]}/${p[0]}`;
+                  return iso;
+                };
+                const dataPagBR = formatarDataBR(div.paymentDate);
+                const dataComBR = formatarDataBR(div.lastDatePrior);
+                const tipo = div.label || 'JCP / Dividendo';
+                const rate = div.rate || 0;
+                
+                const ativo = carteiraAtivos.find(a => a.ticker === ticker);
+                const qtd = ativo ? ativo.qtd : 1;
+                const valorTotal = rate * qtd;
 
-      let dadosFormatados = [];
-      let dadosVolume = [];
-      dadosOHLCVAtual = [];
-      let usandoDadosSimulados = false;
-
-      let motivoFalhaGrafico = null;
-
-      if (token) {
-        try {
-          // Chamada direta à Brapi (sem proxy CORS — ver nota em testarStatusBrapi()).
-          let urlAlvo = `https://brapi.dev/api/quote/${ticker}?range=${rangeStr}&interval=${intervalStr}&token=${token}`;
-          let res = await fetch(urlAlvo);
-          if (!res.ok) {
-            urlAlvo = `https://brapi.dev/api/quote/${ticker}.SA?range=${rangeStr}&interval=${intervalStr}&token=${token}`;
-            res = await fetch(urlAlvo);
-          }
-          if (res.ok) {
-            const data = await res.json();
-            if (data.results && data.results[0] && data.results[0].historicalDataPrice) {
-              const historico = data.results[0].historicalDataPrice.slice().sort((a, b) => a.date - b.date);
-              historico.forEach((h, i) => {
-                const anterior = i > 0 ? historico[i - 1] : h;
-                dadosFormatados.push({ time: h.date, value: h.close });
-                dadosVolume.push({
-                  time: h.date,
-                  value: h.volume || 0,
-                  color: h.close >= anterior.close ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)'
-                });
-                dadosOHLCVAtual.push({
-                  time: h.date, open: h.open, high: h.high, low: h.low, close: h.close, volume: h.volume || 0
-                });
+                const jaExiste = listaDividendos.some(d => d.ticker === ticker && d.dataPag === dataPagBR && Math.abs(d.valor - valorTotal) < 0.05);
+                if (!jaExiste && valorTotal > 0) {
+                  const novoProvento = {
+                    ticker,
+                    tipo,
+                    dataCom: dataComBR,
+                    dataPag: dataPagBR,
+                    valor: parseFloat(valorTotal.toFixed(2))
+                  };
+                  listaDividendos.push(novoProvento);
+                  novosEncontrados.push(novoProvento);
+                }
               });
-              if (dadosFormatados.length === 0) {
-                motivoFalhaGrafico = 'A Brapi respondeu, mas não trouxe histórico de preços para esse período/ativo.';
-              }
-            } else {
-              motivoFalhaGrafico = (data && data.message) ? `Brapi: ${data.message}` : 'A Brapi respondeu sem dados de histórico de preços.';
+            });
+
+            if (novosEncontrados.length > 0) {
+              localStorage.setItem('dividendos_salvos', JSON.stringify(listaDividendos));
+              renderizarTabelaDividendos();
+              exibirModalAlertaNovosProventos(novosEncontrados);
             }
-          } else {
-            let corpoErro = '';
-            try { const j = await res.json(); corpoErro = j.message || j.error || ''; } catch (e2) { /* corpo não era JSON */ }
-            motivoFalhaGrafico = `Falha na requisição (HTTP ${res.status})${corpoErro ? ': ' + corpoErro : ''}.`;
-          }
-        } catch (e) {
-          console.error("Erro ao buscar histórico da Brapi:", e);
-          motivoFalhaGrafico = 'Erro de rede/conexão ao tentar buscar os dados (verifique sua internet ou tente novamente em instantes).';
-        }
-      } else {
-        motivoFalhaGrafico = 'Nenhum token da Brapi configurado em Configurações.';
-      }
-
-      if (dadosFormatados.length === 0) {
-        usandoDadosSimulados = true;
-        const hoje = new Date();
-        let qtdDias = 30;
-        if (periodoGraficoAtual === '5D') qtdDias = 5;
-        if (periodoGraficoAtual === '1M') qtdDias = 30;
-        if (periodoGraficoAtual === '3M') qtdDias = 90;
-
-        let precoBase = ticker === 'PETR4' ? 32.00 : (ticker === 'SAPR11' ? 21.50 : 6.20);
-        let timestampAtual = Math.floor(hoje.getTime() / 1000) - (qtdDias * 86400);
-        let precoAnterior = precoBase;
-
-        for (let i = 0; i < qtdDias; i++) {
-          timestampAtual += 86400;
-          let variacao = (Math.sin(i / 10) * 0.8) + ((Math.random() - 0.48) * 0.5);
-          precoAnterior = precoBase;
-          precoBase = Math.max(5.00, precoBase + variacao);
-
-          let dataObj = new Date(timestampAtual * 1000);
-          let dataStr = dataObj.toISOString().split('T')[0];
-          const abertura = precoAnterior;
-          const fechamento = precoBase;
-          const maxima = Math.max(abertura, fechamento) + Math.random() * 0.3;
-          const minima = Math.min(abertura, fechamento) - Math.random() * 0.3;
-          const volumeSimulado = Math.floor(500000 + Math.random() * 4000000);
-
-          dadosFormatados.push({ time: dataStr, value: parseFloat(fechamento.toFixed(2)) });
-          dadosVolume.push({
-            time: dataStr, value: volumeSimulado,
-            color: fechamento >= abertura ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)'
-          });
-          dadosOHLCVAtual.push({
-            time: dataStr, open: parseFloat(abertura.toFixed(2)), high: parseFloat(maxima.toFixed(2)),
-            low: parseFloat(minima.toFixed(2)), close: parseFloat(fechamento.toFixed(2)), volume: volumeSimulado
-          });
-        }
-      }
-
-      tvSeries.setData(dadosFormatados);
-      if (tvVolumeSeries) tvVolumeSeries.setData(dadosVolume);
-      tvChart.timeScale().fitContent();
-
-      const avisoSimulado = document.getElementById('avisoGraficoSimulado');
-      if (avisoSimulado) {
-        if (usandoDadosSimulados) {
-          const spanMotivo = avisoSimulado.querySelector('span');
-          if (spanMotivo) {
-            spanMotivo.innerHTML = motivoFalhaGrafico
-              ? `Exibindo dados <b>simulados</b> apenas para visualização. Motivo: ${motivoFalhaGrafico}`
-              : 'Sem token válido ou API indisponível: exibindo dados <b>simulados</b> apenas para visualização. Configure o token da Brapi em Configurações para ver o histórico real.';
           }
         }
-        avisoSimulado.classList.toggle('hidden', !usandoDadosSimulados);
-      }
-
-      exibirPrecoJustoChartHeader(ticker);
-    }
-
-    // Brapi retorna 'date' como timestamp Unix em segundos no histórico de preços.
-    // O gráfico simulado (fallback) usa string 'yyyy-mm-dd'. Essa função lida com os dois formatos.
-    function paraDataJS(t) {
-      if (typeof t === 'number') return new Date(t * 1000);
-      return new Date(t);
-    }
-
-    function formatarDataOHLCV(t) {
-      return paraDataJS(t).toLocaleDateString('pt-BR');
-    }
-
-    function exibirPrecoJustoChartHeader(ticker) {
-      const el = document.getElementById('precoJustoChartHeader');
-      if (!el) return;
-      const ativo = carteiraAtivos.find(a => a.ticker === ticker);
-      if (ativo && ativo.precoJusto !== null && ativo.precoJusto !== undefined && !isNaN(ativo.precoJusto)) {
-        const estimadoTxt = ativo.precoJustoEstimado ? ' (estimativa)' : ' (fórmula de Graham)';
-        el.innerHTML = `Preço-Justo: <b>R$ ${ativo.precoJusto.toFixed(2).replace('.', ',')}</b>${estimadoTxt}`;
-        el.classList.remove('hidden');
-      } else {
-        el.innerHTML = `Preço-Justo indisponível para ${ticker} (atualize as cotações na Carteira).`;
-        el.classList.remove('hidden');
+      } catch (err) {
+        console.error("Erro na varredura automática de proventos:", err);
       }
     }
 
-    // TABELA DE RETORNO POR PERÍODO (independe do zoom do gráfico: sempre busca 1 ano de dados diários)
-    async function carregarTabelaRetornos() {
-      const container = document.getElementById('tabelaRetornosPeriodo');
-      if (!container) return;
-      const ticker = document.getElementById('tickerGraficoAvancado').value || 'PETR4';
-      const token = localStorage.getItem('brapi_token');
+    function exibirModalAlertaNovosProventos(novos) {
+      let htmlItens = novos.map(p => `
+        <div class="p-3 border border-emerald-500/30 rounded-lg bg-slate-800 text-xs space-y-1">
+          <div class="flex justify-between font-semibold text-sm text-emerald-300">
+            <span>${p.ticker} (${p.tipo})</span>
+            <span>R$ ${p.valor.toFixed(2).replace('.', ',')}</span>
+          </div>
+          <div class="text-slate-300">Data-Com: ${p.dataCom} | Pagamento: ${p.dataPag}</div>
+        </div>
+      `).join('');
 
-      container.innerHTML = '<p class="col-span-full text-xs text-gray-400 py-2">Carregando retornos...</p>';
-
-      let fechamentos = [];
-      let motivoFalhaTabela = null;
-
-      // Reaproveita os dados já carregados do gráfico se cobrirem pelo menos ~80 dias
-      if (dadosOHLCVAtual.length > 0) {
-        const primeiraData = paraDataJS(dadosOHLCVAtual[0].time);
-        const ultimaData = paraDataJS(dadosOHLCVAtual[dadosOHLCVAtual.length - 1].time);
-        if ((ultimaData - primeiraData) / 86400000 >= 80) {
-          fechamentos = dadosOHLCVAtual.map(d => ({ time: d.time, value: d.close }));
-        }
-      }
-
-      if (fechamentos.length === 0 && token) {
-        try {
-          // 3mo é o maior período liberado no plano gratuito da Brapi
-          // Chamada direta à Brapi (sem proxy CORS — ver nota em testarStatusBrapi()).
-          let urlAlvo = `https://brapi.dev/api/quote/${ticker}?range=3mo&interval=1d&token=${token}`;
-          let res = await fetch(urlAlvo);
-          if (!res.ok) {
-            urlAlvo = `https://brapi.dev/api/quote/${ticker}.SA?range=3mo&interval=1d&token=${token}`;
-            res = await fetch(urlAlvo);
-          }
-          if (res.ok) {
-            const data = await res.json();
-            if (data.results && data.results[0] && data.results[0].historicalDataPrice) {
-              fechamentos = data.results[0].historicalDataPrice
-                .slice().sort((a, b) => a.date - b.date)
-                .map(h => ({ time: h.date, value: h.close }));
-            } else {
-              motivoFalhaTabela = (data && data.message) ? `Brapi: ${data.message}` : 'A Brapi respondeu sem dados de histórico.';
-            }
-          } else {
-            let corpoErro = '';
-            try { const j = await res.json(); corpoErro = j.message || j.error || ''; } catch (e2) { /* corpo não era JSON */ }
-            motivoFalhaTabela = `Falha na requisição (HTTP ${res.status})${corpoErro ? ': ' + corpoErro : ''}.`;
-          }
-        } catch (e) {
-          console.error("Erro ao buscar histórico para tabela de retornos:", e);
-          motivoFalhaTabela = 'Erro de rede/conexão ao buscar os dados.';
-        }
-      } else if (fechamentos.length === 0) {
-        motivoFalhaTabela = 'Nenhum token da Brapi configurado em Configurações.';
-      }
-
-      if (fechamentos.length === 0) {
-        container.innerHTML = `<p class="col-span-full text-xs text-gray-400 py-2">${motivoFalhaTabela || 'Configure o token da Brapi em Configurações para ver os retornos por período.'}</p>`;
-        return;
-      }
-
-      const periodos = [
-        { label: '1 dia', dias: 1 },
-        { label: '1 semana', dias: 7 },
-        { label: '1 mês', dias: 30 },
-        { label: '3 meses', dias: 90 },
-        { label: '6 meses', dias: 180 },
-        { label: '1 ano', dias: 365 }
-      ];
-
-      const ultimo = fechamentos[fechamentos.length - 1];
-      const dataUltimo = paraDataJS(ultimo.time);
-      const dataPrimeiro = paraDataJS(fechamentos[0].time);
-      const diasDisponiveis = (dataUltimo - dataPrimeiro) / 86400000;
-
-      container.innerHTML = periodos.map(p => {
-        // Não calcula o período se não houver histórico suficiente para uma comparação confiável
-        if (p.dias > 1 && diasDisponiveis < p.dias * 0.5) {
-          return `
-            <div class="p-2 rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-darkborder">
-              <div class="text-gray-400 text-[11px] uppercase font-semibold">${p.label}</div>
-              <div class="text-gray-300 dark:text-gray-600 font-bold">—</div>
-            </div>`;
-        }
-        const dataAlvo = new Date(dataUltimo);
-        dataAlvo.setDate(dataAlvo.getDate() - p.dias);
-        let referencia = fechamentos[0];
-        for (let i = 0; i < fechamentos.length; i++) {
-          if (paraDataJS(fechamentos[i].time) >= dataAlvo) { referencia = fechamentos[i]; break; }
-        }
-        const retorno = referencia.value ? ((ultimo.value - referencia.value) / referencia.value) * 100 : 0;
-        const positivo = retorno >= 0;
-        const cor = positivo ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500';
-        const sinal = positivo ? '+' : '';
-        return `
-          <div class="p-2 rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-darkborder">
-            <div class="text-gray-400 text-[11px] uppercase font-semibold">${p.label}</div>
-            <div class="${cor} font-bold">${sinal}${retorno.toFixed(2)}%</div>
-          </div>`;
-      }).join('');
+      let modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[70] flex items-center justify-center p-4';
+      modal.innerHTML = `
+        <div class="bg-slate-900 border border-emerald-500/50 rounded-xl shadow-2xl max-w-md w-full p-6 text-slate-100 space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold text-emerald-400 flex items-center gap-2">
+              <i class="fa-solid fa-bell"></i> Novos Proventos Detectados e Salvos!
+            </h3>
+            <button onclick="this.closest('.fixed').remove()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+          </div>
+          <p class="text-xs text-slate-300">O sistema identificou e registrou automaticamente novos proventos para os ativos da sua carteira:</p>
+          <div class="space-y-2 max-h-60 overflow-y-auto">${htmlItens}</div>
+          <div class="flex gap-2 pt-2">
+            <button onclick="this.closest('.fixed').remove(); navegar('dividendos');" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 rounded-lg text-sm transition">
+              Ir para Consulta
+            </button>
+            <button onclick="this.closest('.fixed').remove()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium py-2 px-4 rounded-lg text-sm transition">
+              Fechar
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
     }
 
     function converterDataParaObjeto(dataStr) {
@@ -1678,11 +777,9 @@
     }
 
     function renderizarTabelaDividendos() {
-      listaDividendos.sort((a, b) => {
-        return converterDataParaObjeto(a.dataPag) - converterDataParaObjeto(b.dataPag);
-      });
-
+      listaDividendos.sort((a, b) => converterDataParaObjeto(a.dataPag) - converterDataParaObjeto(b.dataPag));
       const tbody = document.getElementById('tabelaDividendos');
+      if (!tbody) return;
       tbody.innerHTML = '';
       let total = 0;
 
@@ -1695,9 +792,8 @@
             <td class="py-3 px-4">${item.dataCom}</td>
             <td class="py-3 px-4">${item.dataPag}</td>
             <td class="py-3 px-4 font-semibold text-emerald-600 dark:text-emerald-400">R$ ${item.valor.toFixed(2).replace('.', ',')}</td>
-            <td class="py-3 px-4 text-center space-x-2">
-              <button onclick="abrirEditarDividendo(${index})" class="text-blue-500 hover:text-blue-700" title="Editar Provento"><i class="fa-solid fa-pen-to-square"></i></button>
-              <button onclick="removerDividendo(${index})" class="text-red-500 hover:text-red-700" title="Excluir Provento"><i class="fa-solid fa-trash"></i></button>
+            <td class="py-3 px-4 text-center">
+              <button onclick="removerDividendo(${index})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
         `;
@@ -1706,272 +802,48 @@
       document.getElementById('valorTotalProventos').innerText = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       document.getElementById('totalProventosHeader').innerText = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       document.getElementById('mediaMensalProventos').innerText = `R$ ${(total / 36).toFixed(2).replace('.', ',')} / mês`;
-
-      renderizarHistoricoPorAtivo();
-      renderizarGraficoProventos();
-      recalcularTotais();
     }
 
-    function renderizarHistoricoPorAtivo() {
-      const container = document.getElementById('containerDividendosPorAtivo');
-      if (!container) return;
-      container.innerHTML = '';
-
-      const agrupado = {};
-      listaDividendos.forEach(item => {
-        if (!agrupado[item.ticker]) agrupado[item.ticker] = [];
-        agrupado[item.ticker].push(item);
+    function abrirProximosDividendos() {
+      const hoje = new Date();
+      const futuros = listaDividendos.filter(item => {
+        const dataP = converterDataParaObjeto(item.dataPag);
+        return dataP >= new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
       });
 
-      if (Object.keys(agrupado).length === 0) {
-        container.innerHTML = '<p class="text-xs text-gray-400">Nenhum provento cadastrado.</p>';
-        return;
-      }
+      const listaExibicao = futuros.length > 0 ? futuros : listaDividendos;
 
-      for (const [ticker, itens] of Object.entries(agrupado)) {
-        itens.sort((a, b) => converterDataParaObjeto(a.dataPag) - converterDataParaObjeto(b.dataPag));
-
-        let totalAtivo = itens.reduce((soma, i) => soma + i.valor, 0);
-        let linhasHtml = itens.map(i => `
-          <div class="flex justify-between items-center text-xs py-2 border-b border-gray-100 dark:border-darkborder/50">
-            <div>
-              <span class="font-semibold text-gray-700 dark:text-gray-300">${i.tipo}</span>
-              <span class="text-gray-400 ml-2">(Data Com: ${i.dataCom} | Pgto: ${i.dataPag})</span>
-            </div>
-            <span class="font-bold text-emerald-600 dark:text-emerald-400">R$ ${i.valor.toFixed(2).replace('.', ',')}</span>
+      let htmlItens = listaExibicao.map(p => `
+        <div class="p-3 border border-gray-100 dark:border-darkborder rounded-lg bg-gray-50 dark:bg-slate-900 flex justify-between items-center text-xs">
+          <div>
+            <span class="font-bold text-gray-800 dark:text-white text-sm">${p.ticker}</span>
+            <p class="text-gray-500 dark:text-gray-400">${p.tipo} • Data Com: ${p.dataCom}</p>
+            <p class="text-blue-600 dark:text-blue-400 font-medium mt-0.5">Pagamento: ${p.dataPag}</p>
           </div>
-        `).join('');
+          <span class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">R$ ${p.valor.toFixed(2).replace('.', ',')}</span>
+        </div>
+      `).join('');
 
-        container.innerHTML += `
-          <div class="border border-gray-200 dark:border-darkborder rounded-xl p-4 bg-gray-50 dark:bg-slate-900 space-y-2">
-            <div class="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-darkborder">
-              <span class="font-bold text-base text-gray-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-coins text-emerald-500"></i> ${ticker}
-              </span>
-              <span class="text-sm font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 rounded-lg border border-emerald-200 dark:border-emerald-900">
-                Total Acumulado: R$ ${totalAtivo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </span>
+      let modalAgenda = document.getElementById('modalAgendaProventos');
+      if (!modalAgenda) {
+        modalAgenda = document.createElement('div');
+        modalAgenda.id = 'modalAgendaProventos';
+        modalAgenda.className = 'fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+        modalAgenda.innerHTML = `
+          <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-lg w-full p-6 border border-gray-100 dark:border-darkborder space-y-4">
+            <div class="flex justify-between items-center">
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-calendar-alt text-blue-600"></i> Próximos Dividendos (Agenda)
+              </h3>
+              <button onclick="document.getElementById('modalAgendaProventos').remove()" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="space-y-1">${linhasHtml}</div>
+            <div class="space-y-2 max-h-60 overflow-y-auto">${htmlItens || '<p class="text-xs text-gray-400 text-center py-4">Nenhum provento futuro cadastrado.</p>'}</div>
+            <button onclick="document.getElementById('modalAgendaProventos').remove()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
+              Fechar Agenda
+            </button>
           </div>
         `;
-      }
-    }
-
-    // GRÁFICO DE PROVENTOS: ANO -> MÊS -> ATIVOS QUE PAGARAM
-    let graficoProventosChart = null;
-    let nivelGraficoProventos = 'ano'; // 'ano' | 'mes'
-    let anoSelecionadoGrafico = null;
-    const NOMES_MESES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-
-    function agruparProventosPorAno() {
-      const totais = {};
-      listaDividendos.forEach(item => {
-        const data = converterDataParaObjeto(item.dataPag);
-        const ano = data.getFullYear();
-        totais[ano] = (totais[ano] || 0) + item.valor;
-      });
-      return Object.keys(totais).sort().reduce((acc, ano) => {
-        acc[ano] = totais[ano];
-        return acc;
-      }, {});
-    }
-
-    function agruparProventosPorMes(ano) {
-      const totaisPorMes = new Array(12).fill(0);
-      listaDividendos.forEach(item => {
-        const data = converterDataParaObjeto(item.dataPag);
-        if (data.getFullYear() === ano) {
-          totaisPorMes[data.getMonth()] += item.valor;
-        }
-      });
-      return totaisPorMes;
-    }
-
-    function ativosQuePagaramNoMes(ano, mesIndex) {
-      return listaDividendos.filter(item => {
-        const data = converterDataParaObjeto(item.dataPag);
-        return data.getFullYear() === ano && data.getMonth() === mesIndex;
-      });
-    }
-
-    function renderizarGraficoProventos() {
-      const canvas = document.getElementById('graficoProventosCanvas');
-      if (!canvas || typeof Chart === 'undefined') return;
-
-      const btnVoltar = document.getElementById('btnVoltarGraficoProventos');
-      const titulo = document.getElementById('tituloGraficoProventos');
-      const listaMes = document.getElementById('listaAtivosMesProventos');
-      listaMes.classList.add('hidden');
-      listaMes.innerHTML = '';
-
-      let labels = [];
-      let valores = [];
-      let cores = [];
-
-      if (nivelGraficoProventos === 'ano') {
-        const totaisPorAno = agruparProventosPorAno();
-        labels = Object.keys(totaisPorAno);
-        valores = Object.values(totaisPorAno);
-        cores = labels.map(() => 'rgba(37, 99, 235, 0.75)'); // azul
-        titulo.innerHTML = '<i class="fa-solid fa-chart-column text-emerald-500"></i> Proventos por Ano';
-        btnVoltar.classList.add('hidden');
-      } else {
-        const totaisPorMes = agruparProventosPorMes(anoSelecionadoGrafico);
-        labels = NOMES_MESES;
-        valores = totaisPorMes;
-        // Barra verde nos meses com dividendo recebido, cinza nos meses sem nada
-        cores = totaisPorMes.map(v => v > 0 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(148, 163, 184, 0.35)');
-        titulo.innerHTML = `<i class="fa-solid fa-chart-column text-emerald-500"></i> Proventos em ${anoSelecionadoGrafico} por Mês`;
-        btnVoltar.classList.remove('hidden');
-      }
-
-      if (graficoProventosChart) {
-        graficoProventosChart.data.labels = labels;
-        graficoProventosChart.data.datasets[0].data = valores;
-        graficoProventosChart.data.datasets[0].backgroundColor = cores;
-        graficoProventosChart.update();
-        return;
-      }
-
-      graficoProventosChart = new Chart(canvas.getContext('2d'), {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [{
-            label: 'Proventos (R$)',
-            data: valores,
-            backgroundColor: cores,
-            borderRadius: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (ctx) => `R$ ${ctx.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: { callback: (v) => `R$ ${v}` }
-            }
-          },
-          onClick: (evt, elements) => {
-            if (!elements.length) return;
-            const idx = elements[0].index;
-            if (nivelGraficoProventos === 'ano') {
-              const totaisPorAno = agruparProventosPorAno();
-              anoSelecionadoGrafico = parseInt(Object.keys(totaisPorAno)[idx]);
-              nivelGraficoProventos = 'mes';
-              renderizarGraficoProventos();
-            } else {
-              exibirAtivosDoMes(idx);
-            }
-          }
-        }
-      });
-    }
-
-    function voltarGraficoProventos() {
-      nivelGraficoProventos = 'ano';
-      anoSelecionadoGrafico = null;
-      renderizarGraficoProventos();
-    }
-
-    function exibirAtivosDoMes(mesIndex) {
-      const itens = ativosQuePagaramNoMes(anoSelecionadoGrafico, mesIndex);
-      const container = document.getElementById('listaAtivosMesProventos');
-
-      if (itens.length === 0) {
-        container.innerHTML = `<p class="text-xs text-gray-400">Nenhum provento recebido em ${NOMES_MESES[mesIndex]}/${anoSelecionadoGrafico}.</p>`;
-        container.classList.remove('hidden');
-        return;
-      }
-
-      const totalMes = itens.reduce((acc, i) => acc + i.valor, 0);
-      container.innerHTML = `
-        <h5 class="text-sm font-bold text-gray-800 dark:text-white flex items-center gap-2">
-          <i class="fa-solid fa-list-check text-blue-500"></i> Ativos que pagaram em ${NOMES_MESES[mesIndex]}/${anoSelecionadoGrafico}
-          <span class="text-xs font-normal text-gray-500">(Total: R$ ${totalMes.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
-        </h5>
-        ${itens.map(i => `
-          <div class="flex justify-between items-center text-xs p-2.5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-darkborder rounded-lg">
-            <div>
-              <span class="font-bold text-gray-800 dark:text-white">${i.ticker}</span>
-              <span class="text-gray-500 dark:text-gray-400"> • ${i.tipo} • Pago em ${i.dataPag}</span>
-            </div>
-            <span class="font-semibold text-emerald-600 dark:text-emerald-400">R$ ${i.valor.toFixed(2).replace('.', ',')}</span>
-          </div>
-        `).join('')}
-      `;
-      container.classList.remove('hidden');
-    }
-
-    function abrirModalDividendo() {
-      document.getElementById('tituloModalDividendo').innerHTML = '<i class="fa-solid fa-plus-circle text-emerald-600"></i> Registrar Novo Provento';
-      document.getElementById('divIndexEdicao').value = '-1';
-      document.getElementById('divTicker').value = '';
-      document.getElementById('divDataCom').value = '';
-      document.getElementById('divDataPag').value = '';
-      document.getElementById('divValor').value = '';
-      document.getElementById('modalDividendo').classList.remove('hidden');
-    }
-
-    function abrirEditarDividendo(index) {
-      const item = listaDividendos[index];
-      if (!item) return;
-      document.getElementById('tituloModalDividendo').innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> Editar Provento';
-      document.getElementById('divIndexEdicao').value = index;
-      document.getElementById('divTicker').value = item.ticker;
-      document.getElementById('divTipo').value = item.tipo;
-      document.getElementById('divDataCom').value = item.dataCom;
-      document.getElementById('divDataPag').value = item.dataPag;
-      document.getElementById('divValor').value = item.valor;
-      document.getElementById('modalDividendo').classList.remove('hidden');
-    }
-
-    function fecharModalDividendo() {
-      document.getElementById('modalDividendo').classList.add('hidden');
-    }
-
-    function salvarNovoDividendo() {
-      const indexEdicao = parseInt(document.getElementById('divIndexEdicao').value);
-      const ticker = document.getElementById('divTicker').value.toUpperCase().trim();
-      const tipo = document.getElementById('divTipo').value;
-      const dataCom = document.getElementById('divDataCom').value.trim();
-      const dataPag = document.getElementById('divDataPag').value.trim();
-      const valor = parseFloat(document.getElementById('divValor').value);
-
-      if (!ticker || !dataCom || !dataPag || isNaN(valor)) {
-        mostrarNotificacao("Preencha todos os campos corretamente.", "aviso");
-        return;
-      }
-
-      if (indexEdicao >= 0) {
-        listaDividendos[indexEdicao] = { ticker, tipo, dataCom, dataPag, valor };
-        mostrarNotificacao("Provento atualizado com sucesso!", "sucesso");
-      } else {
-        listaDividendos.push({ ticker, tipo, dataCom, dataPag, valor });
-        mostrarNotificacao("Provento registrado com sucesso!", "sucesso");
-      }
-
-      localStorage.setItem('dividendos_salvos', JSON.stringify(listaDividendos));
-      renderizarTabelaDividendos();
-      fecharModalDividendo();
-    }
-
-    function removerDividendo(index) {
-      if (confirm("Tem certeza que deseja excluir este registro de provento?")) {
-        listaDividendos.splice(index, 1);
-        localStorage.setItem('dividendos_salvos', JSON.stringify(listaDividendos));
-        renderizarTabelaDividendos();
-        mostrarNotificacao("Provento removido.", "info");
+        document.body.appendChild(modalAgenda);
       }
     }
 
@@ -1986,8 +858,7 @@
         const corVariacao = variacao >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500';
         const sinalVariacao = variacao >= 0 ? '+' : '';
         const precoJustoTxt = (ativo.precoJusto !== null && ativo.precoJusto !== undefined && !isNaN(ativo.precoJusto))
-          ? `R$ ${ativo.precoJusto.toFixed(2).replace('.', ',')}` + (ativo.precoJustoEstimado ? ' *' : '')
-          : 'R$ -';
+          ? `R$ ${ativo.precoJusto.toFixed(2).replace('.', ',')}` : 'R$ -';
 
         const tr = document.createElement('tr');
         tr.setAttribute('data-ticker', ativo.ticker);
@@ -1997,7 +868,7 @@
           <td class="py-3 px-4 qtd">${ativo.qtd}</td>
           <td class="py-3 px-4 pm">R$ ${ativo.pm.toFixed(2).replace('.', ',')}</td>
           <td class="py-3 px-4 preco-atual font-semibold">R$ ${ativo.precoAtual.toFixed(2).replace('.', ',')}</td>
-          <td class="py-3 px-4 preco-justo-tabela" title="${ativo.precoJustoEstimado ? 'Estimativa (sem lucro/patrimônio por ação disponíveis)' : 'Calculado pela fórmula de Graham'}">${precoJustoTxt}</td>
+          <td class="py-3 px-4 preco-justo-tabela">${precoJustoTxt}</td>
           <td class="py-3 px-4 variacao ${corVariacao} font-medium">${sinalVariacao}${variacao.toFixed(2)}%</td>
           <td class="py-3 px-4 valor-investido">R$ ${valorInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
           <td class="py-3 px-4 valor-atual font-semibold">R$ ${valorAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
@@ -2011,60 +882,28 @@
 
     function renderizarCardsRadar() {
       const grid = document.getElementById('gridRadar');
+      if (!grid) return;
       grid.innerHTML = '';
       tickersRadar.forEach(ticker => {
         grid.innerHTML += `
           <div class="border border-gray-200 dark:border-darkborder rounded-lg p-4 bg-gray-50 dark:bg-slate-900 relative" data-op-ticker="${ticker}">
-            <button onclick="removerAtivoRadar('${ticker}')" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xs" title="Remover do Radar"><i class="fa-solid fa-xmark"></i></button>
-            <span id="badge-${ticker}" class="text-xs font-bold bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 px-2 py-0.5 rounded">🔵 Carregando...</span>
+            <span id="badge-${ticker}" class="text-xs font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded">🔵 Carregando...</span>
             <h4 class="text-lg font-bold text-gray-800 dark:text-white mt-2">${ticker}</h4>
-            <p id="nome-${ticker}" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Buscando dados...</p>
             <div class="mt-4 space-y-1 text-sm">
-              <div class="flex justify-between"><span>Preço Atual:</span> <span id="op-preco-${ticker}" class="font-semibold text-blue-600 dark:text-blue-400">R$ 0,00</span></div>
-              <div class="flex justify-between"><span>Preço Justo:</span> <span id="op-justo-${ticker}" class="font-semibold text-gray-700 dark:text-gray-300">R$ 0,00</span></div>
+              <div class="flex justify-between"><span>Preço Atual:</span> <span id="op-preco-${ticker}" class="font-semibold text-blue-400">R$ 0,00</span></div>
+              <div class="flex justify-between"><span>Preço Justo:</span> <span id="op-justo-${ticker}" class="font-semibold">R$ 0,00</span></div>
             </div>
           </div>
         `;
       });
     }
 
-    function adicionarAtivoRadar() {
-      const input = document.getElementById('novoTickerRadar');
-      const ticker = input.value.toUpperCase().trim();
-      if (!ticker) {
-        mostrarNotificacao("Digite o código do ativo (ex: CPLE6).", "aviso");
-        return;
-      }
-      if (tickersRadar.includes(ticker)) {
-        mostrarNotificacao("Este ativo já está no seu radar!", "aviso");
-        return;
-      }
-      tickersRadar.push(ticker);
-      localStorage.setItem('radar_personalizado', JSON.stringify(tickersRadar));
-      input.value = '';
-      renderizarCardsRadar();
-      atualizarCotacoesBrapi(false);
-      mostrarNotificacao(`Ativo ${ticker} adicionado ao radar!`, "sucesso");
-    }
-
-    function removerAtivoRadar(ticker) {
-      if (confirm(`Deseja remover ${ticker} do radar?`)) {
-        tickersRadar = tickersRadar.filter(t => t !== ticker);
-        localStorage.setItem('radar_personalizado', JSON.stringify(tickersRadar));
-        renderizarCardsRadar();
-        mostrarNotificacao(`Ativo ${ticker} removido.`, "info");
-      }
-    }
-
     async function atualizarCotacoesBrapi(exibirNotificacoes = true) {
       const token = localStorage.getItem('brapi_token');
-      if (!token) {
-        if (exibirNotificacoes) mostrarNotificacao("Insira o Token da Brapi nas Configurações.", "aviso");
-        return;
-      }
+      if (!token) return;
 
       const statusElement = document.getElementById('statusAtualizacao');
-      if (statusElement) statusElement.innerText = "Atualizando preços...";
+      if (statusElement) statusElement.innerText = "Atualizando preços e proventos...";
 
       const linhasTabela = document.querySelectorAll('#tabelaAtivos tr[data-ticker]');
       const tickersTabela = Array.from(linhasTabela).map(l => l.getAttribute('data-ticker'));
@@ -2074,287 +913,115 @@
 
       for (const ticker of todosTickers) {
         try {
-          // Chamada direta à Brapi (sem proxy CORS — ver nota em testarStatusBrapi()).
-          let urlAlvo = `https://brapi.dev/api/quote/${ticker}?token=${token}&fundamental=true`;
-          let res = await fetch(urlAlvo);
-          if (!res.ok && res.status === 404) {
-            urlAlvo = `https://brapi.dev/api/quote/${ticker}.SA?token=${token}&fundamental=true`;
-            res = await fetch(urlAlvo);
-          }
+          let res = await fetch(`https://brapi.dev/api/quote/${ticker}?token=${token}&fundamental=true`);
           if (res.ok) {
             const data = await res.json();
             if (data.results && data.results.length > 0) {
               const ativo = data.results[0];
               const precoAtualApi = parseFloat(ativo.regularMarketPrice);
               const variacao = ativo.regularMarketChangePercent;
-              const nomeEmpresa = ativo.longName || ativo.shortName || ticker;
-
-              const nomeEl = document.getElementById(`nome-${ticker}`);
-              if (nomeEl) nomeEl.innerText = nomeEmpresa;
-
-              // Fórmula de Graham só é válida com EPS (lucro/ação) e VPA positivos.
-              // Fora isso, não é possível calcular preço justo por fundamentos.
-              let precoJusto = null;
-              let precoJustoEstimado = false;
-              if (ativo.eps && ativo.bookValue && ativo.eps > 0 && ativo.bookValue > 0) {
-                precoJusto = Math.sqrt(22.5 * ativo.eps * ativo.bookValue);
-              } else {
-                precoJusto = precoAtualApi * 0.95;
-                precoJustoEstimado = true;
-              }
+              let precoJusto = (ativo.eps && ativo.bookValue && ativo.eps > 0 && ativo.bookValue > 0) ? Math.sqrt(22.5 * ativo.eps * ativo.bookValue) : precoAtualApi * 0.95;
 
               const ativoCarteira = carteiraAtivos.find(a => a.ticker === ticker);
               if (ativoCarteira) {
                 ativoCarteira.precoAtual = precoAtualApi;
                 ativoCarteira.precoJusto = precoJusto;
-                ativoCarteira.precoJustoEstimado = precoJustoEstimado;
                 ativoCarteira.variacao = variacao;
               }
-
-              atualizarLinhaTabela(ticker, precoAtualApi, variacao, precoJusto, precoJustoEstimado);
-              atualizarRadarOportunidades(ticker, precoAtualApi, precoJusto, precoJustoEstimado);
+              atualizarLinhaTabela(ticker, precoAtualApi, variacao, precoJusto);
               atualizados++;
             }
           }
         } catch (err) {
-          console.error("Erro ao buscar ativo:", err);
+          console.error("Erro ao atualizar ativo:", err);
         }
       }
+
+      // Dispara verificação automática de proventos junto à Brapi
+      await verificarProventosAutomaticos();
 
       salvarCarteira();
       recalcularTotais();
-      const agora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      if (statusElement) statusElement.innerText = atualizados > 0 ? `Atualizado às ${agora}` : "Erro de conexão";
-
-      if (exibirNotificacoes) {
-        if (atualizados > 0) {
-          mostrarNotificacao("Preços atualizados com sucesso!", "sucesso");
-        } else {
-          mostrarNotificacao("Erro ao conectar à Brapi. Verifique o token.", "erro");
-        }
-      }
+      if (statusElement) statusElement.innerText = "Atualizado com sucesso";
+      if (exibirNotificacoes) mostrarNotificacao("Preços e proventos sincronizados!", "sucesso");
     }
 
-    function atualizarLinhaTabela(ticker, precoAtual, variacao, precoJusto, precoJustoEstimado = false) {
+    function atualizarLinhaTabela(ticker, precoAtual, variacao, precoJusto) {
       const linhas = document.querySelectorAll(`#tabelaAtivos tr[data-ticker="${ticker}"]`);
       linhas.forEach(linha => {
         const celulaPreco = linha.querySelector('.preco-atual');
         const celulaJusto = linha.querySelector('.preco-justo-tabela');
         const celulaVariacao = linha.querySelector('.variacao');
-        const celulaQtd = linha.querySelector('.qtd');
-        const celulaValorAtual = linha.querySelector('.valor-atual');
-
-        if (celulaPreco && precoAtual !== undefined) {
-          celulaPreco.innerText = `R$ ${precoAtual.toFixed(2).replace('.', ',')}`;
-        }
-        if (celulaJusto && precoJusto !== undefined && !isNaN(precoJusto)) {
-          celulaJusto.innerText = `R$ ${precoJusto.toFixed(2).replace('.', ',')}` + (precoJustoEstimado ? ' *' : '');
-          celulaJusto.title = precoJustoEstimado ? 'Estimativa (sem lucro/patrimônio por ação disponíveis para o cálculo de Graham)' : 'Calculado pela fórmula de Graham';
-        }
+        if (celulaPreco) celulaPreco.innerText = `R$ ${precoAtual.toFixed(2).replace('.', ',')}`;
+        if (celulaJusto && !isNaN(precoJusto)) celulaJusto.innerText = `R$ ${precoJusto.toFixed(2).replace('.', ',')}`;
         if (celulaVariacao && variacao !== undefined) {
-          const sinal = variacao >= 0 ? '+' : '';
-          celulaVariacao.innerText = `${sinal}${variacao.toFixed(2)}%`;
-          celulaVariacao.className = variacao >= 0 ? "py-3 px-4 variacao text-emerald-600 dark:text-emerald-400 font-medium" : "py-3 px-4 variacao text-red-500 font-medium";
-        }
-        if (celulaQtd && celulaValorAtual && precoAtual !== undefined) {
-          const qtd = parseFloat(celulaQtd.innerText.replace(',', '.'));
-          celulaValorAtual.innerText = `R$ ${(qtd * precoAtual).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          celulaVariacao.innerText = `${variacao >= 0 ? '+' : ''}${variacao.toFixed(2)}%`;
+          celulaVariacao.className = variacao >= 0 ? "py-3 px-4 variacao text-emerald-400 font-medium" : "py-3 px-4 variacao text-red-500 font-medium";
         }
       });
     }
 
-    function atualizarRadarOportunidades(ticker, precoAtual, precoJusto, precoJustoEstimado = false) {
-      const card = document.querySelector(`[data-op-ticker="${ticker}"]`);
-      if (!card) return;
-      const spanPreco = document.getElementById(`op-preco-${ticker}`);
-      const spanJusto = document.getElementById(`op-justo-${ticker}`);
-      const badge = document.getElementById(`badge-${ticker}`);
-
-      if (spanPreco) spanPreco.innerText = `R$ ${precoAtual.toFixed(2).replace('.', ',')}`;
-      if (spanJusto) spanJusto.innerText = `R$ ${precoJusto.toFixed(2).replace('.', ',')}` + (precoJustoEstimado ? ' *' : '');
-
-      if (badge) {
-        if (precoAtual < precoJusto) {
-          badge.innerHTML = "🟢 Bom para comprar / Oportunidade";
-          badge.className = "text-xs font-bold bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded";
-        } else if (Math.abs(precoAtual - precoJusto) / precoJusto <= 0.05) {
-          badge.innerHTML = "🔵 Aguardar / Neutro";
-          badge.className = "text-xs font-bold bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 px-2 py-0.5 rounded";
-        } else {
-          badge.innerHTML = "🟠 Evitar novas compras no momento";
-          badge.className = "text-xs font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded";
-        }
-      }
-    }
-
     function recalcularTotais() {
-      const linhas = document.querySelectorAll('#tabelaAtivos tr[data-ticker]');
       let totalInvestido = 0;
       let totalAtual = 0;
-      let totalAtivosCount = 0;
-
       carteiraAtivos.forEach(ativo => {
         totalInvestido += ativo.qtd * ativo.pm;
         totalAtual += ativo.qtd * ativo.precoAtual;
-        totalAtivosCount++;
       });
 
       document.getElementById('totalCarteira').innerText = `R$ ${totalAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       
-      const lucroElem = document.getElementById('lucroPrejuizo');
       const diferenca = totalAtual - totalInvestido;
       const percentual = totalInvestido > 0 ? (diferenca / totalInvestido) * 100 : 0;
-      const sinal = diferenca >= 0 ? '+' : '';
-      
-      lucroElem.innerHTML = `R$ ${diferenca.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-sm font-normal">(${sinal}${percentual.toFixed(2)}%)</span>`;
-      lucroElem.className = diferenca >= 0 ? "text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1" : "text-2xl font-bold text-red-500 mt-1";
+      const lucroElem = document.getElementById('lucroPrejuizo');
+      lucroElem.innerHTML = `R$ ${diferenca.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-xs">(${percentual >= 0 ? '+' : ''}${percentual.toFixed(2)}%)</span>`;
 
       let totalProventos = listaDividendos.reduce((acc, item) => acc + item.valor, 0);
       let resultadoReal = (totalAtual + totalProventos) - totalInvestido;
       let percentualReal = totalInvestido > 0 ? (resultadoReal / totalInvestido) * 100 : 0;
-      const sinalReal = resultadoReal >= 0 ? '+' : '';
 
       const resultadoRealElem = document.getElementById('resultadoRealLiquido');
-      resultadoRealElem.innerHTML = `R$ ${resultadoReal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-xs font-normal">(${sinalReal}${percentualReal.toFixed(2)}%)</span>`;
-      resultadoRealElem.className = resultadoReal >= 0 ? "text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1" : "text-2xl font-bold text-red-500 mt-1";
+      resultadoRealElem.innerHTML = `R$ ${resultadoReal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-xs">(${percentualReal >= 0 ? '+' : ''}${percentualReal.toFixed(2)}%)</span>`;
 
       document.getElementById('raioInvestido').innerText = `R$ ${totalInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       document.getElementById('raioAtual').innerText = `R$ ${totalAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      
-      const raioDifElem = document.getElementById('raioDiferenca');
-      const sinalDif = diferenca >= 0 ? '+' : '';
-      raioDifElem.innerText = `R$ ${diferenca.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${sinalDif}${percentual.toFixed(2)}%)`;
-      raioDifElem.className = diferenca >= 0 ? "font-bold text-emerald-600 dark:text-emerald-400" : "font-bold text-red-500";
-
-      let patrimonioMaisDiv = totalAtual + totalProventos;
-      document.getElementById('raioPatrimonioMaisDiv').innerText = `R$ ${patrimonioMaisDiv.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      document.getElementById('raioMenosInvestido').innerText = `- R$ ${totalInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      
-      const raioResFinalElem = document.getElementById('raioResultadoFinal');
-      const sinalResFinal = resultadoReal >= 0 ? '+' : '';
-      raioResFinalElem.innerText = `R$ ${resultadoReal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${sinalResFinal}${percentualReal.toFixed(2)}%)`;
-      raioResFinalElem.className = resultadoReal >= 0 ? "font-bold text-emerald-600 dark:text-emerald-400" : "font-bold text-red-500";
-
-      const badgeQtdAtivos = document.getElementById('qtdAtivosMonitorados');
-      if (badgeQtdAtivos) badgeQtdAtivos.innerText = totalAtivosCount;
-
-      calcularSimuladorLongoPrazo(totalAtual);
-      atualizarGraficoAlocacao();
+      document.getElementById('raioDiferenca').innerText = `R$ ${diferenca.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('raioPatrimonioMaisDiv').innerText = `R$ ${(totalAtual + totalProventos).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('raioResultadoFinal').innerText = `R$ ${resultadoReal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
-    function calcularSimuladorLongoPrazo(patrimonioAtualOverride) {
-      const patrimonioAtual = patrimonioAtualOverride !== undefined ? patrimonioAtualOverride : parseFloat(document.getElementById('totalCarteira').innerText.replace('R$', '').replace(/\./g, '').replace(',', '.').trim()) || 0;
-      const anosInput = parseInt(document.getElementById('anosSimulacao').value);
-      const anos = (!isNaN(anosInput) && anosInput >= 0) ? anosInput : 0;
-      
-      let patrimonioFinal = patrimonioAtual * Math.pow(1 + 0.08, anos);
-      let dividendosAcumulados = patrimonioFinal * 0.06 * (anos * 0.5); 
-      let rendaMensalEstimada = (patrimonioFinal * 0.06) / 12;
-
-      document.getElementById('simPatrimonioFinal').innerText = `R$ ${patrimonioFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      document.getElementById('simRendaMensal').innerText = `R$ ${rendaMensalEstimada.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / mês`;
-      document.getElementById('simTotalDividendos').innerText = `R$ ${dividendosAcumulados.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    function abrirModalDividendo() {
+      document.getElementById('modalDividendo').classList.remove('hidden');
     }
-
-    function atualizarGraficoAlocacao() {
-      const container = document.getElementById('containerBarrasAlocacao');
-      if (!container) return;
-      container.innerHTML = '';
-
-      let totalVal = 0;
-      let dadosAtivos = [];
-
-      carteiraAtivos.forEach(ativo => {
-        const vAtu = ativo.qtd * ativo.precoAtual;
-        totalVal += vAtu;
-        dadosAtivos.push({ ticker: ativo.ticker, valor: vAtu });
-      });
-
-      if (totalVal === 0) {
-        container.innerHTML = '<p class="text-xs text-gray-400">Nenhum ativo na carteira para gerar gráfico.</p>';
-        return;
-      }
-
-      const coresBarra = ['bg-blue-600', 'bg-emerald-600', 'bg-cyan-600', 'bg-indigo-600', 'bg-amber-600', 'bg-purple-600'];
-      
-      dadosAtivos.forEach((item, idx) => {
-        const percentual = (item.valor / totalVal) * 100;
-        const cor = coresBarra[idx % coresBarra.length];
-        container.innerHTML += `
-          <div>
-            <div class="flex justify-between text-xs font-semibold mb-1 text-gray-700 dark:text-gray-300">
-              <span>${item.ticker}</span>
-              <span>${percentual.toFixed(1)}% (R$ ${item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
-            </div>
-            <div class="w-full bg-gray-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
-              <div class="${cor} h-2.5 rounded-full transition-all duration-500" style="width: ${percentual}%"></div>
-            </div>
-          </div>
-        `;
-      });
+    function fecharModalDividendo() {
+      document.getElementById('modalDividendo').classList.add('hidden');
     }
+    function salvarNovoDividendo() {
+      const ticker = document.getElementById('divTicker').value.toUpperCase().trim();
+      const tipo = document.getElementById('divTipo').value;
+      const dataCom = document.getElementById('divDataCom').value.trim();
+      const dataPag = document.getElementById('divDataPag').value.trim();
+      const valor = parseFloat(document.getElementById('divValor').value);
 
-    function removerAtivo(btn) {
-      if (confirm("Deseja remover este ativo da carteira?")) {
-        const linha = btn.closest('tr');
-        const ticker = linha.getAttribute('data-ticker');
-        carteiraAtivos = carteiraAtivos.filter(a => a.ticker !== ticker);
-        salvarCarteira();
-        linha.remove();
-        recalcularTotais();
-        mostrarNotificacao("Ativo removido.", "info");
-      }
-    }
-
-    function abrirModalOperacao() {
-      document.getElementById('opTicker').value = '';
-      document.getElementById('opQtd').value = '';
-      document.getElementById('opPM').value = '';
-      document.getElementById('modalOperacao').classList.remove('hidden');
-    }
-
-    function fecharModalOperacao() {
-      document.getElementById('modalOperacao').classList.add('hidden');
-    }
-
-    function salvarNovaOperacao() {
-      const ticker = document.getElementById('opTicker').value.toUpperCase().trim();
-      const novaQtd = parseFloat(document.getElementById('opQtd').value);
-      const novoPm = parseFloat(document.getElementById('opPM').value);
-
-      if (!ticker || isNaN(novaQtd) || isNaN(novoPm)) {
+      if (!ticker || !dataCom || !dataPag || isNaN(valor)) {
         mostrarNotificacao("Preencha todos os campos corretamente.", "aviso");
         return;
       }
 
-      const ativoExistente = carteiraAtivos.find(a => a.ticker === ticker);
+      listaDividendos.push({ ticker, tipo, dataCom, dataPag, valor });
+      localStorage.setItem('dividendos_salvos', JSON.stringify(listaDividendos));
+      renderizarTabelaDividendos();
+      fecharModalDividendo();
+      mostrarNotificacao("Provento registrado!", "sucesso");
+    }
 
-      if (ativoExistente) {
-        const totalQtd = ativoExistente.qtd + novaQtd;
-        const totalInvestidoAntigo = ativoExistente.qtd * ativoExistente.pm;
-        const totalInvestidoNovoAporte = novaQtd * novoPm;
-        const novoPrecoMedio = (totalInvestidoAntigo + totalInvestidoNovoAporte) / totalQtd;
-
-        ativoExistente.qtd = totalQtd;
-        ativoExistente.pm = novoPrecoMedio;
-        mostrarNotificacao(`Aporte adicionado em ${ticker}!`, "sucesso");
-      } else {
-        carteiraAtivos.push({
-          ticker,
-          qtd: novaQtd,
-          pm: novoPm,
-          precoAtual: novoPm,
-          precoJusto: null,
-          precoJustoEstimado: false,
-          variacao: 0
-        });
-        mostrarNotificacao(`Novo ativo ${ticker} cadastrado!`, "sucesso");
+    function removerDividendo(index) {
+      if (confirm("Deseja excluir este provento?")) {
+        listaDividendos.splice(index, 1);
+        localStorage.setItem('dividendos_salvos', JSON.stringify(listaDividendos));
+        renderizarTabelaDividendos();
+        mostrarNotificacao("Provento removido.", "info");
       }
-
-      salvarCarteira();
-      renderizarTabelaCarteira();
-      fecharModalOperacao();
-      recalcularTotais();
     }
 
     function exportarBackup() {
@@ -2376,77 +1043,20 @@
         try {
           const dados = JSON.parse(e.target.result);
           if (dados && Array.isArray(dados.ativos)) {
-            // Converte texto "R$ 1.234,56" em número, se o backup for de uma versão antiga.
-            const paraNumero = (v) => {
-              if (typeof v === 'number') return v;
-              if (typeof v === 'string') return parseFloat(v.replace('R$', '').replace(/\./g, '').replace(',', '.').trim()) || 0;
-              return 0;
-            };
-            carteiraAtivos = dados.ativos.map(a => ({
-              ticker: a.ticker,
-              qtd: paraNumero(a.qtd),
-              pm: paraNumero(a.pm),
-              precoAtual: paraNumero(a.precoAtual),
-              precoJusto: a.precoJusto !== undefined ? paraNumero(a.precoJusto) : null,
-              precoJustoEstimado: !!a.precoJustoEstimado,
-              variacao: paraNumero(a.variacao)
-            }));
+            carteiraAtivos = dados.ativos;
             salvarCarteira();
             renderizarTabelaCarteira();
-            recalcularTotais();
           }
           if (dados && Array.isArray(dados.dividendos)) {
             listaDividendos = dados.dividendos;
             localStorage.setItem('dividendos_salvos', JSON.stringify(listaDividendos));
             renderizarTabelaDividendos();
           }
-          mostrarNotificacao("Backup restaurado com sucesso!", "sucesso");
+          recalcularTotais();
+          mostrarNotificacao("Backup restaurado!", "sucesso");
         } catch (err) { mostrarNotificacao("Erro ao ler backup.", "erro"); }
       };
       reader.readAsText(file);
-    }
-
-    function abrirProximosDividendos() {
-      const proximos = [
-        { ticker: 'SAPR11', tipo: 'JCP / Dividendo', dataCom: '15/03/2026', dataPag: '30/03/2026', valorEstimado: 'R$ 46,00' },
-        { ticker: 'PETR4', tipo: 'Dividendos', dataCom: '20/03/2026', dataPag: '15/04/2026', valorEstimado: 'R$ 90,00' },
-        { ticker: 'KLBN3', tipo: 'Dividendo Trimestral', dataCom: '02/04/2026', dataPag: '18/04/2026', valorEstimado: 'R$ 185,00' }
-      ];
-
-      let htmlItens = proximos.map(p => `
-        <div class="p-3 border border-gray-100 dark:border-darkborder rounded-lg bg-gray-50 dark:bg-slate-900 flex justify-between items-center">
-          <div>
-            <span class="font-bold text-gray-800 dark:text-white">${p.ticker}</span>
-            <p class="text-xs text-gray-500 dark:text-gray-400">${p.tipo} • Data Com: ${p.dataCom}</p>
-            <p class="text-xs text-blue-600 dark:text-blue-400 font-medium">Pagamento: ${p.dataPag}</p>
-          </div>
-          <span class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">${p.valorEstimado}</span>
-        </div>
-      `).join('');
-
-      let modalAgenda = document.getElementById('modalAgendaProventos');
-      if (!modalAgenda) {
-        modalAgenda = document.createElement('div');
-        modalAgenda.id = 'modalAgendaProventos';
-        modalAgenda.className = 'fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4';
-        modalAgenda.innerHTML = `
-          <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-lg w-full p-6 border border-gray-100 dark:border-darkborder space-y-4">
-            <div class="flex justify-between items-center">
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-calendar-alt text-blue-600"></i> Próximos Dividendos (Agenda)
-              </h3>
-              <button onclick="document.getElementById('modalAgendaProventos').remove()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                <i class="fa-solid fa-xmark text-lg"></i>
-              </button>
-            </div>
-            <div class="space-y-2 max-h-60 overflow-y-auto">${htmlItens}</div>
-            <button onclick="document.getElementById('modalAgendaProventos').remove()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
-              Fechar Agenda
-            </button>
-          </div>
-        `;
-        document.body.appendChild(modalAgenda);
-      }
     }
   </script>
 </body>
