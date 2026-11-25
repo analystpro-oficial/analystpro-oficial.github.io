@@ -1,4 +1,4 @@
 {
   "version": "1.8.7",
-  "releaseNotes": "Histórico individual de compras por ativo com edição, exclusão e recálculo automático do Preço Médio."
+  "releaseNotes": "Edição direta do preço de compra de qualquer operação lançada com recálculo automático do Preço Médio, mantendo histórico, gráficos e dados salvos."
 }
