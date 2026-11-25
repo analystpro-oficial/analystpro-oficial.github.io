@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AnalystPro - Gestão de Investimentos</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AnalystPro - Carteira, Dividendos e Oportunidades</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -11,187 +11,84 @@
       theme: {
         extend: {
           colors: {
-            darkbg: '#0f172a',
-            darkcard: '#1e293b',
-            darkborder: '#334155'
+            darkcard: '#111827',
+            darkborder: '#1f2937'
           }
         }
       }
-    }
+    };
   </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Biblioteca TradingView Lightweight Charts -->
-  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
-  <!-- Chart.js para o gráfico de dividendos (Ano -> Mês -> Ativos) -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <!-- EmailJS: envio de e-mail direto do navegador, sem backend, usado na recuperação de senha -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
-    /* Mascara a senha visualmente (bolinhas) via CSS, sem usar type="password".
-       Assim o Chrome/Edge/Safari não reconhecem o campo como senha e param de
-       oferecer login salvo / gerenciador de senhas por cima do campo. */
     .campo-senha-mascarada {
       -webkit-text-security: disc;
       text-security: disc;
     }
   </style>
 </head>
-<body class="bg-gray-100 dark:bg-darkbg font-sans text-gray-800 dark:text-gray-100 transition-colors duration-200">
+<body class="bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
 
-  <!-- NOTIFICAÇÃO TOAST CUSTOMIZADA -->
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+  <!-- CONTAINER DE NOTIFICAÇÕES TOAST -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- MODAL POP-UP PARA NOTAS DE ATUALIZAÇÃO (CHANGELOG) -->
-  <div id="modalChangelog" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-lg w-full p-6 border border-gray-100 dark:border-darkborder space-y-4">
+  <!-- MODAL CHANGELOG / NOVIDADES -->
+  <div id="modalChangelog" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[65] flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder space-y-4">
       <div class="flex justify-between items-center">
         <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Notas de Atualização (Changelog)
+          <i class="fa-solid fa-list-check text-blue-600"></i> Novidades da Versão
         </h3>
         <button onclick="fecharModalChangelog()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
-      <div class="space-y-4 max-h-72 overflow-y-auto pr-2 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
-        <div class="border-l-2 border-emerald-500 pl-3 space-y-1">
-          <span class="font-bold text-emerald-600 dark:text-emerald-400 text-base">Versão V1.8.6</span>
-          <p class="text-gray-400 text-xs">Novembro de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Vírgula automática no Valor Total de Proventos:</b> máscara de centavos em tempo real ao cadastrar ou editar proventos.</li>
-          </ul>
+      <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300 max-h-72 overflow-y-auto">
+        <div class="p-3 rounded-lg bg-blue-50 dark:bg-slate-900 border border-blue-200 dark:border-blue-800">
+          <div class="font-bold text-blue-700 dark:text-blue-400">V1.8.7</div>
+          <p class="text-xs mt-1">Histórico individual de compras por ativo: clique sobre a ação na Carteira para visualizar cada aporte (data, quantidade e valor pago), editar compras específicas ou excluí-las com recálculo automático do Preço Médio.</p>
         </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.5</span>
-          <p class="text-gray-400 text-xs">Novembro de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Edição de ativos na Carteira:</b> novo botão de editar na linha de cada ativo para alterar ticker, quantidade e preço médio com recálculo automático.</li>
-            <li><b>Vírgula automática no Preço da Compra:</b> formatação automática de centavos durante a digitação na Nova Operação e na edição de ativos.</li>
-          </ul>
+        <div class="p-3 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder">
+          <div class="font-bold text-gray-800 dark:text-white">V1.8.6</div>
+          <p class="text-xs mt-1">Vírgula automática no Valor Total de Proventos: máscara de centavos em tempo real ao cadastrar ou editar proventos.</p>
         </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.4</span>
-          <p class="text-gray-400 text-xs">Setembro de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Correção crítica do erro 401 (Brapi):</b> removido o proxy CORS externo (corsproxy.io), que passou a exigir cadastro/chave própria e estava bloqueando todas as chamadas à Brapi. Agora o app chama a Brapi diretamente, já que ela libera CORS para uso via navegador.</li>
-            <li><b>Status "Brapi: Online/Offline" mais confiável:</b> deixou de depender de um serviço intermediário instável.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.3</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Períodos do Gráfico Avançado ajustados ao plano gratuito da Brapi:</b> os botões agora oferecem 5D, 1M e 3M (os únicos períodos liberados sem plano pago) em vez de 6M/1A/5A, que sempre caíam em dados simulados.</li>
-            <li><b>Tabela de Retorno por Período</b> ajustada para buscar no máximo 3 meses de histórico (o limite do plano gratuito); "6 meses" e "1 ano" mostram "—" nesse plano, em vez de erro.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.2</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Diagnóstico do Gráfico Avançado:</b> quando cai para dados simulados, o aviso agora mostra o motivo real (erro HTTP, mensagem da Brapi, falta de token, etc.) em vez de sempre dizer genericamente "sem token válido".</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.1</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Correção crítica:</b> o Gráfico Avançado nunca carregava porque a URL da biblioteca (CDN) tinha um caminho de pasta errado (/standalone/ extra), resultando em erro 404 — não era bloqueio de rede como se suspeitava antes.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.0</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Tooltip no Gráfico Avançado:</b> passe o mouse sobre o gráfico para ver Abertura, Máxima, Mínima, Fechamento e Volume do dia.</li>
-            <li><b>Barras de volume:</b> adicionado histograma de volume negociado abaixo do gráfico de preço, colorido por dia de alta/baixa.</li>
-            <li><b>Tabela de Retorno por Período:</b> 1 dia, 1 semana, 1 mês, 3 meses, 6 meses e 1 ano, calculados a partir do histórico real.</li>
-            <li><b>Preço-Justo no gráfico:</b> exibido junto ao cabeçalho do Gráfico Avançado, reaproveitando o cálculo de Graham já feito na Carteira.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.4</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Gráfico Avançado de Cotação:</b> biblioteca do gráfico trocada de CDN (unpkg → jsdelivr), que estava sendo bloqueada em algumas redes e deixava o gráfico em branco sem aviso. Agora, se falhar, mostra uma mensagem explicando o motivo.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.3</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Correção crítica:</b> os modais de "Esqueci a Senha" e "Novidades" não abriam de fato na tela de login — ficavam escondidos atrás dela por causa de um empate de camada (z-index) visual.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.2</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Campos de senha sem interferência do navegador:</b> os campos de senha pararam de usar type="password" nativo (agora mascaram só visualmente via CSS), o que impede o Chrome/Windows de sobrepor sugestões de login salvo e de bloquear o clique no botão de mostrar/esconder senha.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.1</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Botão de mostrar/esconder senha:</b> adicionado ícone de "olho" em todos os campos de senha (login, trocar senha e recuperação), para você conferir o que digitou.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.7.0</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Recuperação de senha por e-mail:</b> novo fluxo com código de 6 dígitos enviado por e-mail (via EmailJS), substituindo a caixa genérica do navegador.</li>
-            <li><b>Trocar senha em Configurações:</b> nova aba de Segurança para trocar a senha (com validação da senha atual), configurar e-mail de recuperação e credenciais do EmailJS.</li>
-            <li><b>Campo de senha mais limpo:</b> ajustes para reduzir sugestões de autopreenchimento/gerenciador de senhas do navegador sobrepondo o campo.</li>
-          </ul>
-        </div>
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.6.0</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Correção crítica de persistência:</b> a carteira de ativos agora é salva no dispositivo (antes só existia na tela e se perdia ao recarregar a página).</li>
-            <li><b>Nova aba Dashboard:</b> resumo geral, Raio-X e Simulador saíram das demais abas (não aparecem mais "grudados" em Carteira, Dividendos, etc.) e ganharam uma aba própria.</li>
-            <li><b>Proxy de cotações corrigido:</b> ajustado o formato de chamada à Brapi via corsproxy.io, que estava quebrando as requisições do gráfico avançado.</li>
-            <li><b>Aviso de dados simulados:</b> o gráfico avançado agora avisa claramente quando está exibindo dados fictícios (sem token ou API fora do ar).</li>
-            <li><b>Preço Justo mais confiável:</b> corrigido cálculo que podia gerar "NaN" e sinalizado com "*" quando o valor é apenas uma estimativa.</li>
-            <li><b>Gráfico de Proventos:</b> novo gráfico interativo em Dividendos — clique no ano para ver os meses, e no mês para ver quais ativos pagaram.</li>
-          </ul>
-        </div>
-
-        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
-          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.5.9</span>
-          <p class="text-gray-400 text-xs">Agosto de 2026</p>
-          <ul class="list-disc list-inside space-y-1 pt-1">
-            <li><b>Remoção de Banners Globais:</b> Retirada definitiva do banner fixo superior de notificação de versão que se repetia indesejadamente nas abas internas, eliminando a poluição visual.</li>
-            <li><b>Raio-X Didático da Carteira:</b> Painel visual explicativo detalhando os valores investidos, valor de mercado das ações e o impacto dos dividendos na rentabilidade real.</li>
-            <li><b>Ordenação Cronológica de Dividendos:</b> Meses e anos organizados rigorosamente de forma crescente por data de pagamento.</li>
-          </ul>
+        <div class="p-3 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder">
+          <div class="font-bold text-gray-800 dark:text-white">V1.8.4</div>
+          <p class="text-xs mt-1">Correção da chamada direta à API Brapi sem proxy CORS externo.</p>
         </div>
       </div>
       <button onclick="fecharModalChangelog()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
-        Entendido
+        Fechar
       </button>
     </div>
   </div>
 
-  <!-- MODAL POP-UP PARA NOVA OPERAÇÃO -->
+  <!-- MODAL POP-UP PARA CADASTRAR NOVA OPERAÇÃO -->
   <div id="modalOperacao" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <i class="fa-solid fa-plus-circle text-emerald-600"></i> Cadastrar Nova Operação
         </h3>
-        <button onclick="fecharModalOperacao()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <button onclick="fecharModalOperacao()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
       </div>
       <div class="space-y-4">
         <div>
           <label for="opTicker" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Código do Ativo (Ticker)</label>
           <input type="text" id="opTicker" placeholder="Ex: SAPR11, PETR4" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm uppercase focus:ring-2 focus:ring-emerald-500 outline-none">
         </div>
+        <div>
+          <label for="opData" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Data da Compra</label>
+          <input type="text" id="opData" placeholder="DD/MM/AAAA" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label for="opQtd" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Quantidade</label>
-            <input type="number" id="opQtd" placeholder="Ex: 20" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+            <input type="number" step="any" id="opQtd" placeholder="Ex: 20" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
           </div>
           <div>
             <label for="opPM" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Preço da Compra (R$)</label>
@@ -206,6 +103,80 @@
             Salvar Operação
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL HISTÓRICO INDIVIDUAL DE COMPRAS POR ATIVO -->
+  <div id="modalHistoricoAtivo" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-2xl w-full p-6 border border-gray-100 dark:border-darkborder space-y-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h3 id="tituloModalHistorico" class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Histórico de Compras
+          </h3>
+          <p id="resumoModalHistorico" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
+        </div>
+        <button onclick="fecharModalHistoricoAtivo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="histTickerAtual">
+
+      <!-- FORMULÁRIO DE EDIÇÃO DE UMA COMPRA ESPECÍFICA -->
+      <div id="formEdicaoCompraIndividual" class="hidden p-4 rounded-lg bg-blue-50 dark:bg-slate-900 border border-blue-200 dark:border-blue-800 space-y-3">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-bold uppercase text-blue-700 dark:text-blue-400">Editando Compra Selecionada</span>
+          <button onclick="cancelarEdicaoCompraIndividual()" class="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400">Cancelar edição</button>
+        </div>
+        <input type="hidden" id="editCompraIndex" value="-1">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Data</label>
+            <input type="text" id="editCompraData" placeholder="DD/MM/AAAA" class="w-full px-3 py-1.5 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-800 text-gray-900 dark:text-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Quantidade</label>
+            <input type="number" step="any" id="editCompraQtd" class="w-full px-3 py-1.5 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-800 text-gray-900 dark:text-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Valor Pago (R$)</label>
+            <input type="text" inputmode="numeric" id="editCompraPreco" oninput="formatarMoedaVirgula(this)" class="w-full px-3 py-1.5 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-800 text-gray-900 dark:text-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+        <div class="flex justify-end">
+          <button onclick="salvarEdicaoCompraIndividual()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-1.5 rounded-lg text-xs transition">
+            Salvar Alteração desta Compra
+          </button>
+        </div>
+      </div>
+
+      <!-- LISTA DE OPERAÇÕES DO ATIVO -->
+      <div class="overflow-x-auto max-h-72 overflow-y-auto border border-gray-200 dark:border-darkborder rounded-lg">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-darkborder bg-gray-50 dark:bg-slate-900 text-gray-600 dark:text-gray-400 text-xs font-semibold">
+              <th class="py-2.5 px-3">Data</th>
+              <th class="py-2.5 px-3">Quantidade</th>
+              <th class="py-2.5 px-3">Valor Pago (Unit.)</th>
+              <th class="py-2.5 px-3">Total da Compra</th>
+              <th class="py-2.5 px-3 text-center">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaHistoricoComprasAtivo" class="divide-y divide-gray-100 dark:divide-darkborder">
+            <!-- Preenchido dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex justify-between items-center pt-1">
+        <button onclick="abrirModalNovaCompraParaAtivo()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3.5 py-2 rounded-lg text-xs flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-plus"></i> Adicionar Compra neste Ativo
+        </button>
+        <button onclick="fecharModalHistoricoAtivo()" class="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 font-medium px-4 py-2 rounded-lg text-xs transition">
+          Fechar
+        </button>
       </div>
     </div>
   </div>
@@ -247,7 +218,7 @@
     </div>
   </div>
 
-  <!-- MODAL: RECUPERAÇÃO DE SENHA POR E-MAIL (substitui a caixa nativa do navegador) -->
+  <!-- MODAL: RECUPERAÇÃO DE SENHA POR E-MAIL -->
   <div id="modalRecuperarSenha" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
       <div class="flex justify-between items-center mb-4">
@@ -257,7 +228,6 @@
         <button onclick="fecharModalRecuperarSenha()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <!-- ETAPA 1: pedir envio do código -->
       <div id="etapaEnviarCodigo" class="space-y-4">
         <p id="textoEtapaEnvio" class="text-sm text-gray-600 dark:text-gray-300"></p>
         <button id="btnEnviarCodigoRecuperacao" onclick="enviarCodigoRecuperacao()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg text-sm transition shadow-md flex items-center justify-center gap-2">
@@ -271,7 +241,6 @@
         </div>
       </div>
 
-      <!-- ETAPA 2: digitar código + nova senha -->
       <div id="etapaConfirmarCodigo" class="space-y-4 hidden">
         <p class="text-sm text-gray-600 dark:text-gray-300">Digite o código de 6 dígitos que enviamos para o seu e-mail de recuperação, e a nova senha de acesso.</p>
         <div>
@@ -297,7 +266,7 @@
     </div>
   </div>
 
-
+  <!-- TELA DE LOGIN -->
   <div id="telaLogin" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-8 border border-gray-100 dark:border-darkborder relative">
       <div class="absolute top-4 right-4 flex items-center gap-2">
@@ -305,7 +274,7 @@
           <i class="fa-solid fa-list-check"></i> Novidades
         </button>
         <span id="badgeVersaoLogin" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-gray-200 dark:border-slate-700 shadow-sm">
-          Versão V1.8.6
+          Versão V1.8.7
         </span>
       </div>
 
@@ -352,7 +321,7 @@
               <span>Brapi: Verificando...</span>
             </div>
             <button onclick="abrirModalChangelog()" class="flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-emerald-400 border border-slate-700 shadow-sm hover:bg-slate-700 transition cursor-pointer" title="Ver Notas da Versão">
-              <span id="badgeVersaoHeader">Versão V1.8.6</span>
+              <span id="badgeVersaoHeader">Versão V1.8.7</span>
             </button>
           </div>
         </div>
@@ -372,128 +341,128 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
-      <!-- SEÇÃO: DASHBOARD (Resumo Geral, Raio-X e Simulador) -->
+      <!-- SEÇÃO: DASHBOARD -->
       <section id="sec-dashboard" class="space-y-8">
-      <!-- PAINEL DE RESUMO GERAL COM RENTABILIDADE REAL -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-blue-500 border border-gray-100 dark:border-darkborder transition-colors">
-          <span class="text-sm text-gray-500 dark:text-gray-400">Valor Total da Carteira</span>
-          <h2 id="totalCarteira" class="text-2xl font-bold text-gray-900 dark:text-white mt-1">R$ 0,00</h2>
-          <span id="statusAtualizacao" class="text-xs text-gray-400">Aguardando atualização...</span>
-        </div>
-        <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-emerald-500 border border-gray-100 dark:border-darkborder transition-colors">
-          <span class="text-sm text-gray-500 dark:text-gray-400">Proventos Recebidos</span>
-          <h2 id="totalProventosHeader" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00</h2>
-          <span class="text-xs text-gray-400">Total acumulado (2023-2026)</span>
-        </div>
-        <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-cyan-500 border border-gray-100 dark:border-darkborder transition-colors">
-          <span class="text-sm text-gray-500 dark:text-gray-400">Lucro / Prejuízo (Ações)</span>
-          <h2 id="lucroPrejuizo" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00 <span class="text-xs font-normal">(+0.00%)</span></h2>
-        </div>
-        <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-indigo-500 border border-gray-100 dark:border-darkborder transition-colors">
-          <span class="text-sm text-gray-500 dark:text-gray-400">Resultado Líquido Real (+ Div.)</span>
-          <h2 id="resultadoRealLiquido" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00 <span class="text-xs font-normal">(+0.00%)</span></h2>
-          <span class="text-xs text-gray-400">Patrimônio + Proventos - Investido</span>
-        </div>
-      </div>
-
-      <!-- NOVO PAINEL: RAIO-X DIDÁTICO DETALHADO DA CARTEIRA -->
-      <div class="bg-white dark:bg-darkcard rounded-xl p-6 shadow-sm border border-gray-200 dark:border-darkborder mb-8 space-y-6">
-        <div class="border-b border-gray-100 dark:border-darkborder pb-4">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <i class="fa-solid fa-magnifying-glass-chart text-blue-600"></i> Raio-X Didático: Entenda seus Números
-          </h3>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Detalhamento visual de quanto você investiu, quanto as ações valem hoje e o impacto real dos dividendos.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Bloco 1: Variação das Ações -->
-          <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-xl border border-gray-200 dark:border-darkborder space-y-3">
-            <h4 class="font-bold text-sm text-gray-800 dark:text-white flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-blue-500"></i> 1. Desempenho Exclusivo das Ações (Preço)
-            </h4>
-            <div class="space-y-2 text-xs">
-              <div class="flex justify-between py-1 border-b border-gray-200 dark:border-darkborder/50">
-                <span class="text-gray-600 dark:text-gray-400">Valor Total Investido (Compras):</span>
-                <span id="raioInvestido" class="font-bold text-gray-900 dark:text-white">R$ 0,00</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-gray-200 dark:border-darkborder/50">
-                <span class="text-gray-600 dark:text-gray-400">Valor Atual das Ações (Mercado):</span>
-                <span id="raioAtual" class="font-bold text-blue-600 dark:text-blue-400">R$ 0,00</span>
-              </div>
-              <div class="flex justify-between py-1 font-semibold">
-                <span class="text-gray-700 dark:text-gray-300">Prejuízo Virtual / Não Realizado:</span>
-                <span id="raioDiferenca" class="text-red-500">R$ 0,00 (0.00%)</span>
-              </div>
-            </div>
-            <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed pt-1">
-              <b>Explicação:</b> Atualmente, a soma do valor atual das ações no mercado está ligeiramente abaixo do total desembolsado nas compras. As cotações oscilaram para baixo temporariamente.
-            </p>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-blue-500 border border-gray-100 dark:border-darkborder transition-colors">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Valor Total da Carteira</span>
+            <h2 id="totalCarteira" class="text-2xl font-bold text-gray-900 dark:text-white mt-1">R$ 0,00</h2>
+            <span id="statusAtualizacao" class="text-xs text-gray-400">Aguardando atualização...</span>
           </div>
-
-          <!-- Bloco 2: Resultado Real com Dividendos -->
-          <div class="bg-emerald-50/50 dark:bg-emerald-950/20 p-5 rounded-xl border border-emerald-200 dark:border-emerald-900/50 space-y-3">
-            <h4 class="font-bold text-sm text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
-              <i class="fa-solid fa-hand-holding-dollar text-emerald-500"></i> 2. Resultado Líquido Real (+ Proventos)
-            </h4>
-            <div class="space-y-2 text-xs">
-              <div class="flex justify-between py-1 border-b border-emerald-200 dark:border-emerald-900/40">
-                <span class="text-gray-600 dark:text-gray-400">Patrimônio das Ações + Proventos:</span>
-                <span id="raioPatrimonioMaisDiv" class="font-bold text-gray-900 dark:text-white">R$ 0,00</span>
-              </div>
-              <div class="flex justify-between py-1 border-b border-emerald-200 dark:border-emerald-900/40">
-                <span class="text-gray-600 dark:text-gray-400">Menos o Valor Total Investido:</span>
-                <span id="raioMenosInvestido" class="font-bold text-red-500">- R$ 0,00</span>
-              </div>
-              <div class="flex justify-between py-1 font-semibold text-sm">
-                <span class="text-emerald-700 dark:text-emerald-400">Lucro Líquido Real Final:</span>
-                <span id="raioResultadoFinal" class="text-emerald-600 dark:text-emerald-400">R$ 0,00 (0.00%)</span>
-              </div>
-            </div>
-            <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/80 leading-relaxed pt-1">
-              <b>Explicação:</b> Mesmo com a leve oscilação negativa das cotações, o dinheiro vivo recebido em proventos cobre essa diferença e deixa o seu saldo final no positivo!
-            </p>
+          <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-emerald-500 border border-gray-100 dark:border-darkborder transition-colors">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Proventos Recebidos</span>
+            <h2 id="totalProventosHeader" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00</h2>
+            <span class="text-xs text-gray-400">Total acumulado (2023-2026)</span>
+          </div>
+          <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-cyan-500 border border-gray-100 dark:border-darkborder transition-colors">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Lucro / Prejuízo (Ações)</span>
+            <h2 id="lucroPrejuizo" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00 <span class="text-xs font-normal">(+0.00%)</span></h2>
+          </div>
+          <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-indigo-500 border border-gray-100 dark:border-darkborder transition-colors">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Resultado Líquido Real (+ Div.)</span>
+            <h2 id="resultadoRealLiquido" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">R$ 0,00 <span class="text-xs font-normal">(+0.00%)</span></h2>
+            <span class="text-xs text-gray-400">Patrimônio + Proventos - Investido</span>
           </div>
         </div>
-      </div>
 
-      <!-- PAINEL PROFISSIONAL: SIMULADOR -->
-      <div class="bg-gradient-to-r from-blue-900 to-slate-900 text-white rounded-xl p-6 shadow-xl mb-8 border border-blue-800">
-        <div class="flex justify-between items-center mb-4 flex-wrap gap-3">
-          <div>
-            <h3 class="text-lg font-bold flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-emerald-400"></i> Simulador de Renda Passiva e Juros Compostos (Longo Prazo)
+        <!-- RAIO-X DIDÁTICO DETALHADO DA CARTEIRA -->
+        <div class="bg-white dark:bg-darkcard rounded-xl p-6 shadow-sm border border-gray-200 dark:border-darkborder mb-8 space-y-6">
+          <div class="border-b border-gray-100 dark:border-darkborder pb-4">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-magnifying-glass-chart text-blue-600"></i> Raio-X Didático: Entenda seus Números
             </h3>
-            <p class="text-xs text-blue-200">Projeção estimada considerando reinvestimento contínuo de dividendos (6% a.a. médio).</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Detalhamento visual de quanto você investiu, quanto as ações valem hoje e o impacto real dos dividendos.</p>
           </div>
-          <div class="flex items-center gap-2 bg-blue-950/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs">
-            <label for="anosSimulacao" class="font-medium">Horizonte (Anos):</label>
-            <input type="number" id="anosSimulacao" value="0" min="0" max="50" oninput="calcularSimuladorLongoPrazo()" class="w-16 bg-slate-900 text-white text-center font-bold px-2 py-1 rounded border border-blue-600 outline-none">
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-xl border border-gray-200 dark:border-darkborder space-y-3">
+              <h4 class="font-bold text-sm text-gray-800 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-blue-500"></i> 1. Desempenho Exclusivo das Ações (Preço)
+              </h4>
+              <div class="space-y-2 text-xs">
+                <div class="flex justify-between py-1 border-b border-gray-200 dark:border-darkborder/50">
+                  <span class="text-gray-600 dark:text-gray-400">Valor Total Investido (Compras):</span>
+                  <span id="raioInvestido" class="font-bold text-gray-900 dark:text-white">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-gray-200 dark:border-darkborder/50">
+                  <span class="text-gray-600 dark:text-gray-400">Valor Atual das Ações (Mercado):</span>
+                  <span id="raioAtual" class="font-bold text-blue-600 dark:text-blue-400">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between py-1 font-semibold">
+                  <span class="text-gray-700 dark:text-gray-300">Prejuízo Virtual / Não Realizado:</span>
+                  <span id="raioDiferenca" class="text-red-500">R$ 0,00 (0.00%)</span>
+                </div>
+              </div>
+              <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed pt-1">
+                <b>Explicação:</b> Atualmente, a soma do valor atual das ações no mercado está ligeiramente abaixo do total desembolsado nas compras. As cotações oscilaram para baixo temporariamente.
+              </p>
+            </div>
+
+            <div class="bg-emerald-50/50 dark:bg-emerald-950/20 p-5 rounded-xl border border-emerald-200 dark:border-emerald-900/50 space-y-3">
+              <h4 class="font-bold text-sm text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+                <i class="fa-solid fa-hand-holding-dollar text-emerald-500"></i> 2. Resultado Líquido Real (+ Proventos)
+              </h4>
+              <div class="space-y-2 text-xs">
+                <div class="flex justify-between py-1 border-b border-emerald-200 dark:border-emerald-900/40">
+                  <span class="text-gray-600 dark:text-gray-400">Patrimônio das Ações + Proventos:</span>
+                  <span id="raioPatrimonioMaisDiv" class="font-bold text-gray-900 dark:text-white">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-emerald-200 dark:border-emerald-900/40">
+                  <span class="text-gray-600 dark:text-gray-400">Menos o Valor Total Investido:</span>
+                  <span id="raioMenosInvestido" class="font-bold text-red-500">- R$ 0,00</span>
+                </div>
+                <div class="flex justify-between py-1 font-semibold text-sm">
+                  <span class="text-emerald-700 dark:text-emerald-400">Lucro Líquido Real Final:</span>
+                  <span id="raioResultadoFinal" class="text-emerald-600 dark:text-emerald-400">R$ 0,00 (0.00%)</span>
+                </div>
+              </div>
+              <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/80 leading-relaxed pt-1">
+                <b>Explicação:</b> Mesmo com a leve oscilação negativa das cotações, o dinheiro vivo recebido em proventos cobre essa diferença e deixa o seu saldo final no positivo!
+              </p>
+            </div>
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-          <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-            <span class="text-xs text-blue-200 uppercase font-semibold">Patrimônio Projetado</span>
-            <h4 id="simPatrimonioFinal" class="text-xl font-bold text-white mt-1">R$ 0,00</h4>
+
+        <!-- SIMULADOR -->
+        <div class="bg-gradient-to-r from-blue-900 to-slate-900 text-white rounded-xl p-6 shadow-xl mb-8 border border-blue-800">
+          <div class="flex justify-between items-center mb-4 flex-wrap gap-3">
+            <div>
+              <h3 class="text-lg font-bold flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-emerald-400"></i> Simulador de Renda Passiva e Juros Compostos (Longo Prazo)
+              </h3>
+              <p class="text-xs text-blue-200">Projeção estimada considerando reinvestimento contínuo de dividendos (6% a.a. médio).</p>
+            </div>
+            <div class="flex items-center gap-2 bg-blue-950/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs">
+              <label for="anosSimulacao" class="font-medium">Horizonte (Anos):</label>
+              <input type="number" id="anosSimulacao" value="0" min="0" max="50" oninput="calcularSimuladorLongoPrazo()" class="w-16 bg-slate-900 text-white text-center font-bold px-2 py-1 rounded border border-blue-600 outline-none">
+            </div>
           </div>
-          <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-            <span class="text-xs text-emerald-300 uppercase font-semibold">Renda Passiva Mensal Estimada</span>
-            <h4 id="simRendaMensal" class="text-xl font-bold text-emerald-400 mt-1">R$ 0,00 / mês</h4>
-          </div>
-          <div class="bg-white/5 p-3 rounded-lg border border-white/10">
-            <span class="text-xs text-cyan-300 uppercase font-semibold">Total em Dividendos Acumulados</span>
-            <h4 id="simTotalDividendos" class="text-xl font-bold text-cyan-400 mt-1">R$ 0,00</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+              <span class="text-xs text-blue-200 uppercase font-semibold">Patrimônio Projetado</span>
+              <h4 id="simPatrimonioFinal" class="text-xl font-bold text-white mt-1">R$ 0,00</h4>
+            </div>
+            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+              <span class="text-xs text-emerald-300 uppercase font-semibold">Renda Passiva Mensal Estimada</span>
+              <h4 id="simRendaMensal" class="text-xl font-bold text-emerald-400 mt-1">R$ 0,00 / mês</h4>
+            </div>
+            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+              <span class="text-xs text-cyan-300 uppercase font-semibold">Total em Dividendos Acumulados</span>
+              <h4 id="simTotalDividendos" class="text-xl font-bold text-cyan-400 mt-1">R$ 0,00</h4>
+            </div>
           </div>
         </div>
-      </div>
       </section>
 
       <!-- SEÇÃO: CARTEIRA -->
       <section id="sec-carteira" class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border border-gray-100 dark:border-darkborder hidden transition-colors">
         <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
-          <h3 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-            <i class="fa-solid fa-wallet text-blue-600 dark:text-blue-400"></i> Minha Carteira
-          </h3>
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-wallet text-blue-600 dark:text-blue-400"></i> Minha Carteira
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Clique sobre o nome de uma ação para ver, editar ou excluir cada compra individual.</p>
+          </div>
           <div class="flex gap-2 flex-wrap">
             <button onclick="abrirModalOperacao()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-md font-medium text-sm flex items-center gap-1.5 transition">
               <i class="fa-solid fa-plus"></i> Nova Operação
@@ -526,7 +495,7 @@
               </tr>
             </thead>
             <tbody id="tabelaAtivos" class="divide-y divide-gray-100 dark:divide-darkborder text-sm">
-              <!-- Preenchido dinamicamente por renderizarTabelaCarteira(), a partir de carteiraAtivos (localStorage) -->
+              <!-- Preenchido dinamicamente por renderizarTabelaCarteira() -->
             </tbody>
           </table>
         </div>
@@ -575,7 +544,7 @@
           </div>
         </div>
 
-        <!-- GRÁFICO DE PROVENTOS: ANO -> MÊS -> ATIVOS QUE PAGARAM -->
+        <!-- GRÁFICO DE PROVENTOS -->
         <div class="p-5 border border-gray-200 dark:border-darkborder rounded-xl bg-gray-50 dark:bg-slate-900 space-y-3">
           <div class="flex justify-between items-center flex-wrap gap-3">
             <div>
@@ -656,7 +625,7 @@
           </div>
         </div>
 
-        <!-- GRÁFICO AVANÇADO ESTILO TRADINGVIEW (DIAS, MESES E ANOS) -->
+        <!-- GRÁFICO AVANÇADO ESTILO TRADINGVIEW -->
         <div class="p-5 border border-gray-200 dark:border-darkborder rounded-xl bg-gray-50 dark:bg-slate-900 space-y-4">
           <div class="flex justify-between items-center flex-wrap gap-3">
             <div>
@@ -682,11 +651,8 @@
             <i class="fa-solid fa-triangle-exclamation"></i>
             <span>Sem token válido ou API indisponível: exibindo dados <b>simulados</b> apenas para visualização. Configure o token da Brapi em Configurações para ver o histórico real.</span>
           </div>
-          <!-- Container externo fixo (não é limpo pela lib do gráfico) -->
           <div id="tradingviewChartOuter" class="w-full h-80 rounded-lg overflow-hidden border border-gray-200 dark:border-darkborder bg-white dark:bg-slate-950 relative min-h-[320px]">
-            <!-- Container interno: a biblioteca do gráfico limpa e recria isso livremente -->
             <div id="tradingviewChartContainer" class="w-full h-full"></div>
-            <!-- Tooltip flutuante com OHLC + Volume ao passar o mouse -->
             <div id="tooltipGraficoAvancado" class="hidden absolute z-10 pointer-events-none bg-white dark:bg-slate-800 border border-gray-200 dark:border-darkborder rounded-lg shadow-lg px-3 py-2 text-xs space-y-0.5 text-gray-700 dark:text-gray-200"></div>
           </div>
           <p class="text-xs text-gray-400 text-center">Arraste para navegar no tempo ou use o seletor acima para alternar o horizonte temporal por dias, meses ou anos.</p>
@@ -694,7 +660,7 @@
           <!-- TABELA DE RETORNO POR PERÍODO -->
           <div class="pt-3 border-t border-gray-200 dark:border-darkborder">
             <div id="tabelaRetornosPeriodo" class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center text-xs">
-              <!-- Preenchido dinamicamente por carregarTabelaRetornos() -->
+              <!-- Preenchido dinamicamente -->
             </div>
           </div>
         </div>
@@ -773,7 +739,6 @@
           </h3>
 
           <div class="max-w-md space-y-6">
-            <!-- TROCAR SENHA -->
             <div class="p-4 border border-gray-200 dark:border-darkborder rounded-lg space-y-3">
               <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Trocar senha de acesso</h4>
               <div>
@@ -813,7 +778,6 @@
               </button>
             </div>
 
-            <!-- E-MAIL DE RECUPERAÇÃO -->
             <div class="p-4 border border-gray-200 dark:border-darkborder rounded-lg space-y-3">
               <h4 class="font-semibold text-sm text-gray-800 dark:text-white">E-mail de recuperação</h4>
               <p class="text-xs text-gray-500 dark:text-gray-400">Para onde enviaremos o código de 6 dígitos caso você esqueça a senha.</p>
@@ -823,7 +787,6 @@
               </button>
             </div>
 
-            <!-- CONFIGURAÇÃO DO EMAILJS -->
             <div class="p-4 border border-gray-200 dark:border-darkborder rounded-lg space-y-3">
               <h4 class="font-semibold text-sm text-gray-800 dark:text-white">Envio de e-mail (EmailJS)</h4>
               <p class="text-xs text-gray-500 dark:text-gray-400">Cole aqui os 3 dados da sua conta gratuita em <a href="https://www.emailjs.com" target="_blank" rel="noopener" class="text-blue-500 underline">emailjs.com</a> (Service ID, Template ID e Public Key).</p>
@@ -899,9 +862,7 @@
   </div>
 
   <script>
-    // A versão exibida no app agora vem do version.json (fonte única da verdade).
-    // Isso resolve a falha antiga de version.json e a versão nas telas ficarem dessincronizados.
-    let VERSAO_ATUAL = "1.8.6"; // valor de fallback, sobrescrito por carregarVersaoApp() abaixo
+    let VERSAO_ATUAL = "1.8.7";
 
     async function carregarVersaoApp() {
       try {
@@ -925,9 +886,6 @@
       localStorage.setItem('app_senha', '123456');
     }
 
-    // CONFIGURAÇÃO DO EMAILJS (recuperação de senha por e-mail, sem backend)
-    // Preencha em Configurações > Segurança, ou direto aqui. Veja o passo a passo que te enviei
-    // com as instruções de como criar a conta e obter esses 3 valores em emailjs.com.
     let emailjsConfig = JSON.parse(localStorage.getItem('emailjs_config')) || {
       serviceId: '',
       templateId: '',
@@ -940,13 +898,61 @@
       }
     }
 
-    // MODELO DE DADOS DA CARTEIRA (antes só existia no DOM e se perdia ao recarregar a página)
+    function obterDataHojeBR() {
+      const hoje = new Date();
+      const d = String(hoje.getDate()).padStart(2, '0');
+      const m = String(hoje.getMonth() + 1).padStart(2, '0');
+      const a = hoje.getFullYear();
+      return `${d}/${m}/${a}`;
+    }
+
     const CARTEIRA_PADRAO = [
-      { ticker: 'PETR4', qtd: 10, pm: 32.21, precoAtual: 32.21, precoJusto: 27.22, precoJustoEstimado: false, variacao: 0 },
-      { ticker: 'KLBN3', qtd: 225, pm: 6.28, precoAtual: 6.28, precoJusto: 3.81, precoJustoEstimado: false, variacao: 0 },
-      { ticker: 'SAPR11', qtd: 40, pm: 21.86, precoAtual: 21.86, precoJusto: 21.35, precoJustoEstimado: false, variacao: 0 }
+      {
+        ticker: 'PETR4', qtd: 10, pm: 32.21, precoAtual: 32.21, precoJusto: 27.22, precoJustoEstimado: false, variacao: 0,
+        operacoes: [{ data: 'Saldo Anterior', qtd: 10, preco: 32.21 }]
+      },
+      {
+        ticker: 'KLBN3', qtd: 225, pm: 6.28, precoAtual: 6.28, precoJusto: 3.81, precoJustoEstimado: false, variacao: 0,
+        operacoes: [{ data: 'Saldo Anterior', qtd: 225, preco: 6.28 }]
+      },
+      {
+        ticker: 'SAPR11', qtd: 40, pm: 21.86, precoAtual: 21.86, precoJusto: 21.35, precoJustoEstimado: false, variacao: 0,
+        operacoes: [{ data: 'Saldo Anterior', qtd: 40, preco: 21.86 }]
+      }
     ];
+
     let carteiraAtivos = JSON.parse(localStorage.getItem('carteira_ativos')) || CARTEIRA_PADRAO;
+
+    function normalizarHistoricoOperacoes() {
+      let houveMigracao = false;
+      carteiraAtivos.forEach(ativo => {
+        if (!Array.isArray(ativo.operacoes) || ativo.operacoes.length === 0) {
+          ativo.operacoes = [
+            { data: 'Saldo Consolidado', qtd: Number(ativo.qtd) || 0, preco: Number(ativo.pm) || 0 }
+          ];
+          houveMigracao = true;
+        }
+      });
+      if (houveMigracao) {
+        salvarCarteira();
+      }
+    }
+
+    function recalcularConsolidadoPorOperacoes(ativo) {
+      if (!Array.isArray(ativo.operacoes) || ativo.operacoes.length === 0) {
+        ativo.qtd = 0;
+        ativo.pm = 0;
+        return;
+      }
+      let totalQtd = 0;
+      let totalCusto = 0;
+      ativo.operacoes.forEach(op => {
+        totalQtd += Number(op.qtd) || 0;
+        totalCusto += (Number(op.qtd) || 0) * (Number(op.preco) || 0);
+      });
+      ativo.qtd = totalQtd;
+      ativo.pm = totalQtd > 0 ? (totalCusto / totalQtd) : 0;
+    }
 
     function salvarCarteira() {
       localStorage.setItem('carteira_ativos', JSON.stringify(carteiraAtivos));
@@ -987,9 +993,10 @@
     let tvSeries = null;
     let tvVolumeSeries = null;
     let periodoGraficoAtual = '1M';
-    let dadosOHLCVAtual = []; // guarda open/high/low/close/volume por data, usado pelo tooltip
+    let dadosOHLCVAtual = [];
 
     document.addEventListener('DOMContentLoaded', () => {
+      normalizarHistoricoOperacoes();
       carregarVersaoApp();
       inicializarEmailJS();
       const temaSalvo = localStorage.getItem('app_tema') || 'dark';
@@ -1061,18 +1068,11 @@
       try {
         const resposta = await fetch('./version.json?t=' + new Date().getTime());
         if (resposta.ok) {
-          const dados = await resposta.json();
-          if (dados && dados.version && dados.version !== VERSAO_ATUAL) {
-            // Banner fixo superior omitido permanentemente (ver Changelog V1.5.9)
-          }
+          await resposta.json();
         }
       } catch (e) {
         console.log("Verificação de versão ignorada.");
       }
-    }
-
-    function recarregarPaginaNovaVersao() {
-      window.location.reload(true);
     }
 
     function mostrarNotificacao(mensagem, tipo = 'sucesso') {
@@ -1118,7 +1118,6 @@
       }
     }
 
-    // Código de recuperação: guardado com validade de 15 minutos
     let codigoRecuperacaoAtual = null;
     let codigoRecuperacaoExpira = 0;
 
@@ -1180,7 +1179,7 @@
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
 
       codigoRecuperacaoAtual = String(Math.floor(100000 + Math.random() * 900000));
-      codigoRecuperacaoExpira = Date.now() + 15 * 60 * 1000; // 15 minutos
+      codigoRecuperacaoExpira = Date.now() + 15 * 60 * 1000;
 
       try {
         await emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, {
@@ -1248,9 +1247,6 @@
         return;
       }
       try {
-        // Chamada direta à Brapi (sem proxy CORS): a Brapi já libera CORS para uso via navegador.
-        // O corsproxy.io foi removido porque passou a exigir cadastro/chave própria e estava
-        // bloqueando as requisições, mascarado como se fosse erro 401 da Brapi.
         const res = await fetch(`https://brapi.dev/api/quote/PETR4?token=${token}`);
         if (res.ok) {
           statusContainer.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300";
@@ -1272,7 +1268,7 @@
       });
       const ativa = document.getElementById(`sec-${aba}`);
       if (ativa) ativa.classList.remove('hidden');
-      
+
       if (aba === 'analise') {
         setTimeout(() => {
           inicializarGraficoTradingView();
@@ -1354,7 +1350,6 @@
       mostrarNotificacao("Configuração do EmailJS salva!", "sucesso");
     }
 
-    // GRÁFICO AVANÇADO TRADINGVIEW LIGHTWEIGHT CHARTS
     function inicializarGraficoTradingView() {
       const container = document.getElementById('tradingviewChartContainer');
       if (!container) return;
@@ -1370,7 +1365,6 @@
       }
 
       const isDark = document.documentElement.classList.contains('dark');
-      
       container.innerHTML = '';
       tvChart = null;
       tvSeries = null;
@@ -1411,7 +1405,6 @@
         lineWidth: 2,
       });
 
-      // Série de volume, "espremida" nos 20% inferiores do gráfico via escala de preço própria
       tvVolumeSeries = tvChart.addHistogramSeries({
         priceFormat: { type: 'volume' },
         priceScaleId: 'volume_scale',
@@ -1420,7 +1413,6 @@
         scaleMargins: { top: 0.82, bottom: 0 },
       });
 
-      // Tooltip customizado com OHLC + Volume ao passar o mouse (a lib não tem tooltip pronto)
       tvChart.subscribeCrosshairMove((param) => {
         const tooltip = document.getElementById('tooltipGraficoAvancado');
         if (!tooltip) return;
@@ -1448,8 +1440,8 @@
           <div>Volume: <b>${fmtVol(pontoOHLCV.volume)}</b></div>
         `;
 
-        const container = document.getElementById('tradingviewChartOuter');
-        const larguraContainer = container ? container.clientWidth : 300;
+        const containerOuter = document.getElementById('tradingviewChartOuter');
+        const larguraContainer = containerOuter ? containerOuter.clientWidth : 300;
         let left = param.point.x + 16;
         if (left + 150 > larguraContainer) {
           left = param.point.x - 166;
@@ -1517,12 +1509,10 @@
       let dadosVolume = [];
       dadosOHLCVAtual = [];
       let usandoDadosSimulados = false;
-
       let motivoFalhaGrafico = null;
 
       if (token) {
         try {
-          // Chamada direta à Brapi (sem proxy CORS — ver nota em testarStatusBrapi()).
           let urlAlvo = `https://brapi.dev/api/quote/${ticker}?range=${rangeStr}&interval=${intervalStr}&token=${token}`;
           let res = await fetch(urlAlvo);
           if (!res.ok) {
@@ -1553,12 +1543,12 @@
             }
           } else {
             let corpoErro = '';
-            try { const j = await res.json(); corpoErro = j.message || j.error || ''; } catch (e2) { /* corpo não era JSON */ }
+            try { const j = await res.json(); corpoErro = j.message || j.error || ''; } catch (e2) {}
             motivoFalhaGrafico = `Falha na requisição (HTTP ${res.status})${corpoErro ? ': ' + corpoErro : ''}.`;
           }
         } catch (e) {
           console.error("Erro ao buscar histórico da Brapi:", e);
-          motivoFalhaGrafico = 'Erro de rede/conexão ao tentar buscar os dados (verifique sua internet ou tente novamente em instantes).';
+          motivoFalhaGrafico = 'Erro de rede/conexão ao tentar buscar os dados.';
         }
       } else {
         motivoFalhaGrafico = 'Nenhum token da Brapi configurado em Configurações.';
@@ -1622,8 +1612,6 @@
       exibirPrecoJustoChartHeader(ticker);
     }
 
-    // Brapi retorna 'date' como timestamp Unix em segundos no histórico de preços.
-    // O gráfico simulado (fallback) usa string 'yyyy-mm-dd'. Essa função lida com os dois formatos.
     function paraDataJS(t) {
       if (typeof t === 'number') return new Date(t * 1000);
       return new Date(t);
@@ -1647,7 +1635,6 @@
       }
     }
 
-    // TABELA DE RETORNO POR PERÍODO (independe do zoom do gráfico: sempre busca 1 ano de dados diários)
     async function carregarTabelaRetornos() {
       const container = document.getElementById('tabelaRetornosPeriodo');
       if (!container) return;
@@ -1659,7 +1646,6 @@
       let fechamentos = [];
       let motivoFalhaTabela = null;
 
-      // Reaproveita os dados já carregados do gráfico se cobrirem pelo menos ~80 dias
       if (dadosOHLCVAtual.length > 0) {
         const primeiraData = paraDataJS(dadosOHLCVAtual[0].time);
         const ultimaData = paraDataJS(dadosOHLCVAtual[dadosOHLCVAtual.length - 1].time);
@@ -1670,8 +1656,6 @@
 
       if (fechamentos.length === 0 && token) {
         try {
-          // 3mo é o maior período liberado no plano gratuito da Brapi
-          // Chamada direta à Brapi (sem proxy CORS — ver nota em testarStatusBrapi()).
           let urlAlvo = `https://brapi.dev/api/quote/${ticker}?range=3mo&interval=1d&token=${token}`;
           let res = await fetch(urlAlvo);
           if (!res.ok) {
@@ -1689,7 +1673,7 @@
             }
           } else {
             let corpoErro = '';
-            try { const j = await res.json(); corpoErro = j.message || j.error || ''; } catch (e2) { /* corpo não era JSON */ }
+            try { const j = await res.json(); corpoErro = j.message || j.error || ''; } catch (e2) {}
             motivoFalhaTabela = `Falha na requisição (HTTP ${res.status})${corpoErro ? ': ' + corpoErro : ''}.`;
           }
         } catch (e) {
@@ -1720,7 +1704,6 @@
       const diasDisponiveis = (dataUltimo - dataPrimeiro) / 86400000;
 
       container.innerHTML = periodos.map(p => {
-        // Não calcula o período se não houver histórico suficiente para uma comparação confiável
         if (p.dias > 1 && diasDisponiveis < p.dias * 0.5) {
           return `
             <div class="p-2 rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-darkborder">
@@ -1834,9 +1817,8 @@
       }
     }
 
-    // GRÁFICO DE PROVENTOS: ANO -> MÊS -> ATIVOS QUE PAGARAM
     let graficoProventosChart = null;
-    let nivelGraficoProventos = 'ano'; // 'ano' | 'mes'
+    let nivelGraficoProventos = 'ano';
     let anoSelecionadoGrafico = null;
     const NOMES_MESES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
@@ -1889,14 +1871,13 @@
         const totaisPorAno = agruparProventosPorAno();
         labels = Object.keys(totaisPorAno);
         valores = Object.values(totaisPorAno);
-        cores = labels.map(() => 'rgba(37, 99, 235, 0.75)'); // azul
+        cores = labels.map(() => 'rgba(37, 99, 235, 0.75)');
         titulo.innerHTML = '<i class="fa-solid fa-chart-column text-emerald-500"></i> Proventos por Ano';
         btnVoltar.classList.add('hidden');
       } else {
         const totaisPorMes = agruparProventosPorMes(anoSelecionadoGrafico);
         labels = NOMES_MESES;
         valores = totaisPorMes;
-        // Barra verde nos meses com dividendo recebido, cinza nos meses sem nada
         cores = totaisPorMes.map(v => v > 0 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(148, 163, 184, 0.35)');
         titulo.innerHTML = `<i class="fa-solid fa-chart-column text-emerald-500"></i> Proventos em ${anoSelecionadoGrafico} por Mês`;
         btnVoltar.classList.remove('hidden');
@@ -2064,12 +2045,18 @@
         const precoJustoTxt = (ativo.precoJusto !== null && ativo.precoJusto !== undefined && !isNaN(ativo.precoJusto))
           ? `R$ ${ativo.precoJusto.toFixed(2).replace('.', ',')}` + (ativo.precoJustoEstimado ? ' *' : '')
           : 'R$ -';
+        const qtdOperacoes = Array.isArray(ativo.operacoes) ? ativo.operacoes.length : 1;
 
         const tr = document.createElement('tr');
         tr.setAttribute('data-ticker', ativo.ticker);
-        tr.className = "border-b border-gray-100 dark:border-darkborder text-sm";
+        tr.className = "border-b border-gray-100 dark:border-darkborder text-sm hover:bg-gray-50/70 dark:hover:bg-slate-800/40 transition";
         tr.innerHTML = `
-          <td class="py-3 px-4 font-bold text-gray-800 dark:text-white">${ativo.ticker}</td>
+          <td class="py-3 px-4 font-bold">
+            <button onclick="abrirModalHistoricoAtivo('${ativo.ticker}')" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1.5 text-left" title="Clique para ver o histórico de compras de ${ativo.ticker}">
+              <span>${ativo.ticker}</span>
+              <span class="text-[11px] font-normal text-gray-400">(${qtdOperacoes})</span>
+            </button>
+          </td>
           <td class="py-3 px-4 qtd">${ativo.qtd}</td>
           <td class="py-3 px-4 pm">R$ ${ativo.pm.toFixed(2).replace('.', ',')}</td>
           <td class="py-3 px-4 preco-atual font-semibold">R$ ${ativo.precoAtual.toFixed(2).replace('.', ',')}</td>
@@ -2078,12 +2065,137 @@
           <td class="py-3 px-4 valor-investido">R$ ${valorInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
           <td class="py-3 px-4 valor-atual font-semibold">R$ ${valorAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
           <td class="py-3 px-4 text-center space-x-2">
-            <button onclick="abrirModalEditarAtivo('${ativo.ticker}')" class="text-blue-500 hover:text-blue-700" title="Editar Ativo"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="abrirModalHistoricoAtivo('${ativo.ticker}')" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700" title="Histórico de Compras"><i class="fa-solid fa-list-ul"></i></button>
+            <button onclick="abrirModalEditarAtivo('${ativo.ticker}')" class="text-blue-500 hover:text-blue-700" title="Editar Saldo Consolidado"><i class="fa-solid fa-pen-to-square"></i></button>
             <button onclick="removerAtivo(this)" class="text-red-500 hover:text-red-700" title="Excluir Ativo"><i class="fa-solid fa-trash"></i></button>
           </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    function abrirModalHistoricoAtivo(ticker) {
+      const ativo = carteiraAtivos.find(a => a.ticker === ticker);
+      if (!ativo) return;
+      normalizarHistoricoOperacoes();
+
+      document.getElementById('histTickerAtual').value = ativo.ticker;
+      document.getElementById('tituloModalHistorico').innerHTML = `<i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Histórico de Compras — ${ativo.ticker}`;
+      cancelarEdicaoCompraIndividual();
+      renderizarTabelaHistoricoCompras(ativo);
+      document.getElementById('modalHistoricoAtivo').classList.remove('hidden');
+    }
+
+    function fecharModalHistoricoAtivo() {
+      document.getElementById('modalHistoricoAtivo').classList.add('hidden');
+      cancelarEdicaoCompraIndividual();
+    }
+
+    function renderizarTabelaHistoricoCompras(ativo) {
+      const tbody = document.getElementById('tabelaHistoricoComprasAtivo');
+      const resumo = document.getElementById('resumoModalHistorico');
+      const totalInvestido = ativo.qtd * ativo.pm;
+
+      resumo.innerHTML = `Total consolidado: <b>${ativo.qtd} ações</b> • Preço Médio: <b>R$ ${ativo.pm.toFixed(2).replace('.', ',')}</b> • Investido: <b>R$ ${totalInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>`;
+
+      tbody.innerHTML = '';
+      if (!ativo.operacoes || ativo.operacoes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="py-4 px-3 text-center text-xs text-gray-400">Nenhuma compra registrada para este ativo.</td></tr>';
+        return;
+      }
+
+      ativo.operacoes.forEach((op, idx) => {
+        const totalCompra = (Number(op.qtd) || 0) * (Number(op.preco) || 0);
+        tbody.innerHTML += `
+          <tr class="border-b border-gray-100 dark:border-darkborder text-xs sm:text-sm">
+            <td class="py-2.5 px-3 text-gray-700 dark:text-gray-300">${op.data || '-'}</td>
+            <td class="py-2.5 px-3 font-semibold text-gray-900 dark:text-white">${op.qtd}</td>
+            <td class="py-2.5 px-3 text-gray-700 dark:text-gray-300">R$ ${Number(op.preco).toFixed(2).replace('.', ',')}</td>
+            <td class="py-2.5 px-3 font-semibold text-emerald-600 dark:text-emerald-400">R$ ${totalCompra.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td class="py-2.5 px-3 text-center space-x-2">
+              <button onclick="iniciarEdicaoCompraIndividual(${idx})" class="text-blue-500 hover:text-blue-700" title="Editar esta compra"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button onclick="excluirCompraIndividual(${idx})" class="text-red-500 hover:text-red-700" title="Excluir esta compra"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function iniciarEdicaoCompraIndividual(idx) {
+      const ticker = document.getElementById('histTickerAtual').value;
+      const ativo = carteiraAtivos.find(a => a.ticker === ticker);
+      if (!ativo || !ativo.operacoes[idx]) return;
+
+      const op = ativo.operacoes[idx];
+      document.getElementById('editCompraIndex').value = idx;
+      document.getElementById('editCompraData').value = op.data || obterDataHojeBR();
+      document.getElementById('editCompraQtd').value = op.qtd;
+      document.getElementById('editCompraPreco').value = numeroParaInputVirgula(op.preco);
+      document.getElementById('formEdicaoCompraIndividual').classList.remove('hidden');
+    }
+
+    function cancelarEdicaoCompraIndividual() {
+      document.getElementById('editCompraIndex').value = '-1';
+      document.getElementById('formEdicaoCompraIndividual').classList.add('hidden');
+    }
+
+    function salvarEdicaoCompraIndividual() {
+      const ticker = document.getElementById('histTickerAtual').value;
+      const ativo = carteiraAtivos.find(a => a.ticker === ticker);
+      const idx = parseInt(document.getElementById('editCompraIndex').value);
+      if (!ativo || isNaN(idx) || !ativo.operacoes[idx]) return;
+
+      const novaData = document.getElementById('editCompraData').value.trim() || obterDataHojeBR();
+      const novaQtd = parseFloat(document.getElementById('editCompraQtd').value);
+      const novoPreco = parseMoedaVirgula(document.getElementById('editCompraPreco').value);
+
+      if (isNaN(novaQtd) || novaQtd <= 0 || isNaN(novoPreco) || novoPreco <= 0) {
+        mostrarNotificacao("Informe quantidade e valor pago válidos.", "aviso");
+        return;
+      }
+
+      ativo.operacoes[idx] = { data: novaData, qtd: novaQtd, preco: novoPreco };
+      recalcularConsolidadoPorOperacoes(ativo);
+      salvarCarteira();
+      renderizarTabelaCarteira();
+      recalcularTotais();
+      cancelarEdicaoCompraIndividual();
+      renderizarTabelaHistoricoCompras(ativo);
+      mostrarNotificacao(`Compra de ${ticker} atualizada e Preço Médio recalculado!`, "sucesso");
+    }
+
+    function excluirCompraIndividual(idx) {
+      const ticker = document.getElementById('histTickerAtual').value;
+      const ativo = carteiraAtivos.find(a => a.ticker === ticker);
+      if (!ativo || !ativo.operacoes[idx]) return;
+
+      if (!confirm("Deseja excluir esta compra específica e recalcular o Preço Médio?")) return;
+
+      ativo.operacoes.splice(idx, 1);
+
+      if (ativo.operacoes.length === 0) {
+        carteiraAtivos = carteiraAtivos.filter(a => a.ticker !== ticker);
+        salvarCarteira();
+        renderizarTabelaCarteira();
+        recalcularTotais();
+        fecharModalHistoricoAtivo();
+        mostrarNotificacao(`Última operação removida. Ativo ${ticker} removido da carteira.`, "info");
+        return;
+      }
+
+      recalcularConsolidadoPorOperacoes(ativo);
+      salvarCarteira();
+      renderizarTabelaCarteira();
+      recalcularTotais();
+      cancelarEdicaoCompraIndividual();
+      renderizarTabelaHistoricoCompras(ativo);
+      mostrarNotificacao(`Compra removida e Preço Médio de ${ticker} recalculado!`, "info");
+    }
+
+    function abrirModalNovaCompraParaAtivo() {
+      const ticker = document.getElementById('histTickerAtual').value;
+      fecharModalHistoricoAtivo();
+      abrirModalOperacao(ticker);
     }
 
     function abrirModalEditarAtivo(ticker) {
@@ -2122,6 +2234,7 @@
       ativo.ticker = novoTicker;
       ativo.qtd = novaQtd;
       ativo.pm = novoPm;
+      ativo.operacoes = [{ data: 'Saldo Ajustado (' + obterDataHojeBR() + ')', qtd: novaQtd, preco: novoPm }];
 
       salvarCarteira();
       renderizarTabelaCarteira();
@@ -2195,7 +2308,6 @@
 
       for (const ticker of todosTickers) {
         try {
-          // Chamada direta à Brapi (sem proxy CORS — ver nota em testarStatusBrapi()).
           let urlAlvo = `https://brapi.dev/api/quote/${ticker}?token=${token}&fundamental=true`;
           let res = await fetch(urlAlvo);
           if (!res.ok && res.status === 404) {
@@ -2213,8 +2325,6 @@
               const nomeEl = document.getElementById(`nome-${ticker}`);
               if (nomeEl) nomeEl.innerText = nomeEmpresa;
 
-              // Fórmula de Graham só é válida com EPS (lucro/ação) e VPA positivos.
-              // Fora isso, não é possível calcular preço justo por fundamentos.
               let precoJusto = null;
               let precoJustoEstimado = false;
               if (ativo.eps && ativo.bookValue && ativo.eps > 0 && ativo.bookValue > 0) {
@@ -2309,7 +2419,6 @@
     }
 
     function recalcularTotais() {
-      const linhas = document.querySelectorAll('#tabelaAtivos tr[data-ticker]');
       let totalInvestido = 0;
       let totalAtual = 0;
       let totalAtivosCount = 0;
@@ -2321,12 +2430,12 @@
       });
 
       document.getElementById('totalCarteira').innerText = `R$ ${totalAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      
+
       const lucroElem = document.getElementById('lucroPrejuizo');
       const diferenca = totalAtual - totalInvestido;
       const percentual = totalInvestido > 0 ? (diferenca / totalInvestido) * 100 : 0;
       const sinal = diferenca >= 0 ? '+' : '';
-      
+
       lucroElem.innerHTML = `R$ ${diferenca.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-sm font-normal">(${sinal}${percentual.toFixed(2)}%)</span>`;
       lucroElem.className = diferenca >= 0 ? "text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1" : "text-2xl font-bold text-red-500 mt-1";
 
@@ -2341,7 +2450,7 @@
 
       document.getElementById('raioInvestido').innerText = `R$ ${totalInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       document.getElementById('raioAtual').innerText = `R$ ${totalAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      
+
       const raioDifElem = document.getElementById('raioDiferenca');
       const sinalDif = diferenca >= 0 ? '+' : '';
       raioDifElem.innerText = `R$ ${diferenca.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${sinalDif}${percentual.toFixed(2)}%)`;
@@ -2350,7 +2459,7 @@
       let patrimonioMaisDiv = totalAtual + totalProventos;
       document.getElementById('raioPatrimonioMaisDiv').innerText = `R$ ${patrimonioMaisDiv.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       document.getElementById('raioMenosInvestido').innerText = `- R$ ${totalInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      
+
       const raioResFinalElem = document.getElementById('raioResultadoFinal');
       const sinalResFinal = resultadoReal >= 0 ? '+' : '';
       raioResFinalElem.innerText = `R$ ${resultadoReal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${sinalResFinal}${percentualReal.toFixed(2)}%)`;
@@ -2367,9 +2476,9 @@
       const patrimonioAtual = patrimonioAtualOverride !== undefined ? patrimonioAtualOverride : parseFloat(document.getElementById('totalCarteira').innerText.replace('R$', '').replace(/\./g, '').replace(',', '.').trim()) || 0;
       const anosInput = parseInt(document.getElementById('anosSimulacao').value);
       const anos = (!isNaN(anosInput) && anosInput >= 0) ? anosInput : 0;
-      
+
       let patrimonioFinal = patrimonioAtual * Math.pow(1 + 0.08, anos);
-      let dividendosAcumulados = patrimonioFinal * 0.06 * (anos * 0.5); 
+      let dividendosAcumulados = patrimonioFinal * 0.06 * (anos * 0.5);
       let rendaMensalEstimada = (patrimonioFinal * 0.06) / 12;
 
       document.getElementById('simPatrimonioFinal').innerText = `R$ ${patrimonioFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -2397,7 +2506,7 @@
       }
 
       const coresBarra = ['bg-blue-600', 'bg-emerald-600', 'bg-cyan-600', 'bg-indigo-600', 'bg-amber-600', 'bg-purple-600'];
-      
+
       dadosAtivos.forEach((item, idx) => {
         const percentual = (item.valor / totalVal) * 100;
         const cor = coresBarra[idx % coresBarra.length];
@@ -2427,8 +2536,9 @@
       }
     }
 
-    function abrirModalOperacao() {
-      document.getElementById('opTicker').value = '';
+    function abrirModalOperacao(tickerPredefinido = '') {
+      document.getElementById('opTicker').value = tickerPredefinido;
+      document.getElementById('opData').value = obterDataHojeBR();
       document.getElementById('opQtd').value = '';
       document.getElementById('opPM').value = '';
       document.getElementById('modalOperacao').classList.remove('hidden');
@@ -2440,24 +2550,25 @@
 
     function salvarNovaOperacao() {
       const ticker = document.getElementById('opTicker').value.toUpperCase().trim();
+      const dataCompra = document.getElementById('opData').value.trim() || obterDataHojeBR();
       const novaQtd = parseFloat(document.getElementById('opQtd').value);
       const novoPm = parseMoedaVirgula(document.getElementById('opPM').value);
 
-      if (!ticker || isNaN(novaQtd) || isNaN(novoPm)) {
+      if (!ticker || isNaN(novaQtd) || novaQtd <= 0 || isNaN(novoPm) || novoPm <= 0) {
         mostrarNotificacao("Preencha todos os campos corretamente.", "aviso");
         return;
       }
 
+      normalizarHistoricoOperacoes();
       const ativoExistente = carteiraAtivos.find(a => a.ticker === ticker);
 
       if (ativoExistente) {
-        const totalQtd = ativoExistente.qtd + novaQtd;
-        const totalInvestidoAntigo = ativoExistente.qtd * ativoExistente.pm;
-        const totalInvestidoNovoAporte = novaQtd * novoPm;
-        const novoPrecoMedio = (totalInvestidoAntigo + totalInvestidoNovoAporte) / totalQtd;
-
-        ativoExistente.qtd = totalQtd;
-        ativoExistente.pm = novoPrecoMedio;
+        ativoExistente.operacoes.push({
+          data: dataCompra,
+          qtd: novaQtd,
+          preco: novoPm
+        });
+        recalcularConsolidadoPorOperacoes(ativoExistente);
         mostrarNotificacao(`Aporte adicionado em ${ticker}!`, "sucesso");
       } else {
         carteiraAtivos.push({
@@ -2467,7 +2578,12 @@
           precoAtual: novoPm,
           precoJusto: null,
           precoJustoEstimado: false,
-          variacao: 0
+          variacao: 0,
+          operacoes: [{
+            data: dataCompra,
+            qtd: novaQtd,
+            preco: novoPm
+          }]
         });
         mostrarNotificacao(`Novo ativo ${ticker} cadastrado!`, "sucesso");
       }
@@ -2497,21 +2613,28 @@
         try {
           const dados = JSON.parse(e.target.result);
           if (dados && Array.isArray(dados.ativos)) {
-            // Converte texto "R$ 1.234,56" em número, se o backup for de uma versão antiga.
             const paraNumero = (v) => {
               if (typeof v === 'number') return v;
               if (typeof v === 'string') return parseFloat(v.replace('R$', '').replace(/\./g, '').replace(',', '.').trim()) || 0;
               return 0;
             };
-            carteiraAtivos = dados.ativos.map(a => ({
-              ticker: a.ticker,
-              qtd: paraNumero(a.qtd),
-              pm: paraNumero(a.pm),
-              precoAtual: paraNumero(a.precoAtual),
-              precoJusto: a.precoJusto !== undefined ? paraNumero(a.precoJusto) : null,
-              precoJustoEstimado: !!a.precoJustoEstimado,
-              variacao: paraNumero(a.variacao)
-            }));
+            carteiraAtivos = dados.ativos.map(a => {
+              const qtdNum = paraNumero(a.qtd);
+              const pmNum = paraNumero(a.pm);
+              const ops = Array.isArray(a.operacoes) && a.operacoes.length > 0
+                ? a.operacoes.map(o => ({ data: o.data || 'Saldo Consolidado', qtd: paraNumero(o.qtd), preco: paraNumero(o.preco) }))
+                : [{ data: 'Saldo Consolidado', qtd: qtdNum, preco: pmNum }];
+              return {
+                ticker: a.ticker,
+                qtd: qtdNum,
+                pm: pmNum,
+                precoAtual: paraNumero(a.precoAtual),
+                precoJusto: a.precoJusto !== undefined ? paraNumero(a.precoJusto) : null,
+                precoJustoEstimado: !!a.precoJustoEstimado,
+                variacao: paraNumero(a.variacao),
+                operacoes: ops
+              };
+            });
             salvarCarteira();
             renderizarTabelaCarteira();
             recalcularTotais();
