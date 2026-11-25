@@ -54,7 +54,22 @@
       </div>
       <div class="space-y-4 max-h-72 overflow-y-auto pr-2 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
         <div class="border-l-2 border-emerald-500 pl-3 space-y-1">
-          <span class="font-bold text-emerald-600 dark:text-emerald-400 text-base">Versão V1.8.4</span>
+          <span class="font-bold text-emerald-600 dark:text-emerald-400 text-base">Versão V1.8.6</span>
+          <p class="text-gray-400 text-xs">Novembro de 2026</p>
+          <ul class="list-disc list-inside space-y-1 pt-1">
+            <li><b>Vírgula automática no Valor Total de Proventos:</b> máscara de centavos em tempo real ao cadastrar ou editar proventos.</li>
+          </ul>
+        </div>
+        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
+          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.5</span>
+          <p class="text-gray-400 text-xs">Novembro de 2026</p>
+          <ul class="list-disc list-inside space-y-1 pt-1">
+            <li><b>Edição de ativos na Carteira:</b> novo botão de editar na linha de cada ativo para alterar ticker, quantidade e preço médio com recálculo automático.</li>
+            <li><b>Vírgula automática no Preço da Compra:</b> formatação automática de centavos durante a digitação na Nova Operação e na edição de ativos.</li>
+          </ul>
+        </div>
+        <div class="border-l-2 border-gray-300 dark:border-slate-700 pl-3 space-y-1">
+          <span class="font-bold text-gray-500 dark:text-gray-400 text-base">Versão V1.8.4</span>
           <p class="text-gray-400 text-xs">Setembro de 2026</p>
           <ul class="list-disc list-inside space-y-1 pt-1">
             <li><b>Correção crítica do erro 401 (Brapi):</b> removido o proxy CORS externo (corsproxy.io), que passou a exigir cadastro/chave própria e estava bloqueando todas as chamadas à Brapi. Agora o app chama a Brapi diretamente, já que ela libera CORS para uso via navegador.</li>
@@ -180,7 +195,7 @@
           </div>
           <div>
             <label for="opPM" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Preço da Compra (R$)</label>
-            <input type="number" step="0.01" id="opPM" placeholder="Ex: 20.00" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+            <input type="text" inputmode="numeric" id="opPM" oninput="formatarMoedaVirgula(this)" placeholder="Ex: 20,00" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
           </div>
         </div>
         <div class="flex gap-3 pt-2">
@@ -189,6 +204,43 @@
           </button>
           <button onclick="salvarNovaOperacao()" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg text-sm transition">
             Salvar Operação
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL POP-UP PARA EDITAR ATIVO DA CARTEIRA -->
+  <div id="modalEditarAtivo" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-pen-to-square text-blue-600"></i> Editar Ativo da Carteira
+        </h3>
+        <button onclick="fecharModalEditarAtivo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="space-y-4">
+        <input type="hidden" id="editAtivoTickerOriginal">
+        <div>
+          <label for="editAtivoTicker" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Código do Ativo (Ticker)</label>
+          <input type="text" id="editAtivoTicker" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm uppercase focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="editAtivoQtd" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Quantidade</label>
+            <input type="number" step="any" id="editAtivoQtd" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+          <div>
+            <label for="editAtivoPM" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Preço Médio (R$)</label>
+            <input type="text" inputmode="numeric" id="editAtivoPM" oninput="formatarMoedaVirgula(this)" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button onclick="fecharModalEditarAtivo()" class="w-1/2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-sm transition">
+            Cancelar
+          </button>
+          <button onclick="salvarEdicaoAtivo()" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
+            Salvar Alterações
           </button>
         </div>
       </div>
@@ -253,7 +305,7 @@
           <i class="fa-solid fa-list-check"></i> Novidades
         </button>
         <span id="badgeVersaoLogin" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-gray-200 dark:border-slate-700 shadow-sm">
-          Versão V1.8.4
+          Versão V1.8.6
         </span>
       </div>
 
@@ -300,7 +352,7 @@
               <span>Brapi: Verificando...</span>
             </div>
             <button onclick="abrirModalChangelog()" class="flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-emerald-400 border border-slate-700 shadow-sm hover:bg-slate-700 transition cursor-pointer" title="Ver Notas da Versão">
-              <span id="badgeVersaoHeader">Versão V1.8.4</span>
+              <span id="badgeVersaoHeader">Versão V1.8.6</span>
             </button>
           </div>
         </div>
@@ -832,7 +884,7 @@
         </div>
         <div>
           <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Valor Total (R$)</label>
-          <input type="number" step="0.01" id="divValor" placeholder="Ex: 45.20" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          <input type="text" inputmode="numeric" id="divValor" oninput="formatarMoedaVirgula(this)" placeholder="Ex: 45,20" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
         <div class="flex gap-3 pt-2">
           <button onclick="fecharModalDividendo()" class="w-1/2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-sm transition">
@@ -849,7 +901,7 @@
   <script>
     // A versão exibida no app agora vem do version.json (fonte única da verdade).
     // Isso resolve a falha antiga de version.json e a versão nas telas ficarem dessincronizados.
-    let VERSAO_ATUAL = "1.8.4"; // valor de fallback, sobrescrito por carregarVersaoApp() abaixo
+    let VERSAO_ATUAL = "1.8.6"; // valor de fallback, sobrescrito por carregarVersaoApp() abaixo
 
     async function carregarVersaoApp() {
       try {
@@ -898,6 +950,30 @@
 
     function salvarCarteira() {
       localStorage.setItem('carteira_ativos', JSON.stringify(carteiraAtivos));
+    }
+
+    function formatarMoedaVirgula(input) {
+      const apenasDigitos = input.value.replace(/\D/g, '');
+      if (!apenasDigitos) {
+        input.value = '';
+        return;
+      }
+      const centavos = parseInt(apenasDigitos, 10);
+      const reais = (centavos / 100).toFixed(2);
+      input.value = reais.replace('.', ',');
+    }
+
+    function numeroParaInputVirgula(valor) {
+      const num = parseFloat(valor);
+      if (isNaN(num)) return '';
+      return num.toFixed(2).replace('.', ',');
+    }
+
+    function parseMoedaVirgula(valorTexto) {
+      if (typeof valorTexto === 'number') return valorTexto;
+      if (!valorTexto) return NaN;
+      const limpo = String(valorTexto).replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+      return parseFloat(limpo);
     }
 
     let tickersRadar = JSON.parse(localStorage.getItem('radar_personalizado')) || ['SAPR11', 'PETR4', 'KLBN3', 'BBAS3', 'VALE3', 'TAEE11'];
@@ -1932,7 +2008,7 @@
       document.getElementById('divTipo').value = item.tipo;
       document.getElementById('divDataCom').value = item.dataCom;
       document.getElementById('divDataPag').value = item.dataPag;
-      document.getElementById('divValor').value = item.valor;
+      document.getElementById('divValor').value = numeroParaInputVirgula(item.valor);
       document.getElementById('modalDividendo').classList.remove('hidden');
     }
 
@@ -1946,9 +2022,9 @@
       const tipo = document.getElementById('divTipo').value;
       const dataCom = document.getElementById('divDataCom').value.trim();
       const dataPag = document.getElementById('divDataPag').value.trim();
-      const valor = parseFloat(document.getElementById('divValor').value);
+      const valor = parseMoedaVirgula(document.getElementById('divValor').value);
 
-      if (!ticker || !dataCom || !dataPag || isNaN(valor)) {
+      if (!ticker || !dataCom || !dataPag || isNaN(valor) || valor <= 0) {
         mostrarNotificacao("Preencha todos os campos corretamente.", "aviso");
         return;
       }
@@ -2001,12 +2077,57 @@
           <td class="py-3 px-4 variacao ${corVariacao} font-medium">${sinalVariacao}${variacao.toFixed(2)}%</td>
           <td class="py-3 px-4 valor-investido">R$ ${valorInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
           <td class="py-3 px-4 valor-atual font-semibold">R$ ${valorAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-          <td class="py-3 px-4 text-center">
-            <button onclick="removerAtivo(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+          <td class="py-3 px-4 text-center space-x-2">
+            <button onclick="abrirModalEditarAtivo('${ativo.ticker}')" class="text-blue-500 hover:text-blue-700" title="Editar Ativo"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="removerAtivo(this)" class="text-red-500 hover:text-red-700" title="Excluir Ativo"><i class="fa-solid fa-trash"></i></button>
           </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    function abrirModalEditarAtivo(ticker) {
+      const ativo = carteiraAtivos.find(a => a.ticker === ticker);
+      if (!ativo) return;
+      document.getElementById('editAtivoTickerOriginal').value = ativo.ticker;
+      document.getElementById('editAtivoTicker').value = ativo.ticker;
+      document.getElementById('editAtivoQtd').value = ativo.qtd;
+      document.getElementById('editAtivoPM').value = numeroParaInputVirgula(ativo.pm);
+      document.getElementById('modalEditarAtivo').classList.remove('hidden');
+    }
+
+    function fecharModalEditarAtivo() {
+      document.getElementById('modalEditarAtivo').classList.add('hidden');
+    }
+
+    function salvarEdicaoAtivo() {
+      const tickerOriginal = document.getElementById('editAtivoTickerOriginal').value;
+      const novoTicker = document.getElementById('editAtivoTicker').value.toUpperCase().trim();
+      const novaQtd = parseFloat(document.getElementById('editAtivoQtd').value);
+      const novoPm = parseMoedaVirgula(document.getElementById('editAtivoPM').value);
+
+      if (!novoTicker || isNaN(novaQtd) || novaQtd <= 0 || isNaN(novoPm) || novoPm <= 0) {
+        mostrarNotificacao("Preencha ticker, quantidade e preço médio válidos.", "aviso");
+        return;
+      }
+
+      if (novoTicker !== tickerOriginal && carteiraAtivos.some(a => a.ticker === novoTicker)) {
+        mostrarNotificacao(`O ativo ${novoTicker} já existe na carteira.`, "aviso");
+        return;
+      }
+
+      const ativo = carteiraAtivos.find(a => a.ticker === tickerOriginal);
+      if (!ativo) return;
+
+      ativo.ticker = novoTicker;
+      ativo.qtd = novaQtd;
+      ativo.pm = novoPm;
+
+      salvarCarteira();
+      renderizarTabelaCarteira();
+      fecharModalEditarAtivo();
+      recalcularTotais();
+      mostrarNotificacao(`Ativo ${novoTicker} atualizado com sucesso!`, "sucesso");
     }
 
     function renderizarCardsRadar() {
@@ -2320,7 +2441,7 @@
     function salvarNovaOperacao() {
       const ticker = document.getElementById('opTicker').value.toUpperCase().trim();
       const novaQtd = parseFloat(document.getElementById('opQtd').value);
-      const novoPm = parseFloat(document.getElementById('opPM').value);
+      const novoPm = parseMoedaVirgula(document.getElementById('opPM').value);
 
       if (!ticker || isNaN(novaQtd) || isNaN(novoPm)) {
         mostrarNotificacao("Preencha todos os campos corretamente.", "aviso");
