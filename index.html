@@ -47,16 +47,16 @@
       </div>
       <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300 max-h-72 overflow-y-auto">
         <div class="p-3 rounded-lg bg-blue-50 dark:bg-slate-900 border border-blue-200 dark:border-blue-800">
-          <div class="font-bold text-blue-700 dark:text-blue-400">V1.8.7</div>
+          <div class="font-bold text-blue-700 dark:text-blue-400">V1.8.8</div>
+          <p class="text-xs mt-1">Lançamento e edição de compras informando Data, Quantidade e Valor Total Pago, calculando automaticamente o Preço Unitário exato sem distorcer o Preço Médio nem o Total Investido.</p>
+        </div>
+        <div class="p-3 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder">
+          <div class="font-bold text-gray-800 dark:text-white">V1.8.7</div>
           <p class="text-xs mt-1">Edição direta do preço de compra de qualquer operação lançada com recálculo automático do Preço Médio, mantendo histórico, gráficos e dados salvos.</p>
         </div>
         <div class="p-3 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder">
           <div class="font-bold text-gray-800 dark:text-white">V1.8.6</div>
           <p class="text-xs mt-1">Vírgula automática no Valor Total de Proventos: máscara de centavos em tempo real ao cadastrar ou editar proventos.</p>
-        </div>
-        <div class="p-3 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder">
-          <div class="font-bold text-gray-800 dark:text-white">V1.8.4</div>
-          <p class="text-xs mt-1">Correção da chamada direta à API Brapi sem proxy CORS externo.</p>
         </div>
       </div>
       <button onclick="fecharModalChangelog()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
@@ -66,7 +66,7 @@
   </div>
 
   <!-- MODAL POP-UP PARA CADASTRAR / EDITAR OPERAÇÃO -->
-  <div id="modalOperacao" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modalOperacao" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[55] flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
       <div class="flex justify-between items-center mb-4">
         <h3 id="tituloModalOperacao" class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -87,13 +87,18 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label for="opQtd" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Quantidade</label>
-            <input type="number" step="any" id="opQtd" placeholder="Ex: 20" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+            <label for="opQtd" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Quantidade Comprada</label>
+            <input type="number" step="any" id="opQtd" oninput="recalcularCamposOperacao('qtd')" placeholder="Ex: 66" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
           </div>
           <div>
-            <label for="opPM" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Preço da Compra (R$)</label>
-            <input type="text" inputmode="numeric" id="opPM" oninput="formatarMoedaVirgula(this)" placeholder="Ex: 20,00" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+            <label for="opTotal" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Valor Total Pago (R$)</label>
+            <input type="text" inputmode="numeric" id="opTotal" oninput="formatarMoedaVirgula(this); recalcularCamposOperacao('total');" placeholder="Ex: 222,40" class="w-full px-3 py-2 border border-emerald-400 dark:border-emerald-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm font-semibold focus:ring-2 focus:ring-emerald-500 outline-none">
           </div>
+        </div>
+        <div>
+          <label for="opPM" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Preço Unitário por Ação (R$)</label>
+          <input type="text" inputmode="numeric" id="opPM" oninput="formatarMoedaVirgula(this); recalcularCamposOperacao('preco');" placeholder="Calculado automaticamente (Total ÷ Qtd)" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+          <p id="previewCalculoOperacao" class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Informe a Quantidade e o Valor Total Pago; o preço unitário é calculado automaticamente.</p>
         </div>
         <div class="flex gap-3 pt-2">
           <button onclick="fecharModalOperacao()" class="w-1/2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-sm transition">
@@ -154,11 +159,11 @@
   </div>
 
   <!-- MODAL POP-UP PARA EDITAR ATIVO DA CARTEIRA -->
-  <div id="modalEditarAtivo" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modalEditarAtivo" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[55] flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <i class="fa-solid fa-pen-to-square text-blue-600"></i> Editar Ativo da Carteira
+          <i class="fa-solid fa-pen-to-square text-blue-600"></i> Editar Saldo Consolidado
         </h3>
         <button onclick="fecharModalEditarAtivo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
@@ -170,13 +175,17 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label for="editAtivoQtd" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Quantidade</label>
-            <input type="number" step="any" id="editAtivoQtd" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+            <label for="editAtivoQtd" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Quantidade Total</label>
+            <input type="number" step="any" id="editAtivoQtd" oninput="recalcularCamposEditarAtivo('qtd')" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
           </div>
           <div>
-            <label for="editAtivoPM" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Preço Médio (R$)</label>
-            <input type="text" inputmode="numeric" id="editAtivoPM" oninput="formatarMoedaVirgula(this)" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+            <label for="editAtivoTotal" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Total Investido (R$)</label>
+            <input type="text" inputmode="numeric" id="editAtivoTotal" oninput="formatarMoedaVirgula(this); recalcularCamposEditarAtivo('total');" class="w-full px-3 py-2 border border-blue-400 dark:border-blue-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
           </div>
+        </div>
+        <div>
+          <label for="editAtivoPM" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Preço Médio (R$)</label>
+          <input type="text" inputmode="numeric" id="editAtivoPM" oninput="formatarMoedaVirgula(this); recalcularCamposEditarAtivo('pm');" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
         <div class="flex gap-3 pt-2">
           <button onclick="fecharModalEditarAtivo()" class="w-1/2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-sm transition">
@@ -246,7 +255,7 @@
           <i class="fa-solid fa-list-check"></i> Novidades
         </button>
         <span id="badgeVersaoLogin" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-gray-200 dark:border-slate-700 shadow-sm">
-          Versão V1.8.7
+          Versão V1.8.8
         </span>
       </div>
 
@@ -293,7 +302,7 @@
               <span>Brapi: Verificando...</span>
             </div>
             <button onclick="abrirModalChangelog()" class="flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-emerald-400 border border-slate-700 shadow-sm hover:bg-slate-700 transition cursor-pointer" title="Ver Notas da Versão">
-              <span id="badgeVersaoHeader">Versão V1.8.7</span>
+              <span id="badgeVersaoHeader">Versão V1.8.8</span>
             </button>
           </div>
         </div>
@@ -361,12 +370,12 @@
                   <span id="raioAtual" class="font-bold text-blue-600 dark:text-blue-400">R$ 0,00</span>
                 </div>
                 <div class="flex justify-between py-1 font-semibold">
-                  <span class="text-gray-700 dark:text-gray-300">Prejuízo Virtual / Não Realizado:</span>
+                  <span class="text-gray-700 dark:text-gray-300">Lucro / Prejuízo Não Realizado:</span>
                   <span id="raioDiferenca" class="text-red-500">R$ 0,00 (0.00%)</span>
                 </div>
               </div>
               <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed pt-1">
-                <b>Explicação:</b> Atualmente, a soma do valor atual das ações no mercado está ligeiramente abaixo do total desembolsado nas compras. As cotações oscilaram para baixo temporariamente.
+                <b>Explicação:</b> Compara o total desembolsado nas compras com o valor de mercado atual das suas ações.
               </p>
             </div>
 
@@ -389,7 +398,7 @@
                 </div>
               </div>
               <p class="text-[11px] text-emerald-700/80 dark:text-emerald-400/80 leading-relaxed pt-1">
-                <b>Explicação:</b> Mesmo com a leve oscilação negativa das cotações, o dinheiro vivo recebido em proventos cobre essa diferença e deixa o seu saldo final no positivo!
+                <b>Explicação:</b> Soma o patrimônio atual com todos os proventos recebidos e desconta o capital investido.
               </p>
             </div>
           </div>
@@ -433,7 +442,7 @@
             <h3 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
               <i class="fa-solid fa-wallet text-blue-600 dark:text-blue-400"></i> Minha Carteira
             </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Clique sobre o nome de uma ação para ver, editar o preço de compra ou excluir cada operação individual.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Clique sobre o nome de uma ação para ver, editar o valor total pago/quantidade ou excluir cada operação individual.</p>
           </div>
           <div class="flex gap-2 flex-wrap">
             <button onclick="abrirModalOperacao()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-md font-medium text-sm flex items-center gap-1.5 transition">
@@ -834,7 +843,7 @@
   </div>
 
   <script>
-    let VERSAO_ATUAL = "1.8.7";
+    let VERSAO_ATUAL = "1.8.8";
 
     async function carregarVersaoApp() {
       try {
@@ -846,7 +855,7 @@
           }
         }
       } catch (e) {
-        console.log("Não foi possível ler version.json, usando versão de fallback embutida.");
+        console.log("Usando versão embutida.");
       }
       const textoVersao = `Versão V${VERSAO_ATUAL}`;
       document.querySelectorAll('#badgeVersaoLogin, #badgeVersaoHeader').forEach(el => {
@@ -881,29 +890,47 @@
     const CARTEIRA_PADRAO = [
       {
         ticker: 'PETR4', qtd: 10, pm: 32.21, precoAtual: 32.21, precoJusto: 27.22, precoJustoEstimado: false, variacao: 0,
-        operacoes: [{ data: 'Saldo Anterior', qtd: 10, preco: 32.21 }]
+        operacoes: [{ data: 'Saldo Anterior', qtd: 10, preco: 32.21, total: 322.10 }]
       },
       {
         ticker: 'KLBN3', qtd: 225, pm: 6.28, precoAtual: 6.28, precoJusto: 3.81, precoJustoEstimado: false, variacao: 0,
-        operacoes: [{ data: 'Saldo Anterior', qtd: 225, preco: 6.28 }]
+        operacoes: [{ data: 'Saldo Anterior', qtd: 225, preco: 6.28, total: 1413.00 }]
       },
       {
         ticker: 'SAPR11', qtd: 40, pm: 21.86, precoAtual: 21.86, precoJusto: 21.35, precoJustoEstimado: false, variacao: 0,
-        operacoes: [{ data: 'Saldo Anterior', qtd: 40, preco: 21.86 }]
+        operacoes: [{ data: 'Saldo Anterior', qtd: 40, preco: 21.86, total: 874.40 }]
       }
     ];
 
     let carteiraAtivos = JSON.parse(localStorage.getItem('carteira_ativos')) || CARTEIRA_PADRAO;
     let operacaoEmEdicao = { ticker: null, index: -1 };
+    let ultimoCampoEditadoOp = 'total';
+
+    function obterTotalOperacao(op) {
+      const qtd = Number(op.qtd) || 0;
+      if (op.total !== undefined && op.total !== null && !isNaN(Number(op.total))) {
+        return Number(op.total);
+      }
+      return qtd * (Number(op.preco) || 0);
+    }
 
     function normalizarHistoricoOperacoes() {
       let houveMigracao = false;
       carteiraAtivos.forEach(ativo => {
         if (!Array.isArray(ativo.operacoes) || ativo.operacoes.length === 0) {
+          const qtd = Number(ativo.qtd) || 0;
+          const pm = Number(ativo.pm) || 0;
           ativo.operacoes = [
-            { data: 'Saldo Consolidado', qtd: Number(ativo.qtd) || 0, preco: Number(ativo.pm) || 0 }
+            { data: 'Saldo Consolidado', qtd: qtd, preco: pm, total: Number((qtd * pm).toFixed(2)) }
           ];
           houveMigracao = true;
+        } else {
+          ativo.operacoes.forEach(op => {
+            if (op.total === undefined || op.total === null || isNaN(Number(op.total))) {
+              op.total = Number(((Number(op.qtd) || 0) * (Number(op.preco) || 0)).toFixed(2));
+              houveMigracao = true;
+            }
+          });
         }
       });
       if (houveMigracao) {
@@ -920,8 +947,10 @@
       let totalQtd = 0;
       let totalCusto = 0;
       ativo.operacoes.forEach(op => {
-        totalQtd += Number(op.qtd) || 0;
-        totalCusto += (Number(op.qtd) || 0) * (Number(op.preco) || 0);
+        const qtdOp = Number(op.qtd) || 0;
+        const custoOp = obterTotalOperacao(op);
+        totalQtd += qtdOp;
+        totalCusto += custoOp;
       });
       ativo.qtd = totalQtd;
       ativo.pm = totalQtd > 0 ? (totalCusto / totalQtd) : 0;
@@ -953,6 +982,69 @@
       if (!valorTexto) return NaN;
       const limpo = String(valorTexto).replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
       return parseFloat(limpo);
+    }
+
+    function formatarBRL(valor) {
+      return Number(valor || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function atualizarPreviewOperacao(qtd, precoUnitario, totalPago) {
+      const preview = document.getElementById('previewCalculoOperacao');
+      if (!preview) return;
+      if (!isNaN(qtd) && qtd > 0 && !isNaN(totalPago) && totalPago > 0) {
+        preview.innerHTML = `Resumo: <b>${qtd} ações</b> por <b>R$ ${formatarBRL(totalPago)}</b> = <b>R$ ${precoUnitario.toFixed(4).replace('.', ',')}</b> por ação.`;
+      } else {
+        preview.textContent = 'Informe a Quantidade e o Valor Total Pago; o preço unitário é calculado automaticamente.';
+      }
+    }
+
+    function recalcularCamposOperacao(origem) {
+      if (origem === 'total' || origem === 'preco') {
+        ultimoCampoEditadoOp = origem;
+      }
+      const qtd = parseFloat(document.getElementById('opQtd').value);
+      const inputPreco = document.getElementById('opPM');
+      const inputTotal = document.getElementById('opTotal');
+
+      if (ultimoCampoEditadoOp === 'total') {
+        const total = parseMoedaVirgula(inputTotal.value);
+        if (!isNaN(qtd) && qtd > 0 && !isNaN(total) && total > 0) {
+          const unitario = total / qtd;
+          inputPreco.value = numeroParaInputVirgula(unitario);
+          atualizarPreviewOperacao(qtd, unitario, total);
+        } else {
+          if (origem === 'total' && isNaN(total)) inputPreco.value = '';
+          atualizarPreviewOperacao(NaN, NaN, NaN);
+        }
+      } else {
+        const preco = parseMoedaVirgula(inputPreco.value);
+        if (!isNaN(qtd) && qtd > 0 && !isNaN(preco) && preco > 0) {
+          const total = qtd * preco;
+          inputTotal.value = numeroParaInputVirgula(total);
+          atualizarPreviewOperacao(qtd, preco, total);
+        } else {
+          if (origem === 'preco' && isNaN(preco)) inputTotal.value = '';
+          atualizarPreviewOperacao(NaN, NaN, NaN);
+        }
+      }
+    }
+
+    function recalcularCamposEditarAtivo(origem) {
+      const qtd = parseFloat(document.getElementById('editAtivoQtd').value);
+      const inputTotal = document.getElementById('editAtivoTotal');
+      const inputPm = document.getElementById('editAtivoPM');
+
+      if (origem === 'total' || origem === 'qtd') {
+        const total = parseMoedaVirgula(inputTotal.value);
+        if (!isNaN(qtd) && qtd > 0 && !isNaN(total) && total > 0) {
+          inputPm.value = numeroParaInputVirgula(total / qtd);
+        }
+      } else if (origem === 'pm') {
+        const pm = parseMoedaVirgula(inputPm.value);
+        if (!isNaN(qtd) && qtd > 0 && !isNaN(pm) && pm > 0) {
+          inputTotal.value = numeroParaInputVirgula(qtd * pm);
+        }
+      }
     }
 
     let tickersRadar = JSON.parse(localStorage.getItem('radar_personalizado')) || ['SAPR11', 'PETR4', 'KLBN3', 'BBAS3', 'VALE3', 'TAEE11'];
@@ -1332,7 +1424,7 @@
           <div class="w-full h-full flex flex-col items-center justify-center gap-2 text-center p-4">
             <i class="fa-solid fa-triangle-exclamation text-amber-500 text-2xl"></i>
             <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Não foi possível carregar a biblioteca do gráfico.</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 max-w-sm">Isso costuma ser bloqueio de rede/firewall ao CDN (jsdelivr.net). Verifique sua conexão ou tente outra rede, e depois recarregue a página.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 max-w-sm">Verifique sua conexão e recarregue a página.</p>
           </div>`;
         return;
       }
@@ -2010,7 +2102,10 @@
       if (!tbody) return;
       tbody.innerHTML = '';
       carteiraAtivos.forEach(ativo => {
-        const valorInvestido = ativo.qtd * ativo.pm;
+        const totalInvestidoOp = Array.isArray(ativo.operacoes) && ativo.operacoes.length > 0
+          ? ativo.operacoes.reduce((acc, op) => acc + obterTotalOperacao(op), 0)
+          : (ativo.qtd * ativo.pm);
+        const valorInvestido = totalInvestidoOp;
         const valorAtual = ativo.qtd * ativo.precoAtual;
         const variacao = ativo.variacao || 0;
         const corVariacao = variacao >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500';
@@ -2025,7 +2120,7 @@
         tr.className = "border-b border-gray-100 dark:border-darkborder text-sm hover:bg-gray-50/70 dark:hover:bg-slate-800/40 transition";
         tr.innerHTML = `
           <td class="py-3 px-4 font-bold">
-            <button onclick="abrirModalHistoricoAtivo('${ativo.ticker}')" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1.5 text-left" title="Clique para ver ou editar o preço de compra de ${ativo.ticker}">
+            <button onclick="abrirModalHistoricoAtivo('${ativo.ticker}')" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1.5 text-left" title="Clique para ver ou editar as compras de ${ativo.ticker}">
               <span>${ativo.ticker}</span>
               <span class="text-[11px] font-normal text-gray-400">(${qtdOperacoes})</span>
             </button>
@@ -2065,7 +2160,9 @@
     function renderizarTabelaHistoricoCompras(ativo) {
       const tbody = document.getElementById('tabelaHistoricoComprasAtivo');
       const resumo = document.getElementById('resumoModalHistorico');
-      const totalInvestido = ativo.qtd * ativo.pm;
+      const totalInvestido = Array.isArray(ativo.operacoes) && ativo.operacoes.length > 0
+        ? ativo.operacoes.reduce((acc, op) => acc + obterTotalOperacao(op), 0)
+        : (ativo.qtd * ativo.pm);
 
       resumo.innerHTML = `Total consolidado: <b>${ativo.qtd} ações</b> • Preço Médio: <b>R$ ${ativo.pm.toFixed(2).replace('.', ',')}</b> • Investido: <b>R$ ${totalInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>`;
 
@@ -2076,15 +2173,16 @@
       }
 
       ativo.operacoes.forEach((op, idx) => {
-        const totalCompra = (Number(op.qtd) || 0) * (Number(op.preco) || 0);
+        const totalCompra = obterTotalOperacao(op);
+        const precoUnitario = (Number(op.qtd) || 0) > 0 ? (totalCompra / Number(op.qtd)) : (Number(op.preco) || 0);
         tbody.innerHTML += `
           <tr class="border-b border-gray-100 dark:border-darkborder text-xs sm:text-sm">
             <td class="py-2.5 px-3 text-gray-700 dark:text-gray-300">${op.data || '-'}</td>
             <td class="py-2.5 px-3 font-semibold text-gray-900 dark:text-white">${op.qtd}</td>
-            <td class="py-2.5 px-3 text-gray-700 dark:text-gray-300">R$ ${Number(op.preco).toFixed(2).replace('.', ',')}</td>
+            <td class="py-2.5 px-3 text-gray-700 dark:text-gray-300">R$ ${precoUnitario.toFixed(2).replace('.', ',')}</td>
             <td class="py-2.5 px-3 font-semibold text-emerald-600 dark:text-emerald-400">R$ ${totalCompra.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td class="py-2.5 px-3 text-center space-x-2">
-              <button onclick="abrirModalOperacao('${ativo.ticker}', ${idx})" class="text-blue-500 hover:text-blue-700" title="Editar preço desta compra"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button onclick="abrirModalOperacao('${ativo.ticker}', ${idx})" class="text-blue-500 hover:text-blue-700" title="Editar esta compra"><i class="fa-solid fa-pen-to-square"></i></button>
               <button onclick="excluirCompraIndividual(${idx})" class="text-red-500 hover:text-red-700" title="Excluir esta compra"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
@@ -2128,9 +2226,13 @@
     function abrirModalEditarAtivo(ticker) {
       const ativo = carteiraAtivos.find(a => a.ticker === ticker);
       if (!ativo) return;
+      const totalInvestido = Array.isArray(ativo.operacoes) && ativo.operacoes.length > 0
+        ? ativo.operacoes.reduce((acc, op) => acc + obterTotalOperacao(op), 0)
+        : (ativo.qtd * ativo.pm);
       document.getElementById('editAtivoTickerOriginal').value = ativo.ticker;
       document.getElementById('editAtivoTicker').value = ativo.ticker;
       document.getElementById('editAtivoQtd').value = ativo.qtd;
+      document.getElementById('editAtivoTotal').value = numeroParaInputVirgula(totalInvestido);
       document.getElementById('editAtivoPM').value = numeroParaInputVirgula(ativo.pm);
       document.getElementById('modalEditarAtivo').classList.remove('hidden');
     }
@@ -2143,10 +2245,15 @@
       const tickerOriginal = document.getElementById('editAtivoTickerOriginal').value;
       const novoTicker = document.getElementById('editAtivoTicker').value.toUpperCase().trim();
       const novaQtd = parseFloat(document.getElementById('editAtivoQtd').value);
-      const novoPm = parseMoedaVirgula(document.getElementById('editAtivoPM').value);
+      const novoTotal = parseMoedaVirgula(document.getElementById('editAtivoTotal').value);
+      const novoPmInput = parseMoedaVirgula(document.getElementById('editAtivoPM').value);
+
+      const totalValido = !isNaN(novoTotal) && novoTotal > 0;
+      const novoPm = totalValido && novaQtd > 0 ? (novoTotal / novaQtd) : novoPmInput;
+      const totalFinal = totalValido ? novoTotal : (novaQtd * novoPm);
 
       if (!novoTicker || isNaN(novaQtd) || novaQtd <= 0 || isNaN(novoPm) || novoPm <= 0) {
-        mostrarNotificacao("Preencha ticker, quantidade e preço médio válidos.", "aviso");
+        mostrarNotificacao("Preencha ticker, quantidade e valor total válidos.", "aviso");
         return;
       }
 
@@ -2159,20 +2266,9 @@
       if (!ativo) return;
 
       ativo.ticker = novoTicker;
-
-      if (Array.isArray(ativo.operacoes) && ativo.operacoes.length > 1) {
-        const proporcaoQtd = ativo.qtd > 0 ? novaQtd / ativo.qtd : 1;
-        ativo.operacoes = ativo.operacoes.map(op => ({
-          data: op.data,
-          qtd: Number(((Number(op.qtd) || 0) * proporcaoQtd).toFixed(4)),
-          preco: Number(op.preco) || novoPm
-        }));
-        recalcularConsolidadoPorOperacoes(ativo);
-      } else {
-        ativo.qtd = novaQtd;
-        ativo.pm = novoPm;
-        ativo.operacoes = [{ data: 'Saldo Ajustado (' + obterDataHojeBR() + ')', qtd: novaQtd, preco: novoPm }];
-      }
+      ativo.qtd = novaQtd;
+      ativo.pm = novoPm;
+      ativo.operacoes = [{ data: 'Saldo Ajustado (' + obterDataHojeBR() + ')', qtd: novaQtd, preco: novoPm, total: Number(totalFinal.toFixed(2)) }];
 
       salvarCarteira();
       renderizarTabelaCarteira();
@@ -2362,7 +2458,10 @@
       let totalAtivosCount = 0;
 
       carteiraAtivos.forEach(ativo => {
-        totalInvestido += ativo.qtd * ativo.pm;
+        const investidoAtivo = Array.isArray(ativo.operacoes) && ativo.operacoes.length > 0
+          ? ativo.operacoes.reduce((acc, op) => acc + obterTotalOperacao(op), 0)
+          : (ativo.qtd * ativo.pm);
+        totalInvestido += investidoAtivo;
         totalAtual += ativo.qtd * ativo.precoAtual;
         totalAtivosCount++;
       });
@@ -2481,11 +2580,17 @@
       const inputData = document.getElementById('opData');
       const inputQtd = document.getElementById('opQtd');
       const inputPreco = document.getElementById('opPM');
+      const inputTotal = document.getElementById('opTotal');
+
+      ultimoCampoEditadoOp = 'total';
 
       if (tickerPredefinido && indiceOperacao >= 0) {
         const ativo = carteiraAtivos.find(a => a.ticker === tickerPredefinido);
         const op = ativo && Array.isArray(ativo.operacoes) ? ativo.operacoes[indiceOperacao] : null;
         if (!ativo || !op) return;
+
+        const totalOp = obterTotalOperacao(op);
+        const unitarioOp = (Number(op.qtd) || 0) > 0 ? (totalOp / Number(op.qtd)) : (Number(op.preco) || 0);
 
         operacaoEmEdicao = { ticker: ativo.ticker, index: indiceOperacao };
         if (titulo) titulo.innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600"></i> Editar Operação — ${ativo.ticker}`;
@@ -2498,7 +2603,9 @@
         inputTicker.disabled = true;
         inputData.value = op.data || obterDataHojeBR();
         inputQtd.value = op.qtd;
-        inputPreco.value = numeroParaInputVirgula(op.preco);
+        inputTotal.value = numeroParaInputVirgula(totalOp);
+        inputPreco.value = numeroParaInputVirgula(unitarioOp);
+        atualizarPreviewOperacao(Number(op.qtd), unitarioOp, totalOp);
       } else {
         operacaoEmEdicao = { ticker: null, index: -1 };
         if (titulo) titulo.innerHTML = `<i class="fa-solid fa-plus-circle text-emerald-600"></i> Cadastrar Nova Operação`;
@@ -2511,7 +2618,9 @@
         inputTicker.disabled = false;
         inputData.value = obterDataHojeBR();
         inputQtd.value = '';
+        inputTotal.value = '';
         inputPreco.value = '';
+        atualizarPreviewOperacao(NaN, NaN, NaN);
       }
 
       document.getElementById('modalOperacao').classList.remove('hidden');
@@ -2527,10 +2636,25 @@
       const ticker = document.getElementById('opTicker').value.toUpperCase().trim();
       const dataCompra = document.getElementById('opData').value.trim() || obterDataHojeBR();
       const novaQtd = parseFloat(document.getElementById('opQtd').value);
-      const novoPm = parseMoedaVirgula(document.getElementById('opPM').value);
+      const totalInformado = parseMoedaVirgula(document.getElementById('opTotal').value);
+      const precoInformado = parseMoedaVirgula(document.getElementById('opPM').value);
 
-      if (!ticker || isNaN(novaQtd) || novaQtd <= 0 || isNaN(novoPm) || novoPm <= 0) {
-        mostrarNotificacao("Preencha todos os campos corretamente.", "aviso");
+      if (!ticker || isNaN(novaQtd) || novaQtd <= 0) {
+        mostrarNotificacao("Informe o ticker e a quantidade comprada.", "aviso");
+        return;
+      }
+
+      let totalFinal = 0;
+      let precoUnitarioFinal = 0;
+
+      if (!isNaN(totalInformado) && totalInformado > 0) {
+        totalFinal = Number(totalInformado.toFixed(2));
+        precoUnitarioFinal = totalFinal / novaQtd;
+      } else if (!isNaN(precoInformado) && precoInformado > 0) {
+        precoUnitarioFinal = precoInformado;
+        totalFinal = Number((novaQtd * precoInformado).toFixed(2));
+      } else {
+        mostrarNotificacao("Informe o Valor Total Pago na compra.", "aviso");
         return;
       }
 
@@ -2543,7 +2667,8 @@
         ativo.operacoes[operacaoEmEdicao.index] = {
           data: dataCompra,
           qtd: novaQtd,
-          preco: novoPm
+          preco: precoUnitarioFinal,
+          total: totalFinal
         };
 
         recalcularConsolidadoPorOperacoes(ativo);
@@ -2554,7 +2679,7 @@
           renderizarTabelaHistoricoCompras(ativo);
         }
         fecharModalOperacao();
-        mostrarNotificacao(`Preço de compra de ${ticker} atualizado e Preço Médio recalculado!`, "sucesso");
+        mostrarNotificacao(`Operação de ${ticker} atualizada e Preço Médio recalculado!`, "sucesso");
         return;
       }
 
@@ -2564,7 +2689,8 @@
         ativoExistente.operacoes.push({
           data: dataCompra,
           qtd: novaQtd,
-          preco: novoPm
+          preco: precoUnitarioFinal,
+          total: totalFinal
         });
         recalcularConsolidadoPorOperacoes(ativoExistente);
         mostrarNotificacao(`Aporte adicionado em ${ticker}!`, "sucesso");
@@ -2572,15 +2698,16 @@
         carteiraAtivos.push({
           ticker,
           qtd: novaQtd,
-          pm: novoPm,
-          precoAtual: novoPm,
+          pm: precoUnitarioFinal,
+          precoAtual: precoUnitarioFinal,
           precoJusto: null,
           precoJustoEstimado: false,
           variacao: 0,
           operacoes: [{
             data: dataCompra,
             qtd: novaQtd,
-            preco: novoPm
+            preco: precoUnitarioFinal,
+            total: totalFinal
           }]
         });
         mostrarNotificacao(`Novo ativo ${ticker} cadastrado!`, "sucesso");
@@ -2620,9 +2747,14 @@
               const qtdNum = paraNumero(a.qtd);
               const pmNum = paraNumero(a.pm);
               const ops = Array.isArray(a.operacoes) && a.operacoes.length > 0
-                ? a.operacoes.map(o => ({ data: o.data || 'Saldo Consolidado', qtd: paraNumero(o.qtd), preco: paraNumero(o.preco) }))
-                : [{ data: 'Saldo Consolidado', qtd: qtdNum, preco: pmNum }];
-              return {
+                ? a.operacoes.map(o => {
+                    const oQtd = paraNumero(o.qtd);
+                    const oPreco = paraNumero(o.preco);
+                    const oTotal = o.total !== undefined && o.total !== null ? paraNumero(o.total) : Number((oQtd * oPreco).toFixed(2));
+                    return { data: o.data || 'Saldo Consolidado', qtd: oQtd, preco: oQtd > 0 ? (oTotal / oQtd) : oPreco, total: oTotal };
+                  })
+                : [{ data: 'Saldo Consolidado', qtd: qtdNum, preco: pmNum, total: Number((qtdNum * pmNum).toFixed(2)) }];
+              const novoAtivo = {
                 ticker: a.ticker,
                 qtd: qtdNum,
                 pm: pmNum,
@@ -2632,6 +2764,8 @@
                 variacao: paraNumero(a.variacao),
                 operacoes: ops
               };
+              recalcularConsolidadoPorOperacoes(novoAtivo);
+              return novoAtivo;
             });
             salvarCarteira();
             renderizarTabelaCarteira();
