@@ -1,4 +1,4 @@
 {
-  "version": "1.8.7",
-  "releaseNotes": "Edição direta do preço de compra de qualquer operação lançada com recálculo automático do Preço Médio, mantendo histórico, gráficos e dados salvos."
+  "version": "1.7.9",
+  "releaseNotes": "Adição de opção para editar o nome da carteira e ajuste automático de vírgula no campo de preço de compra durante o lançamento de novas operações."
 }
