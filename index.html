@@ -31,10 +31,8 @@
 </head>
 <body class="bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
 
-  <!-- CONTAINER DE NOTIFICAÇÕES TOAST -->
   <div id="toastContainer" class="fixed bottom-4 right-4 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- MODAL CHANGELOG / NOVIDADES -->
   <div id="modalChangelog" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[65] flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder space-y-4">
       <div class="flex justify-between items-center">
@@ -47,7 +45,11 @@
       </div>
       <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300 max-h-72 overflow-y-auto">
         <div class="p-3 rounded-lg bg-blue-50 dark:bg-slate-900 border border-blue-200 dark:border-blue-800">
-          <div class="font-bold text-blue-700 dark:text-blue-400">V1.8.8</div>
+          <div class="font-bold text-blue-700 dark:text-blue-400">V1.8.9</div>
+          <p class="text-xs mt-1">Remoção da edição direta do Preço Médio na linha do ativo da carteira, mantendo o recálculo automático exclusivamente pelas operações do histórico.</p>
+        </div>
+        <div class="p-3 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder">
+          <div class="font-bold text-gray-800 dark:text-white">V1.8.8</div>
           <p class="text-xs mt-1">Lançamento e edição de compras informando Data, Quantidade e Valor Total Pago, calculando automaticamente o Preço Unitário exato sem distorcer o Preço Médio nem o Total Investido.</p>
         </div>
         <div class="p-3 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder">
@@ -65,7 +67,6 @@
     </div>
   </div>
 
-  <!-- MODAL POP-UP PARA CADASTRAR / EDITAR OPERAÇÃO -->
   <div id="modalOperacao" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[55] flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
       <div class="flex justify-between items-center mb-4">
@@ -112,7 +113,6 @@
     </div>
   </div>
 
-  <!-- MODAL HISTÓRICO INDIVIDUAL DE COMPRAS POR ATIVO -->
   <div id="modalHistoricoAtivo" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-2xl w-full p-6 border border-gray-100 dark:border-darkborder space-y-4">
       <div class="flex justify-between items-center">
@@ -129,7 +129,6 @@
 
       <input type="hidden" id="histTickerAtual">
 
-      <!-- LISTA DE OPERAÇÕES DO ATIVO -->
       <div class="overflow-x-auto max-h-72 overflow-y-auto border border-gray-200 dark:border-darkborder rounded-lg">
         <table class="w-full text-left border-collapse text-sm">
           <thead>
@@ -141,9 +140,7 @@
               <th class="py-2.5 px-3 text-center">Ações</th>
             </tr>
           </thead>
-          <tbody id="tabelaHistoricoComprasAtivo" class="divide-y divide-gray-100 dark:divide-darkborder">
-            <!-- Preenchido dinamicamente -->
-          </tbody>
+          <tbody id="tabelaHistoricoComprasAtivo" class="divide-y divide-gray-100 dark:divide-darkborder"></tbody>
         </table>
       </div>
 
@@ -158,48 +155,6 @@
     </div>
   </div>
 
-  <!-- MODAL POP-UP PARA EDITAR ATIVO DA CARTEIRA -->
-  <div id="modalEditarAtivo" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[55] flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <i class="fa-solid fa-pen-to-square text-blue-600"></i> Editar Saldo Consolidado
-        </h3>
-        <button onclick="fecharModalEditarAtivo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-      <div class="space-y-4">
-        <input type="hidden" id="editAtivoTickerOriginal">
-        <div>
-          <label for="editAtivoTicker" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Código do Ativo (Ticker)</label>
-          <input type="text" id="editAtivoTicker" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm uppercase focus:ring-2 focus:ring-blue-500 outline-none">
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label for="editAtivoQtd" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Quantidade Total</label>
-            <input type="number" step="any" id="editAtivoQtd" oninput="recalcularCamposEditarAtivo('qtd')" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-          </div>
-          <div>
-            <label for="editAtivoTotal" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Total Investido (R$)</label>
-            <input type="text" inputmode="numeric" id="editAtivoTotal" oninput="formatarMoedaVirgula(this); recalcularCamposEditarAtivo('total');" class="w-full px-3 py-2 border border-blue-400 dark:border-blue-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-lg text-sm font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
-          </div>
-        </div>
-        <div>
-          <label for="editAtivoPM" class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Preço Médio (R$)</label>
-          <input type="text" inputmode="numeric" id="editAtivoPM" oninput="formatarMoedaVirgula(this); recalcularCamposEditarAtivo('pm');" class="w-full px-3 py-2 border border-gray-300 dark:border-darkborder bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-        </div>
-        <div class="flex gap-3 pt-2">
-          <button onclick="fecharModalEditarAtivo()" class="w-1/2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-sm transition">
-            Cancelar
-          </button>
-          <button onclick="salvarEdicaoAtivo()" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
-            Salvar Alterações
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: RECUPERAÇÃO DE SENHA POR E-MAIL -->
   <div id="modalRecuperarSenha" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
       <div class="flex justify-between items-center mb-4">
@@ -247,7 +202,6 @@
     </div>
   </div>
 
-  <!-- TELA DE LOGIN -->
   <div id="telaLogin" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-8 border border-gray-100 dark:border-darkborder relative">
       <div class="absolute top-4 right-4 flex items-center gap-2">
@@ -255,7 +209,7 @@
           <i class="fa-solid fa-list-check"></i> Novidades
         </button>
         <span id="badgeVersaoLogin" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-gray-200 dark:border-slate-700 shadow-sm">
-          Versão V1.8.8
+          Versão V1.8.9
         </span>
       </div>
 
@@ -288,7 +242,6 @@
     </div>
   </div>
 
-  <!-- APLICAÇÃO PRINCIPAL -->
   <div id="appConteudo" class="hidden">
     <header class="bg-blue-600 dark:bg-slate-900 text-white shadow-md border-b border-blue-700 dark:border-darkborder transition-colors duration-200">
       <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center flex-wrap gap-4">
@@ -302,7 +255,7 @@
               <span>Brapi: Verificando...</span>
             </div>
             <button onclick="abrirModalChangelog()" class="flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-emerald-400 border border-slate-700 shadow-sm hover:bg-slate-700 transition cursor-pointer" title="Ver Notas da Versão">
-              <span id="badgeVersaoHeader">Versão V1.8.8</span>
+              <span id="badgeVersaoHeader">Versão V1.8.9</span>
             </button>
           </div>
         </div>
@@ -322,7 +275,6 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
-      <!-- SEÇÃO: DASHBOARD -->
       <section id="sec-dashboard" class="space-y-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border-l-4 border-blue-500 border border-gray-100 dark:border-darkborder transition-colors">
@@ -346,7 +298,6 @@
           </div>
         </div>
 
-        <!-- RAIO-X DIDÁTICO DETALHADO DA CARTEIRA -->
         <div class="bg-white dark:bg-darkcard rounded-xl p-6 shadow-sm border border-gray-200 dark:border-darkborder mb-8 space-y-6">
           <div class="border-b border-gray-100 dark:border-darkborder pb-4">
             <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -404,7 +355,6 @@
           </div>
         </div>
 
-        <!-- SIMULADOR -->
         <div class="bg-gradient-to-r from-blue-900 to-slate-900 text-white rounded-xl p-6 shadow-xl mb-8 border border-blue-800">
           <div class="flex justify-between items-center mb-4 flex-wrap gap-3">
             <div>
@@ -435,14 +385,13 @@
         </div>
       </section>
 
-      <!-- SEÇÃO: CARTEIRA -->
       <section id="sec-carteira" class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border border-gray-100 dark:border-darkborder hidden transition-colors">
         <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
           <div>
             <h3 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
               <i class="fa-solid fa-wallet text-blue-600 dark:text-blue-400"></i> Minha Carteira
             </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Clique sobre o nome de uma ação para ver, editar o valor total pago/quantidade ou excluir cada operação individual.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Clique sobre o nome de uma ação para ver, editar ou excluir cada operação individual.</p>
           </div>
           <div class="flex gap-2 flex-wrap">
             <button onclick="abrirModalOperacao()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-md font-medium text-sm flex items-center gap-1.5 transition">
@@ -475,14 +424,11 @@
                 <th class="py-3 px-4 text-center">Ações</th>
               </tr>
             </thead>
-            <tbody id="tabelaAtivos" class="divide-y divide-gray-100 dark:divide-darkborder text-sm">
-              <!-- Preenchido dinamicamente por renderizarTabelaCarteira() -->
-            </tbody>
+            <tbody id="tabelaAtivos" class="divide-y divide-gray-100 dark:divide-darkborder text-sm"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- SEÇÃO: DIVIDENDOS -->
       <section id="sec-dividendos" class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border border-gray-100 dark:border-darkborder hidden space-y-6 transition-colors">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder p-4 rounded-xl flex items-center justify-between shadow-sm">
@@ -525,7 +471,6 @@
           </div>
         </div>
 
-        <!-- GRÁFICO DE PROVENTOS -->
         <div class="p-5 border border-gray-200 dark:border-darkborder rounded-xl bg-gray-50 dark:bg-slate-900 space-y-3">
           <div class="flex justify-between items-center flex-wrap gap-3">
             <div>
@@ -544,7 +489,6 @@
           <div id="listaAtivosMesProventos" class="hidden space-y-2 pt-2 border-t border-gray-200 dark:border-darkborder"></div>
         </div>
 
-        <!-- TABELA GERAL DE PROVENTOS -->
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
             <thead>
@@ -557,24 +501,18 @@
                 <th class="py-3 px-4 text-center">Ações</th>
               </tr>
             </thead>
-            <tbody id="tabelaDividendos" class="divide-y divide-gray-100 dark:divide-darkborder text-sm">
-              <!-- Inserido via script -->
-            </tbody>
+            <tbody id="tabelaDividendos" class="divide-y divide-gray-100 dark:divide-darkborder text-sm"></tbody>
           </table>
         </div>
 
-        <!-- HISTÓRICO DETALHADO POR ATIVO -->
         <div class="pt-6 border-t border-gray-200 dark:border-darkborder">
           <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4">
             <i class="fa-solid fa-layer-group text-blue-600 dark:text-blue-400"></i> Histórico Detalhado por Ativos Separados
           </h3>
-          <div id="containerDividendosPorAtivo" class="space-y-4">
-            <!-- Preenchido dinamicamente -->
-          </div>
+          <div id="containerDividendosPorAtivo" class="space-y-4"></div>
         </div>
       </section>
 
-      <!-- SEÇÃO: OPORTUNIDADES -->
       <section id="sec-oportunidades" class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border border-gray-100 dark:border-darkborder hidden space-y-6 transition-colors">
         <div class="flex justify-between items-center flex-wrap gap-4">
           <div>
@@ -590,12 +528,9 @@
             </button>
           </div>
         </div>
-        <div id="gridRadar" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Cards do radar -->
-        </div>
+        <div id="gridRadar" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
       </section>
 
-      <!-- SEÇÃO: ANÁLISE & GRÁFICOS -->
       <section id="sec-analise" class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border border-gray-100 dark:border-darkborder hidden space-y-6 transition-colors">
         <div class="flex justify-between items-center flex-wrap gap-4">
           <div>
@@ -606,7 +541,6 @@
           </div>
         </div>
 
-        <!-- GRÁFICO AVANÇADO ESTILO TRADINGVIEW -->
         <div class="p-5 border border-gray-200 dark:border-darkborder rounded-xl bg-gray-50 dark:bg-slate-900 space-y-4">
           <div class="flex justify-between items-center flex-wrap gap-3">
             <div>
@@ -638,11 +572,8 @@
           </div>
           <p class="text-xs text-gray-400 text-center">Arraste para navegar no tempo ou use o seletor acima para alternar o horizonte temporal por dias, meses ou anos.</p>
 
-          <!-- TABELA DE RETORNO POR PERÍODO -->
           <div class="pt-3 border-t border-gray-200 dark:border-darkborder">
-            <div id="tabelaRetornosPeriodo" class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center text-xs">
-              <!-- Preenchido dinamicamente -->
-            </div>
+            <div id="tabelaRetornosPeriodo" class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center text-xs"></div>
           </div>
         </div>
 
@@ -651,9 +582,7 @@
             <h4 class="font-bold text-gray-800 dark:text-white flex items-center gap-2">
               <i class="fa-solid fa-chart-pie text-blue-500"></i> Alocação Setorial da Carteira
             </h4>
-            <div id="containerBarrasAlocacao" class="space-y-3">
-              <!-- Barras de alocação -->
-            </div>
+            <div id="containerBarrasAlocacao" class="space-y-3"></div>
           </div>
 
           <div class="p-5 border border-gray-200 dark:border-darkborder rounded-xl bg-gray-50 dark:bg-slate-900 flex flex-col justify-between space-y-4">
@@ -699,7 +628,6 @@
         </div>
       </section>
 
-      <!-- SEÇÃO: CONFIGURAÇÕES -->
       <section id="sec-configuracoes" class="bg-white dark:bg-darkcard p-6 rounded-lg shadow-sm border border-gray-100 dark:border-darkborder hidden space-y-8 transition-colors">
         <div>
           <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
@@ -793,7 +721,6 @@
     </main>
   </div>
 
-  <!-- MODAL PROVENTO -->
   <div id="modalDividendo" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-darkborder">
       <div class="flex justify-between items-center mb-4">
@@ -843,7 +770,7 @@
   </div>
 
   <script>
-    let VERSAO_ATUAL = "1.8.8";
+    let VERSAO_ATUAL = "1.8.9";
 
     async function carregarVersaoApp() {
       try {
@@ -1025,24 +952,6 @@
         } else {
           if (origem === 'preco' && isNaN(preco)) inputTotal.value = '';
           atualizarPreviewOperacao(NaN, NaN, NaN);
-        }
-      }
-    }
-
-    function recalcularCamposEditarAtivo(origem) {
-      const qtd = parseFloat(document.getElementById('editAtivoQtd').value);
-      const inputTotal = document.getElementById('editAtivoTotal');
-      const inputPm = document.getElementById('editAtivoPM');
-
-      if (origem === 'total' || origem === 'qtd') {
-        const total = parseMoedaVirgula(inputTotal.value);
-        if (!isNaN(qtd) && qtd > 0 && !isNaN(total) && total > 0) {
-          inputPm.value = numeroParaInputVirgula(total / qtd);
-        }
-      } else if (origem === 'pm') {
-        const pm = parseMoedaVirgula(inputPm.value);
-        if (!isNaN(qtd) && qtd > 0 && !isNaN(pm) && pm > 0) {
-          inputTotal.value = numeroParaInputVirgula(qtd * pm);
         }
       }
     }
@@ -2134,7 +2043,6 @@
           <td class="py-3 px-4 valor-atual font-semibold">R$ ${valorAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
           <td class="py-3 px-4 text-center space-x-2">
             <button onclick="abrirModalHistoricoAtivo('${ativo.ticker}')" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700" title="Histórico de Compras"><i class="fa-solid fa-list-ul"></i></button>
-            <button onclick="abrirModalEditarAtivo('${ativo.ticker}')" class="text-blue-500 hover:text-blue-700" title="Editar Saldo Consolidado"><i class="fa-solid fa-pen-to-square"></i></button>
             <button onclick="removerAtivo(this)" class="text-red-500 hover:text-red-700" title="Excluir Ativo"><i class="fa-solid fa-trash"></i></button>
           </td>
         `;
@@ -2221,60 +2129,6 @@
       const ticker = document.getElementById('histTickerAtual').value;
       fecharModalHistoricoAtivo();
       abrirModalOperacao(ticker, -1);
-    }
-
-    function abrirModalEditarAtivo(ticker) {
-      const ativo = carteiraAtivos.find(a => a.ticker === ticker);
-      if (!ativo) return;
-      const totalInvestido = Array.isArray(ativo.operacoes) && ativo.operacoes.length > 0
-        ? ativo.operacoes.reduce((acc, op) => acc + obterTotalOperacao(op), 0)
-        : (ativo.qtd * ativo.pm);
-      document.getElementById('editAtivoTickerOriginal').value = ativo.ticker;
-      document.getElementById('editAtivoTicker').value = ativo.ticker;
-      document.getElementById('editAtivoQtd').value = ativo.qtd;
-      document.getElementById('editAtivoTotal').value = numeroParaInputVirgula(totalInvestido);
-      document.getElementById('editAtivoPM').value = numeroParaInputVirgula(ativo.pm);
-      document.getElementById('modalEditarAtivo').classList.remove('hidden');
-    }
-
-    function fecharModalEditarAtivo() {
-      document.getElementById('modalEditarAtivo').classList.add('hidden');
-    }
-
-    function salvarEdicaoAtivo() {
-      const tickerOriginal = document.getElementById('editAtivoTickerOriginal').value;
-      const novoTicker = document.getElementById('editAtivoTicker').value.toUpperCase().trim();
-      const novaQtd = parseFloat(document.getElementById('editAtivoQtd').value);
-      const novoTotal = parseMoedaVirgula(document.getElementById('editAtivoTotal').value);
-      const novoPmInput = parseMoedaVirgula(document.getElementById('editAtivoPM').value);
-
-      const totalValido = !isNaN(novoTotal) && novoTotal > 0;
-      const novoPm = totalValido && novaQtd > 0 ? (novoTotal / novaQtd) : novoPmInput;
-      const totalFinal = totalValido ? novoTotal : (novaQtd * novoPm);
-
-      if (!novoTicker || isNaN(novaQtd) || novaQtd <= 0 || isNaN(novoPm) || novoPm <= 0) {
-        mostrarNotificacao("Preencha ticker, quantidade e valor total válidos.", "aviso");
-        return;
-      }
-
-      if (novoTicker !== tickerOriginal && carteiraAtivos.some(a => a.ticker === novoTicker)) {
-        mostrarNotificacao(`O ativo ${novoTicker} já existe na carteira.`, "aviso");
-        return;
-      }
-
-      const ativo = carteiraAtivos.find(a => a.ticker === tickerOriginal);
-      if (!ativo) return;
-
-      ativo.ticker = novoTicker;
-      ativo.qtd = novaQtd;
-      ativo.pm = novoPm;
-      ativo.operacoes = [{ data: 'Saldo Ajustado (' + obterDataHojeBR() + ')', qtd: novaQtd, preco: novoPm, total: Number(totalFinal.toFixed(2)) }];
-
-      salvarCarteira();
-      renderizarTabelaCarteira();
-      fecharModalEditarAtivo();
-      recalcularTotais();
-      mostrarNotificacao(`Ativo ${novoTicker} atualizado com sucesso!`, "sucesso");
     }
 
     function renderizarCardsRadar() {
