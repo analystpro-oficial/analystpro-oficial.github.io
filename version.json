@@ -1,4 +1,4 @@
 {
-  "version": "1.7.9",
-  "releaseNotes": "Adição de opção para editar o nome da carteira e ajuste automático de vírgula no campo de preço de compra durante o lançamento de novas operações."
+  "version": " version to V1.9.0 ",
+  "releaseNotes": "Busca de dividentos futuros corretos."
 }
