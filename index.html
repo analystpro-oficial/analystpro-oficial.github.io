@@ -45,7 +45,11 @@
       </div>
       <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300 max-h-72 overflow-y-auto">
         <div class="p-3 rounded-lg bg-blue-50 dark:bg-slate-900 border border-blue-200 dark:border-blue-800">
-          <div class="font-bold text-blue-700 dark:text-blue-400">V1.8.9</div>
+          <div class="font-bold text-blue-700 dark:text-blue-400">V1.9.0</div>
+          <p class="text-xs mt-1">Agenda de Próximos Dividendos integrada à Brapi com filtro de eventos futuros e cálculo automático pelo saldo da carteira.</p>
+        </div>
+        <div class="p-3 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder">
+          <div class="font-bold text-gray-800 dark:text-white">V1.8.9</div>
           <p class="text-xs mt-1">Remoção da edição direta do Preço Médio na linha do ativo da carteira, mantendo o recálculo automático exclusivamente pelas operações do histórico.</p>
         </div>
         <div class="p-3 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder">
@@ -209,7 +213,7 @@
           <i class="fa-solid fa-list-check"></i> Novidades
         </button>
         <span id="badgeVersaoLogin" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-gray-200 dark:border-slate-700 shadow-sm">
-          Versão V1.8.9
+          Versão V1.9.0
         </span>
       </div>
 
@@ -255,7 +259,7 @@
               <span>Brapi: Verificando...</span>
             </div>
             <button onclick="abrirModalChangelog()" class="flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-emerald-400 border border-slate-700 shadow-sm hover:bg-slate-700 transition cursor-pointer" title="Ver Notas da Versão">
-              <span id="badgeVersaoHeader">Versão V1.8.9</span>
+              <span id="badgeVersaoHeader">Versão V1.9.0</span>
             </button>
           </div>
         </div>
@@ -770,7 +774,7 @@
   </div>
 
   <script>
-    let VERSAO_ATUAL = "1.8.9";
+    let VERSAO_ATUAL = "1.9.0";
 
     async function carregarVersaoApp() {
       try {
@@ -2636,47 +2640,173 @@
       reader.readAsText(file);
     }
 
-    function abrirProximosDividendos() {
-      const proximos = [
-        { ticker: 'SAPR11', tipo: 'JCP / Dividendo', dataCom: '15/03/2026', dataPag: '30/03/2026', valorEstimado: 'R$ 46,00' },
-        { ticker: 'PETR4', tipo: 'Dividendos', dataCom: '20/03/2026', dataPag: '15/04/2026', valorEstimado: 'R$ 90,00' },
-        { ticker: 'KLBN3', tipo: 'Dividendo Trimestral', dataCom: '02/04/2026', dataPag: '18/04/2026', valorEstimado: 'R$ 185,00' }
-      ];
+    function parseDataAgendaBrapi(dataVal) {
+      if (!dataVal) return null;
+      if (typeof dataVal === 'number') {
+        const ms = dataVal < 1e12 ? dataVal * 1000 : dataVal;
+        const d = new Date(ms);
+        return isNaN(d.getTime()) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      }
+      const str = String(dataVal).trim();
+      if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
+        const [a, m, dia] = str.split('T')[0].split('-').map(Number);
+        return new Date(a, m - 1, dia);
+      }
+      if (/^\d{2}\/\d{2}\/\d{4}/.test(str)) {
+        const [dia, m, a] = str.split('/').map(Number);
+        return new Date(a, m - 1, dia);
+      }
+      const d = new Date(str);
+      return isNaN(d.getTime()) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    }
 
-      let htmlItens = proximos.map(p => `
-        <div class="p-3 border border-gray-100 dark:border-darkborder rounded-lg bg-gray-50 dark:bg-slate-900 flex justify-between items-center">
-          <div>
-            <span class="font-bold text-gray-800 dark:text-white">${p.ticker}</span>
-            <p class="text-xs text-gray-500 dark:text-gray-400">${p.tipo} • Data Com: ${p.dataCom}</p>
-            <p class="text-xs text-blue-600 dark:text-blue-400 font-medium">Pagamento: ${p.dataPag}</p>
-          </div>
-          <span class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">${p.valorEstimado}</span>
-        </div>
-      `).join('');
+    function formatarDataAgendaBR(dateObj) {
+      if (!dateObj || isNaN(dateObj.getTime())) return 'A definir';
+      const dia = String(dateObj.getDate()).padStart(2, '0');
+      const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const ano = dateObj.getFullYear();
+      return `${dia}/${mes}/${ano}`;
+    }
 
+    function abrirOuCriarModalAgenda(conteudoHtml) {
       let modalAgenda = document.getElementById('modalAgendaProventos');
       if (!modalAgenda) {
         modalAgenda = document.createElement('div');
         modalAgenda.id = 'modalAgendaProventos';
         modalAgenda.className = 'fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4';
-        modalAgenda.innerHTML = `
-          <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-lg w-full p-6 border border-gray-100 dark:border-darkborder space-y-4">
-            <div class="flex justify-between items-center">
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-calendar-alt text-blue-600"></i> Próximos Dividendos (Agenda)
-              </h3>
-              <button onclick="document.getElementById('modalAgendaProventos').remove()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                <i class="fa-solid fa-xmark text-lg"></i>
-              </button>
-            </div>
-            <div class="space-y-2 max-h-60 overflow-y-auto">${htmlItens}</div>
-            <button onclick="document.getElementById('modalAgendaProventos').remove()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
-              Fechar Agenda
-            </button>
-          </div>
-        `;
         document.body.appendChild(modalAgenda);
       }
+      modalAgenda.classList.remove('hidden');
+      modalAgenda.innerHTML = `
+        <div class="bg-white dark:bg-darkcard rounded-xl shadow-2xl max-w-lg w-full p-6 border border-gray-100 dark:border-darkborder space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-calendar-alt text-blue-600"></i> Próximos Dividendos (Agenda)
+            </h3>
+            <button onclick="document.getElementById('modalAgendaProventos').remove()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+              <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+          </div>
+          <div id="conteudoAgendaProventos" class="space-y-2 max-h-72 overflow-y-auto">${conteudoHtml}</div>
+          <button onclick="document.getElementById('modalAgendaProventos').remove()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition">
+            Fechar Agenda
+          </button>
+        </div>
+      `;
+    }
+
+    async function abrirProximosDividendos() {
+      const token = localStorage.getItem('brapi_token');
+      const ativosComSaldo = carteiraAtivos.filter(a => Number(a.qtd) > 0);
+
+      abrirOuCriarModalAgenda(`
+        <div class="py-6 text-center text-xs text-gray-500 dark:text-gray-400 space-y-2">
+          <i class="fa-solid fa-spinner fa-spin text-blue-500 text-lg"></i>
+          <p>Consultando agenda de dividendos na Brapi...</p>
+        </div>
+      `);
+
+      if (!token) {
+        abrirOuCriarModalAgenda(`
+          <div class="p-4 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-xs text-amber-800 dark:text-amber-300">
+            Configure o seu <b>Token da Brapi</b> em <b>Configurações</b> para buscar os próximos dividendos da sua carteira.
+          </div>
+        `);
+        return;
+      }
+
+      if (!ativosComSaldo.length) {
+        abrirOuCriarModalAgenda(`
+          <div class="p-4 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder text-xs text-gray-500 dark:text-gray-400 text-center">
+            Nenhum ativo com quantidade positiva na carteira.
+          </div>
+        `);
+        return;
+      }
+
+      const qtdPorTicker = {};
+      ativosComSaldo.forEach(a => {
+        const tk = String(a.ticker || '').trim().toUpperCase();
+        if (tk) qtdPorTicker[tk] = (qtdPorTicker[tk] || 0) + Number(a.qtd);
+      });
+
+      const tickersLista = Object.keys(qtdPorTicker);
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+
+      const proximos = [];
+      let houveErroRequisicao = false;
+
+      for (const tk of tickersLista) {
+        try {
+          let url = `https://brapi.dev/api/quote/${encodeURIComponent(tk)}?dividends=true&token=${token}`;
+          let res = await fetch(url);
+          if (!res.ok && res.status === 404) {
+            url = `https://brapi.dev/api/quote/${encodeURIComponent(tk + '.SA')}?dividends=true&token=${token}`;
+            res = await fetch(url);
+          }
+          if (!res.ok) {
+            houveErroRequisicao = true;
+            continue;
+          }
+
+          const payload = await res.json();
+          const stock = payload.results && payload.results[0];
+          const cashDividends = stock?.dividendsData?.cashDividends || [];
+          const qtd = qtdPorTicker[tk] || 0;
+
+          for (const div of cashDividends) {
+            const dataComObj = parseDataAgendaBrapi(div.lastDatePrior);
+            const dataPagObj = parseDataAgendaBrapi(div.paymentDate);
+            const dataRefObj = dataPagObj || dataComObj;
+
+            if (!dataRefObj || dataRefObj < hoje) continue;
+
+            const taxaUnitaria = Number(div.rate ?? div.value ?? 0);
+            const valorEstimado = taxaUnitaria * qtd;
+
+            proximos.push({
+              ticker: tk,
+              tipo: div.label || div.type || 'JCP / Dividendo',
+              dataCom: formatarDataAgendaBR(dataComObj),
+              dataPag: formatarDataAgendaBR(dataPagObj),
+              timestampRef: dataRefObj.getTime(),
+              qtd,
+              valorEstimado
+            });
+          }
+        } catch (err) {
+          console.error(`Erro ao buscar dividendos de ${tk}:`, err);
+          houveErroRequisicao = true;
+        }
+      }
+
+      proximos.sort((a, b) => a.timestampRef - b.timestampRef);
+
+      if (!proximos.length) {
+        const msgVazio = houveErroRequisicao
+          ? 'Não foi possível consultar todos os ativos na Brapi agora. Tente novamente em instantes.'
+          : 'Nenhum próximo dividendo anunciado pela B3 para os ativos da sua carteira no momento.';
+        abrirOuCriarModalAgenda(`
+          <div class="p-4 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-darkborder text-xs text-gray-500 dark:text-gray-400 text-center">
+            ${msgVazio}
+          </div>
+        `);
+        return;
+      }
+
+      const htmlItens = proximos.map(p => `
+        <div class="p-3 border border-gray-100 dark:border-darkborder rounded-lg bg-gray-50 dark:bg-slate-900 flex justify-between items-center gap-3">
+          <div>
+            <span class="font-bold text-gray-800 dark:text-white">${p.ticker}</span>
+            <p class="text-xs text-gray-500 dark:text-gray-400">${p.tipo} • Data Com: ${p.dataCom}</p>
+            <p class="text-xs text-blue-600 dark:text-blue-400 font-medium">Pagamento: ${p.dataPag} <span class="text-gray-400 font-normal">(${p.qtd} ações)</span></p>
+          </div>
+          <span class="font-bold text-emerald-600 dark:text-emerald-400 text-sm whitespace-nowrap">R$ ${formatarBRL(p.valorEstimado)}</span>
+        </div>
+      `).join('');
+
+      abrirOuCriarModalAgenda(htmlItens);
     }
   </script>
 </body>
